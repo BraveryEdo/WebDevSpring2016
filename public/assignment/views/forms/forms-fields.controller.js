@@ -6,7 +6,7 @@
 (function(){
     angular
         .module('FormMakerApp')
-        .controller("FormsFieldsController", FormsFieldsController);
+        .controller("FormsFieldsController", ['$scope', '$location', FormsFieldsController]);
 
     function FormsFieldsController($scope, $location){
         $scope.location = $location;

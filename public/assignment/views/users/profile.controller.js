@@ -5,7 +5,7 @@
 (function(){
     angular
         .module("FormMakerApp")
-        .controller("ProfileController", ProfileController);
+        .controller("ProfileController", ['$scope', '$location', ProfileController]);
 
     function ProfileController($scope, $location){
         $scope.location = $location;

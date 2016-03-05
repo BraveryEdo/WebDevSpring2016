@@ -5,9 +5,9 @@
 (function(){
     angular
         .module("FormMakerApp")
-        .controller("SidebarController", SidebarController);
+        .controller('SidebarController', ['$rootScope', '$scope', '$location', SidebarController]);
 
-    function SidebarController($scope, $location){
+    function SidebarController($rootScope, $scope, $location) {
         $scope.location = $location;
     }
 })();

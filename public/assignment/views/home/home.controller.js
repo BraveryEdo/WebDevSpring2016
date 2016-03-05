@@ -5,7 +5,7 @@
 (function(){
     angular
         .module("FormMakerApp")
-        .controller("HomeController", HomeController);
+        .controller("HomeController", ['$scope', '$location', HomeController]);
 
     function HomeController($scope, $location){
         $scope.location = $location;

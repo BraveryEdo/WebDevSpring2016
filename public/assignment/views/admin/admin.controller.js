@@ -3,7 +3,7 @@
 
  angular
      .module("FormMakerApp")
-     .controller("AdminController", AdminController);
+     .controller("AdminController", ['$scope', '$location', AdminController]);
 
  function AdminController($scope, $location){
   $scope.location = $location;
