@@ -9,41 +9,41 @@ angular
     $routeProvider
         .when('/home',
             {
-
                 templateUrl: './views/home/home.view.html',
-                controller: "HomeController"
+                controller: 'HomeController'
             })
         .when('/admin',
             {
 
                 templateUrl: './views/admin/admin.view.html',
-                controller: "AdminController"
+                controller: 'AdminController'
             })
         .when('/forms',
             {
                 templateUrl: './views/forms/forms.view.html',
-                controller: "FormsController"
+                controller: 'FormsController'
             })
         .when('/forms-fields',
             {
                 templateUrl: './views/forms/forms-fields.view.html',
-                controller: "FormsFieldsController"
+                controller: 'FormsFieldsController'
             })
         .when('/profile',
             {
                 templateUrl: './views/users/profile.view.html',
-                controller: "ProfileController"
+                controller: 'ProfileController'
             })
         .when('/login',
             {
                 templateUrl: './views/users/login.view.html',
-                controller: "LoginController"
+                controller: 'LoginController'
             })
         .when('/register',
             {
                 templateUrl: './views/users/register.view.html',
-                controller: "RegisterController"
+                controller: 'RegisterController'
             })
+        .when('/1')
         .otherwise({
             redirectTo: '/home'
         });
