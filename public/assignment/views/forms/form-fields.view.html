@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../home/home.view.html">Form Maker</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="visible-xs"><a href="../home/home.view.html">Home</a></li>
+                <li class="visible-xs"><a href="../users/profile.view.html">Profile</a></li>
+                <li class="visible-xs"><a href="../admin/admin.view.html">Admin</a></li>
+                <li class="visible-xs"><a href="forms.view.html">Forms</a></li>
+                <li><a href="#">Username</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="../home/home.view.html">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="../users/profile.view.html">Profile</a></li>
+                <li><a href="../admin/admin.view.html">Admin</a></li>
+                <li class="active"><a href="forms.view.html">Forms</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-md-10 main">
+            <h1 class="page-header">Forms: Registration Form</h1>
+            <ul class="nav nav-pills">
+                <li><a href="forms.view.html">Forms</a></li>
+                <li class="active"><a href="#">Fields</a></li>
+            </ul>
+            <div class="table table-responsive">
+                <table class="table table-striped">
+                    <div class="form-group"><tbody>
+                        <tr>
+                            <td>First Name:
+                                <input type="text" class="form-control" id=firstName" placeholder="First Name"></td>
+                            <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Last Name:
+                                <input type="text" class="form-control" id=lastName" placeholder="Last Name"></td>
+                            <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
+                        </tr>
+
+                        <tr>
+                           <td> <table>
+                                <tr>Date of Birth:</tr>
+                                <tr>
+                                    <input type="DOB" class="form-control">
+                                </tr>
+                            </table></td>
+                            <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
+                        </tr>
+
+                        <tr>
+                            <td>Gender:
+                                <Select class="form-control" id=gender">
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </Select>
+                            </td>
+                            <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
+                        </tr>
+
+                    <tr>
+                        <td>
+                            Roles:
+                            <br>
+                            <label><input type="checkbox" value="">Admin</label>
+                            <label><input type="checkbox" value="">Student</label>
+                            <label><input type="checkbox" value="">User</label>
+                        </td>
+                        <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                        License Agreement:
+                        <div class="radio">
+                            <label><input type="radio" name="optradio">Yes</label>
+                        </div>
+                        <div class="radio">
+                            <label><input type="radio" name="optradio">No</label>
+                        </div>
+                        </td>
+                        <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            Add New Field:
+                            <select class="form-control">
+                                <option>Single Line Text</option>
+                                <option>Date</option>
+                                <option>Dropdown</option>
+                                <option>Checkbox</option>
+                                <option>Radio Button</option>
+                                <option>Paragraph Text</option>
+                            </select>
+                        </td>
+                        <td><span class="glyphicon glyphicon-plus"></span></td>
+                    </tr>
+                    </tbody></div>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

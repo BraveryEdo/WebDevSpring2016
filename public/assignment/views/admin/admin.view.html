@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="../home/home.view.html">Form Maker</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="visible-xs"><a href="../home/home.view.html">Home</a></li>
+                <li class="visible-xs"><a href="../users/profile.view.html">Profile</a></li>
+                <li class="visible-xs"><a href="admin.view.html">Admin</a></li>
+                <li class="visible-xs"><a href="../forms/forms.view.html">Forms</a></li>
+                <li><a href="#">Username</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="../home/home.view.html">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="../users/profile.view.html">Profile</a></li>
+                <li class="active"><a href="admin.view.html">Admin</a></li>
+                <li><a href="../forms/forms.view.html">Forms</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-md-10 main">
+            <h1 class="page-header">Admin</h1>
+            <h3>Users</h3>
+            <div class="table table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Username</div></th>
+                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Password</div></th>
+                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Role</div></th>
+                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Action</div></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" id="newUsername" placeholder="New Username"></td>
+                            <td><input type="text" class="form-control" id="newPassword" placeholder="New Password"></td>
+                            <td><input type="text" class="form-control" id="newRole" placeholder="New Role"></td>
+                            <td><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-ok" ></span></td>
+                        </tr>
+                        <tr>
+                            <td>Alice</td>
+                            <td>*******</td>
+                            <td>Student</td>
+                            <td><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-pencil"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Bob</td>
+                            <td>*******</td>
+                            <td>Faculty | Admin</td>
+                            <td><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-pencil"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Charlie</td>
+                            <td>*******</td>
+                            <td></td>
+                            <td><span class="glyphicon glyphicon-remove"><span class="glyphicon glyphicon-pencil"></span></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

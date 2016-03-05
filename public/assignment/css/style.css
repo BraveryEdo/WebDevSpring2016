@@ -26,6 +26,15 @@ body {
 }
 
 /*
+    mainView
+*/
+
+.mainView{
+   left: 20px;
+    top: 51px;
+}
+
+/*
  * Sidebar
  */
 
@@ -65,61 +74,25 @@ body {
     color: #fff;
     background-color: #428bca;
 }
-
-
-/*
- * Main content
- */
-
-.main {
-    padding: 20px;
-}
-@media (min-width: 768px) {
-    .main {
-        padding-right: 40px;
-        padding-left: 40px;
+@media (min-width: 768px)
+    .navbar-nav>li>a {
+        padding-top: 15px;
+        padding-bottom: 15px;
     }
-}
-.main .page-header {
-    margin-top: 0;
-}
-
-
-/*
- * Placeholder dashboard ideas
- */
-
-.placeholders {
-    margin-bottom: 30px;
-    text-align: center;
-}
-.placeholders h4 {
-    margin-bottom: 0;
-}
-.placeholder {
-    margin-bottom: 20px;
-}
-.placeholder img {
-    display: inline-block;
-    border-radius: 50%;
-}
-
-.navbar-inverse {
-    background-color: #222;
-    border-color: #080808;
-}
-.navbar-fixed-top {
-    top: 0;
-    border-width: 0 0 1px;
-}
-.navbar-fixed-bottom, .navbar-fixed-top {
-    position: fixed;
-    right: 0;
-    left: 0;
-    z-index: 1030;
-}
-.navbar {
-    min-height: 50px;
-    margin-bottom: 20px;
-}
-
+    .navbar-nav>li>a {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        line-height: 20px;
+    }
+    .nav>li>a {
+        position: relative;
+        display: block;
+        padding: 10px 15px;
+    }
+    a {
+        color: #337ab7;
+        text-decoration: none;
+    }
+    a {
+        background-color: transparent;
+    }
