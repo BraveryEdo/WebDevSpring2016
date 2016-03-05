@@ -34,10 +34,10 @@
 <body data-ng-controller="MainController">
 
 <!--header -->
-<div data-ng-include="'assignment/views/header/header.view.html'"></div>
+<div data-ng-include="'assignment/views/header/header.view.html'" data-ng-controller="HeaderController"></div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <!--sidebar -->
-            <div data-ng-include="'assignment/views/sidebar/sidebar.view.html'"></div>
+            <div data-ng-include="'assignment/views/sidebar/sidebar.view.html'" data-ng-controller="SidebarController"></div>
 
             <div class="mainView" ng-view></div>
         </div>
