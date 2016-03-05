@@ -30,8 +30,7 @@ body {
 */
 
 .mainView{
-   left: 20px;
-    top: 51px;
+   padding: 20px;
 }
 
 /*
@@ -74,7 +73,7 @@ body {
     color: #fff;
     background-color: #428bca;
 }
-@media (min-width: 768px)
+@media (min-width: 768px){
     .navbar-nav>li>a {
         padding-top: 15px;
         padding-bottom: 15px;
@@ -96,3 +95,4 @@ body {
     a {
         background-color: transparent;
     }
+}

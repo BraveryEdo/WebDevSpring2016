@@ -3,10 +3,10 @@
 <nav class="navbar navbar-fixed-top">
     <div class="col-sm-2 col-md-2 sidebar">
         <ul class="nav nav-sidebar">
-            <li ng-class="{'active': location.url() == '/home'}"><a href="#home">Home</a></li>
-            <li ng-class="{'active': location.url() == '/profile'}"><a href="#profile">Profile</a></li>
-            <li ng-class="{'active': location.url() == '/admin'}"><a href="#admin">Admin</a></li>
-            <li ng-class="{'active': location.url() == '/forms'}"><a href="#forms">Forms</a></li>
+            <li data-ng-class="{'active': location.url() == '/home'}"><a href="#/home" data-ng-click="changeView('home')">Home</a></li>
+            <li data-ng-class="{'active': location.url() == '/profile'}"><a href="#/profile" data-ng-click="changeView('profile')">Profile</a></li>
+            <li data-ng-class="{'active': location.url() == '/admin'}"><a href="#/admin" data-ng-click="changeView('admin')">Admin</a></li>
+            <li data-ng-class="{'active': location.url() == '/forms'}"><a href="#/forms" data-ng-click="changeView('forms')">Forms</a></li>
         </ul>
     </div>
 </nav>

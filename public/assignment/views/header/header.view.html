@@ -12,10 +12,9 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li ng-class="{'active': location.url() == '/register'}"><a href="#register">Register</a></li>
-                <li ng-class="{'active': location.url() == '/login'}"><a href="#login">Login</a></li>
-                <li class="visible-xs" ng-class="{'active': location.url() == '/profile'}"><a href="#profile">Profile</a></li>
-                <li class="visible-xs" ng-class="{'active': location.url() == '/admin'}"><a href="#admin">Admin</a></li>
+                <li data-ng-class="{'active': location.url() == '/login'}" ><a href="#/login">Login</a></li>
+                <li class="visible-xs" data-ng-class="{'active': location.url() == '/profile'}" ><a href="#/profile">Profile</a></li>
+                <li class="visible-xs" data-ng-class="{'active': location.url() == '/admin'}" ><a href="#/admin">Admin</a></li>
                 <li><a href="#login">Logout</a></li>
             </ul>
         </div>
