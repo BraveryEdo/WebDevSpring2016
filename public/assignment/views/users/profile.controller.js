@@ -9,5 +9,6 @@
 
     function ProfileController($scope, $location){
         $scope.location = $location;
+        console.log("profile controller finished loading");
     }
 })();

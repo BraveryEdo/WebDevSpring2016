@@ -8,5 +8,10 @@
         .controller("HeaderController", ['$scope', '$location', HeaderController]);
     function HeaderController($scope, $location){
         $scope.location = $location;
+        $scope.showRegister = true;
+        $scope.showLogin = true;
+        $scope.showAdmin = false;
+        $scope.showUsername = true;
+        console.log("header controller finished loading");
     }
 })();

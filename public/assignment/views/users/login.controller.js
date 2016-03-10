@@ -2,12 +2,13 @@
  * Created by EDO on 3/2/2016.
  */
 "use strict";
-(function(){
+(function() {
     angular
         .module("FormMakerApp")
         .controller("LoginController", ['$scope', '$location', LoginController]);
 
-    function LoginController($scope, $location){
+    function LoginController($scope, $location) {
         $scope.location = $location;
+        console.log("login controller finished loading");
     }
 })();

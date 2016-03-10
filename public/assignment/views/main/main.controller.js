@@ -4,11 +4,13 @@
 "use strict";
 (function(){
     angular
-        .module("FormMakerApp", [])
-        .controller("MainController", ['$scope', '$location', MainController]);
+        .module("FormMakerApp")
+        .controller("MainController",  ['$scope', '$location', MainController]);
+
     function MainController($scope, $location){
         $scope.location = $location;
-        $scope.message = "MAIN";
+        $scope.Username = "BraveryEdo";
+        console.log("main controller finished loading");
     }
 })();
 
