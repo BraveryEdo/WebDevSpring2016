@@ -9,5 +9,6 @@
 
     function FormsController($scope, $location){
         $scope.location = $location;
+        console.log("forms controller finished loading");
     }
 })();

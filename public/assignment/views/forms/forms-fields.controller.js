@@ -10,5 +10,6 @@
 
     function FormsFieldsController($scope, $location){
         $scope.location = $location;
+        console.log("forms-fields controller finished loading");
     }
 })();

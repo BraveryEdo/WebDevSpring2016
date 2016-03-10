@@ -9,5 +9,6 @@
 
     function RegisterController($scope, $location){
         $scope.location = $location;
+        console.log("register controller finished loading");
     }
 })();
