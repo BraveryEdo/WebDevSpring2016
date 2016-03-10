@@ -14,7 +14,7 @@
                 <li data-ng-show="showLogin"    data-ng-class="{'active': location.url() == '/login'}" ><a href="/login">Login</a></li>
                 <li data-ng-show="showUsername" data-ng-class="{'active': location.url() == '/profile'}" ><a href="/profile">{{Username}}</a></li>
                 <li class="visible-xs" data-ng-show="showAdmin" data-ng-class="{'active': location.url() == '/admin'}" ><a href="/admin">Admin</a></li>
-                <li data-ng-hide="showLogin"><a href="#/logout">Logout</a></li>
+                <li data-ng-hide="showLogin"><a href="/logout">Logout</a></li>
             </ul>
         </div>
     </div>

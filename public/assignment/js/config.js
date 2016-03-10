@@ -23,9 +23,9 @@
                             templateUrl: 'assignment/views/forms/forms.view.html',
                             controller: 'FormsController'
                         })
-                    .when('/forms-fields',
+                    .when('/form-fields',
                         {
-                            templateUrl: 'assignment/views/forms/forms-fields.view.html',
+                            templateUrl: 'assignment/views/forms/form-fields.view.html',
                             controller: 'FormsFieldsController'
                         })
                     .when('/profile',
