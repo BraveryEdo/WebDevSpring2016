@@ -1,7 +1,7 @@
 <!-- credit: http://stackoverflow.com/questions/296873/basic-html-how-to-set-relative-path-to-current-folder -->
 <!DOCTYPE HTML>
 <html lang="en" data-ng-app="FormMakerApp">
-<head >
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,7 @@
     <link rel="icon" href="../../favicon.ico">
     <title>Form Maker</title>
     <!-- Bootstrap core CSS -->
-    <link href="/assignment/css/style.css" rel="stylesheet">
+    <link href="assignment/css/style.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
     <base href="/">
@@ -44,19 +44,25 @@
     <script src="assignment/views/users/login.controller.js"></script>
     <script src="assignment/views/users/profile.controller.js"></script>
     <script src="assignment/views/users/register.controller.js"></script>
-    <script src="project/views/home/project.controller.js"></script>
     <script src="assignment/services/user.service.client.js"></script>
 
-</head>
+    <!-- Processing's Javascript libraries for audio and graphics -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.sound.min.js"></script>
+    <script src="project/dependencies/angular-p5.js"></script>
+    <script src="project/views/home/project.controller.js"></script>
 
-<body data-ng-controller="MainController">
+    </head>
 
-    <div data-ng-include="'assignment/views/sidebar/sidebar.view.html'"></div>
+    <body data-ng-controller="MainController">
 
-    <div data-ng-include="'assignment/views/header/header.view.html'"></div>
+        <div data-ng-include="'assignment/views/sidebar/sidebar.view.html'"></div>
 
-    <div class="mainView" ng-view></div>
-</body>
+        <div data-ng-include="'assignment/views/header/header.view.html'"></div>
+
+        <div class="mainView" data-ng-view></div>
+    </body>
 
 
 

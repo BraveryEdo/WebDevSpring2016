@@ -25,12 +25,8 @@ body {
     border: 0;
 }
 
-/*
-    mainView
-*/
-
-.mainView{
-   padding: 20px;
+.visualizer{
+    margin-left: 150px;
 }
 
 /*
@@ -44,7 +40,7 @@ body {
 @media (min-width: 768px) {
     .sidebar {
         position: fixed;
-        top: 52px;
+        top: 50px;
         bottom: 0;
         left: 0;
         display: block;
@@ -64,7 +60,6 @@ body {
 .nav-sidebar {
     margin-right: 0px; /* 20px padding + 1px border */
     margin-bottom: 20px;
-    margin-left: -20px;
 }
 .nav-sidebar > li > a {
     padding-right: 0px;
