@@ -9,6 +9,16 @@ var users = [];
         .factory("UserService", UserService);
 
     function UserService() {
+
+        var service = { findUserByCredentials : findUserByCredentials,
+            findAllUsers : findAllUsers,
+            createUser : createUser,
+            deleteUserById : deleteUserById,
+            updateUser : updateUser};
+
+        return service;
+
+
         console.log("gg");
         users.push({"_id": 123, "firstName": "Alice", "lastName": "Wonderland",
             "username": "alice", "password": "alice", "roles": ["student"]});
@@ -21,17 +31,12 @@ var users = [];
         users.push({"_id": 567, "firstName": "Edward", "lastName": "Norton",
                 "username": "ed", "password": "ed", "roles": ["student"]});
 
-        var service = { findUserByCredentials : findUserByCredentials,
-                        findAllUsers : findAllUsers,
-                        createUser : createUser,
-                        deleteUserById : deleteUserById,
-                        updateUser : updateUser};
-
         function findUserByCredentials(username, password, callback){
             var result = null;
-            for(user in users){
-                if (user.username == username && user.password == password){
-                    result = user;
+
+            for(var i = 0; i < users.length; i++) {
+                if (users[i].username == username && users[i].password == password){
+                    result = users[i];
                     break;
                 }
             }
@@ -54,7 +59,7 @@ var users = [];
         }
 
         function updateUser(userId, user, callback){
-            for(var i = 0; i < users.length; i++) {
+            for(var i = 0; i < users.length; ++i) {
                 if (users[i]._id == userId) {
                     users[i] = user;
                     break;
@@ -62,8 +67,6 @@ var users = [];
             }
             findUserByCredentials(user.username, user.password, callback);
         }
-
-        return service;
     }
     console.log("finished loading user service");
 

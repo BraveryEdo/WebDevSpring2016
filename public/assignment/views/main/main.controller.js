@@ -9,7 +9,11 @@
 
     function MainController($scope, $location){
         $scope.location = $location;
-        $scope.Username = "BraveryEdo";
+        $scope.Username = null;
+        $scope.showUsername = false;
+        $scope.showRegister = true;
+        $scope.showLogin = true;
+        $scope.showAdmin = false;
         console.log("main controller finished loading");
     }
 })();

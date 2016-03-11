@@ -7,7 +7,7 @@
         .module('FormMakerApp')
         .config(function ($routeProvider, $locationProvider) {
                 $routeProvider
-                    .when('/home',
+                    .when('/',
                         {
                             templateUrl: 'assignment/views/home/home.view.html',
                             controller: 'HomeController'
@@ -43,8 +43,13 @@
                             templateUrl: 'assignment/views/users/register.view.html',
                             controller: 'RegisterController'
                         })
+                    .when('/project',
+                        {
+                            templateUrl: 'project/views/home/project.view.html',
+                            controller: 'ProjectController'
+                        })
                     .otherwise({
-                        redirectTo: '/home'
+                        redirectTo: '/'
                     });
 
                 $locationProvider.html5Mode(true);
