@@ -19,6 +19,8 @@
 
                     fft = new p5.FFT();
                     fft.setInput(input);
+
+                    window.alert("audio stream ready");
                 };
 
 
@@ -38,9 +40,7 @@
                     p.endShape();
                 };
 
-                p.stop = function(){
-                    input.close();
-                };
+
             }
             ;
 

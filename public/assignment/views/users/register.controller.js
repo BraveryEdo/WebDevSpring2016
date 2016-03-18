@@ -5,25 +5,22 @@
 (function(){
     angular
         .module("FormMakerApp")
-        .controller("RegisterController", ['$scope', '$location', RegisterController]);
+        .controller("RegisterController", ['$scope', '$location', 'UserService', RegisterController]);
 
-    function RegisterController($scope, $location, UserService){
-        $scope.location = $location;
+    function RegisterController($scope , $location, UserService){
+        $scope.locaiton = $location;
 
-        function register(info){
-            console.log("registering info");
+        $scope.register = function (username, password1, password2, email){
 
-            if(info.password1 !== info.password2){
-                $scope.window.alert("passwords do not match, please check passwords before trying again");
-                return;
+            if(password1 !== password2){
+                window.alert("passwords do not match, please check passwords before trying again");
             }
 
-            console.log(info);
-            //var user = findUserByCredentials(username, password, callback) {
-            //
-            //}
+            UserService.findUserByCredentials(username, password1, function(result){console.log("register result: " + result);});
 
-        }
+        };
+
+
 
         console.log("register controller finished loading");
     }
