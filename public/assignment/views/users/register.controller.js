@@ -18,7 +18,7 @@
 
                 UserService.checkID($username,
                     function($result){
-                        if($result == "found"){
+                        if($result != null){
                             window.alert("This username already exists");
                         } else {
                             if($password1 !== $password2){

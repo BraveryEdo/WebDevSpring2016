@@ -80,9 +80,9 @@
             callback(users);
         };
 
-        service.updateUser = function (userId, user, callback) {
+        service.updateUser = function (user, callback) {
             for (var i = 0; i < users.length; ++i) {
-                if (users[i]._id == userId) {
+                if (users[i]._id == user["_id"]) {
                     users[i] = user;
                     break;
                 }

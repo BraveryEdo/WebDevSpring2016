@@ -4,7 +4,7 @@
             <li data-ng-class="{'active': location.url() == '/'}"><a href="/">Home</a></li>
             <li data-ng-show="showUsername" data-ng-class="{'active': location.url() == '/profile'}"><a href="/profile">{{Username}}</a></li>
             <li data-ng-show="showAdmin" data-ng-class="{'active': location.url() == '/admin'}"><a href="/admin">Admin</a></li>
-            <li data-ng-class="{'active': location.url() == '/forms' || location.url() == '/form-fields'}"><a href="/forms">Forms</a></li>
+            <li data-ng-show="showUsername" data-ng-class="{'active': location.url() == '/forms' || location.url() == '/form-fields'}"><a href="/forms">Forms</a></li>
             <li data-ng-class="{'active': location.url() == '/project'}"><a href="/project">Project</a></li>
         </ul>
     </div>

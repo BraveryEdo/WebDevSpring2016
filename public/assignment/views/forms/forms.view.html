@@ -1,43 +1,37 @@
+<h1 class="page-header">Forms</h1>
+<ul class="nav nav-pills">
+    <li class="active"><a href="#">Forms</a></li>
+    <li><a href="/form-fields">Fields</a></li>
+</ul>
+<div class="table table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Form Name</div></th>
+                <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Action</div></th>
+            </tr>
+        </thead>
 
-<div class="container-fluid">
+        <tbody>
+            <tr>
+                <td><input data-ng-model="newFormName" type="text" class="form-control" id="newFormName" placeholder="New Form Name"></td>
+                <td>
+                    <button data-ng-click="addForm()" class="glyphicon glyphicon-plus"></button>
+                    <button data-ng-click="updateForm()" class="glyphicon glyphicon-pencil"></button>
+                </td>
+            </tr>
 
-            <h1 class="page-header">Forms</h1>
-            <ul class="nav nav-pills">
-                <li class="active"><a href="#">Forms</a></li>
-                <li><a href="/form-fields">Fields</a></li>
-            </ul>
-            <div class="table table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Form Name</div></th>
-                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Action</div></th>
-                        </tr>
-                    </thead>
 
-                    <tbody>
-                        <tr>
-                            <td><input type="text" class="form-control" id="newFormName" placeholder="New Form Name"></td>
-                            <td><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-ok" ></span></td>
-                        </tr>
+            <tr data-ng-repeat="form in forms">
+                <td>{{form.title}}</td>
+                <td>
+                    <!-- pass by object preferred over pass by index in case of filtered index not matching original index -->
+                    <button data-ng-click="deleteForm(form)" class="glyphicon glyphicon-remove"></button>
+                    <button data-ng-click="selectForm(form)" class="glyphicon glyphicon-pencil"></button>
+                </td>
+            </tr>
 
-                        <tr>
-                            <td>Registration Form</td>
-                            <td><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-pencil"></span></td>
-                        </tr>
-
-                        <tr>
-                            <td>Contact List</td>
-                            <td><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-pencil"></span></td>
-                        </tr>
-
-                        <tr>
-                            <td>To Do List</td>
-                            <td><span class="glyphicon glyphicon-remove"><span class="glyphicon glyphicon-pencil"></span></span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+        </tbody>
+    </table>
 </div>
+
