@@ -10,9 +10,9 @@
     function RegisterController($scope , $location, UserService){
         $scope.locaiton = $location;
 
-        $scope.register = function ($fname, $lname, $username, $password1, $password2, $email){
-            console.log($fname);
-            if($fname == null || $lname == null || $username == null || $password1 == null || $password2 == null || $email == null){
+        $scope.register = function ($username, $password1, $password2, $email){
+
+            if($username == null || $password1 == null || $password2 == null || $email == null){
                 console.log("something is blank");
             } else {
 
@@ -28,17 +28,19 @@
 
                                 var user = {
                                     "_id": (new Date()).getTime(),
-                                    "firstName": $fname,
-                                    "lastName": $lname,
+                                    "firstName": "",
+                                    "lastName": "",
                                     "username": $username,
                                     "password": $password1,
-                                    "roles": ["student"]
+                                    "roles": ["Student"]
                                 };
 
                                 UserService.createUser(user,
                                     function($res){
                                         if($res != null){
                                             console.log("user successfully registered");
+                                            window.alert("thanks for registering, You can now login");
+                                            $location.url("/login");
                                         }});
                             }
                         }

@@ -5,8 +5,10 @@
 (function(){
     angular
         .module("FormMakerApp")
-        .controller("SidebarController", ['$scope', '$location', SidebarController]);
-    function SidebarController($scope, $location){
+        .controller("SidebarController", ['$scope', '$location', 'UserService', SidebarController]);
+    function SidebarController($scope, $location, UserService){
+        $scope.location = $location;
+
         console.log("sidebar controller finished loading");
     }
 })();

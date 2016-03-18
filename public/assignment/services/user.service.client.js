@@ -6,9 +6,9 @@
     angular
         .module("FormMakerApp")
         .factory("UserService", UserService);
-    console.log("test 1");
+
     function UserService() {
-        console.log("test 2");
+        var currentUser = null;
         var users = [{"_id": 123, "firstName": "Alice", "lastName": "Wonderland", "username": "alice", "password": "alice", "roles": ["student"]},
                     {"_id": 234, "firstName": "Bob", "lastName": "Hope", "username": "bob", "password": "bob", "roles": ["admin"]},
                     {"_id": 345, "firstName": "Charlie", "lastName": "Brown", "username": "charlie", "password": "charlie", "roles": ["faculty"]},
@@ -17,12 +17,34 @@
 
         var service = {};
 
+        service.user = function(callback){
+            callback(currentUser);
+        };
+
+        service.setUser = function(id, callback){
+            var result = null;
+
+            for (var i = 0; i < users.length; i++) {
+                if (users[i]["_id"] == id){
+                    currentUser = users[i];
+                    result = currentUser;
+                    break;
+                }
+            }
+            callback(result);
+        };
+
+        service.logout = function(callback){
+            currentUser = null;
+            callback(currentUser);
+        }
+
         service.checkID = function(username, callback){
             var result = null;
 
             for (var i = 0; i < users.length; i++) {
                 if (users[i]["username"] == username){
-                    result = "found";
+                    result = users[i]["_id"];
                     break;
                 }
             }
@@ -68,7 +90,7 @@
             service.findUserByCredentials(user.username, user.password, callback);
         };
 
-        console.log("finished loading user service");
+        console.log("finished loading user service functions");
         return service;
     }
     console.log("user service file loaded");
