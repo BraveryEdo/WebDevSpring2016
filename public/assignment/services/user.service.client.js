@@ -17,6 +17,19 @@
 
         var service = {};
 
+        service.checkID = function(username, callback){
+            var result = null;
+
+            for (var i = 0; i < users.length; i++) {
+                if (users[i]["username"] == username){
+                    result = "found";
+                    break;
+                }
+            }
+
+            callback(result);
+        };
+
         service.findUserByCredentials = function (username, password, callback) {
             var result = null;
 
@@ -34,9 +47,8 @@
         };
 
         service.createUser = function (user, callback) {
-            user["_id"] = (new Date()).getTime();
             users.push(user);
-            findUserByCredentials(user["username"], user["password"], callback);
+            service.findUserByCredentials(user["username"], user["password"], callback);
         };
 
         service.deleteUserById = function (userId, callback) {
@@ -53,7 +65,7 @@
                     break;
                 }
             }
-            findUserByCredentials(user.username, user.password, callback);
+            service.findUserByCredentials(user.username, user.password, callback);
         };
 
         console.log("finished loading user service");
