@@ -11,6 +11,7 @@
             UserService.logout(function(res){
                 if(res == null){
                     console.log("successfully logged user out");
+                    $location.url('/');
                 }
             });
         };
