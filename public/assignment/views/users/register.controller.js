@@ -15,6 +15,7 @@
             if($fname == null || $lname == null || $username == null || $password1 == null || $password2 == null || $email == null){
                 console.log("something is blank");
             } else {
+
                 UserService.checkID($username,
                     function($result){
                         if($result == "found"){
@@ -37,8 +38,8 @@
                                 UserService.createUser(user,
                                     function($res){
                                         if($res != null){
-                                            console.log("congrats");
-                                            console.log($res);}});
+                                            console.log("user successfully registered");
+                                        }});
                             }
                         }
                     }
