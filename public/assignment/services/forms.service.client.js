@@ -10,9 +10,9 @@
     function FormsService() {
         var currentForm = null;
         var forms = [
-            {"_id": "000", "title": "Contacts", "userId": 123, "fields": []},
-            {"_id": "010", "title": "ToDo",     "userId": 123, "fields": []},
-            {"_id": "020", "title": "CDs",      "userId": 234, "fields": []},
+            {"_id": "000", "title": "Contacts", "userId": 123, "fields": [{"_id": 0, "type": "Text", "title": "alice", "text": "555-555-5555"},]},
+            {"_id": "010", "title": "ToDo",     "userId": 123, "fields": [{"_id": 0, "type": "Text", "title": "go shopping", "text": "before friday's party"},{"_id": 1, "type": "Text", "title": "finish writing paper", "text": "continue with chapter 3 research"},]},
+            {"_id": "020", "title": "CDs",      "userId": 234, "fields": [{"_id": 0, "type": "Text", "title": "Pink Floyd", "text": "The Dark Side of the Moon"}, {"_id": 1, "type": "Text", "title": "Pendulum", "text": "Hold Your Colour"},]},
         ];
 
         var service = {};
@@ -36,15 +36,15 @@
             form["userId"] = userId;
 
             service.findAllFormsForUser(userId, function($allForms){
-                var $result = true;
+                var $result = "true";
                 for(var i = 0; i < $allForms.length; i++){
                     if($allForms[i]["title"] == form["title"]){
-                        $result = false;
+                        $result = "false";
                         break;
                     }
                 }
 
-                if($result){
+                if($result == "false"){
                     callback(null);
                 } else {
                     service.pushForm(form, callback);

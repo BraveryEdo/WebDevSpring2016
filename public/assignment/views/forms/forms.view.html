@@ -14,7 +14,7 @@
 
         <tbody>
             <tr>
-                <td><input require data-ng-model="newFormName" type="text" class="form-control" id="newFormName" placeholder="New Form Name"></td>
+                <td><input required data-ng-model="newFormName" type="text" class="form-control" id="newFormName" placeholder="New Form Name"></td>
                 <td>
                     <button data-ng-click="addForm(newFormName)" class="glyphicon glyphicon-plus"></button>
                     <button data-ng-click="updateForm(newFormName)" class="glyphicon glyphicon-ok"></button>
@@ -23,7 +23,7 @@
 
 
             <tr data-ng-repeat="form in forms">
-                <td data-ng-click="selectForm(form)">{{form.title}}</td>
+                <td data-ng-click="selectForm(form)"><button>{{form.title}}</button></td>
                 <td>
                     <!-- pass by object preferred over pass by index in case of filtered index not matching original index -->
                     <button data-ng-click="deleteForm(form)" class="glyphicon glyphicon-remove"></button>

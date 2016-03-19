@@ -1,84 +1,62 @@
 
 <div class="container-fluid">
         <div class="col-sm-9 col-md-10 main">
-            <h1 class="page-header">Forms: Registration Form</h1>
+            <h1 class="page-header">Form: {{formTitle}}</h1>
             <ul class="nav nav-pills">
                 <li><a href="/forms">Forms</a></li>
                 <li class="active"><a href="#">Fields</a></li>
             </ul>
+
             <div class="table table-responsive">
                 <table class="table table-striped">
-                    <div class="form-group"><tbody>
-                        <tr>
-                            <td>First Name:
-                                <input type="text" class="form-control" id=firstName" placeholder="First Name"></td>
-                            <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Last Name:
-                                <input type="text" class="form-control" id=lastName" placeholder="Last Name"></td>
-                            <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
-                        </tr>
 
-                        <tr>
-                           <td> <table>
-                                <tr>Date of Birth:</tr>
-                                <tr>
-                                    <input type="DOB" class="form-control">
-                                </tr>
-                            </table></td>
-                            <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
-                        </tr>
+                    <div class="form-group">
+                        <tbody>
+                        <tr data-ng-repeat='field in form["fields"]'>
+                            <td data-ng-switch="field['type']">
+                                {{field.title}}:
 
-                        <tr>
-                            <td>Gender:
-                                <Select class="form-control" id=gender">
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Other</option>
-                                </Select>
+                                <input data-ng-switch-when="Text" type="text" class="form-control" data-ng-model='field.text'>
+
+                                <select data-ng-switch-when="Dropdown" class="form-control">
+                                    <option data-ng-model='option.text' data-ng-repeat="option in field['options']">{{option.text}}</option>
+                                </select>
+
+                                <input data-ng-switch-when="Date" type="date" class="form-control">
+
+                                <div data-ng-switch-when="Radio Button" class="radio">
+                                    <label data-ng-model="option.text" data-ng-repeat="option in field['options']"><input type="radio" name="optradio"></label>
+                                </div>
+
+                                <p data-ng-model="field.text" data-ng-switch-when="Paragraph"></p>
+
+                                <p data-ng-switch-default>unknown field type: {{field{'type'}}</p>
+
                             </td>
-                            <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
+
+                            <td>
+                                <span data-ng-click="editField(field)" class="glyphicon glyphicon-ok"></span>
+                                <span data-ng-click="deleteField(field)" class="glyphicon glyphicon-remove"></span>
+                                <span data-ng-click="moveField(field)" class="glyphicon glyphicon-list" aria-hidden="true"></span>
+                            </td>
                         </tr>
 
-                    <tr>
-                        <td>
-                            Roles:
-                            <br>
-                            <label><input type="checkbox" value="">Admin</label>
-                            <label><input type="checkbox" value="">Student</label>
-                            <label><input type="checkbox" value="">User</label>
-                        </td>
-                        <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
-                    </tr>
-                    <tr>
-                        <td>
-                        License Agreement:
-                        <div class="radio">
-                            <label><input type="radio" name="optradio">Yes</label>
                         </div>
-                        <div class="radio">
-                            <label><input type="radio" name="optradio">No</label>
-                        </div>
-                        </td>
-                        <td><span class="glyphicon glyphicon-pencil"></span><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-list" aria-hidden="true"></span></td>
-                    </tr>
-
                     <tr>
                         <td>
                             Add New Field:
-                            <select class="form-control">
-                                <option>Single Line Text</option>
+                            <select data-ng-model="newField" class="form-control">
+                                <option>Text</option>
                                 <option>Date</option>
                                 <option>Dropdown</option>
                                 <option>Checkbox</option>
                                 <option>Radio Button</option>
-                                <option>Paragraph Text</option>
+                                <option>Paragraph</option>
                             </select>
                         </td>
-                        <td><span class="glyphicon glyphicon-plus"></span></td>
+                        <td><span data-ng-click="addField(newField)" class="glyphicon glyphicon-plus"></span></td>
                     </tr>
-                    </tbody></div>
+                    </tbody>
                 </table>
             </div>
         </div>

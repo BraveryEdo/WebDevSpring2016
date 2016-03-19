@@ -24,28 +24,38 @@
 
         $scope.addForm = function($name){
             var fields;
-            if($scope.selectedForm = null){
+            if($scope.selectedForm == null){
                 fields = [];
             } else {
                 fields = $scope.slectedForm["fields"];
             }
-            var form = {"_id": (new Date).getTime(), "title": $name, "userId": $scope.user["_id"], "fields": fields};
-            FormsService.createFormForUser(userid, form, function($res){
-                if($res == null){
-                    console.log("same form name found for this user, aborting creation to avoid duplicates");
-                    window.alert("You already have a form with this name, please use another name");
-                } else {
-                    FormsService.findAllFormsForUser($scope.user["_id"], function($userForms){
-                        $scope.forms = $userForms;
-                    });
-                }
 
-            });
+            if($name == "" || $name == null){
+                window.alert("The form needs a name");
+            } else {
+                var form = {
+                    "_id": (new Date).getTime(),
+                    "title": $name,
+                    "userId": $scope.user["_id"],
+                    "fields": fields
+                };
+                FormsService.createFormForUser($scope.user["_id"], form, function ($res) {
+                    if ($res == null) {
+                        console.log("same form name found for this user, aborting creation to avoid duplicates");
+                        window.alert("You already have a form with this name, please use another name");
+                    } else {
+                        FormsService.findAllFormsForUser($scope.user["_id"], function ($userForms) {
+                            $scope.forms = $userForms;
+                        });
+                    }
 
+                });
+            }
         };
 
         $scope.updateForm = function($form){
-            FormsService.updateFormById()
+            console.log("updating " + $scope.username + "'s form, id#" + $form["_id"]);
+           $location.url('/form-fields');
         };
 
         $scope.deleteForm  = function($form){
@@ -59,6 +69,11 @@
         $scope.selectForm  = function($form){
             $scope.newFormName = $form["title"];
             $scope.selectedform = $form;
+            FormsService.setForm($form, function($res){
+                if($res != $form){
+                    console.log("form not selected correctly for editing");
+                }
+            });
         };
         console.log("forms controller finished loading");
     }
