@@ -14,20 +14,20 @@
 
         <tbody>
             <tr>
-                <td><input data-ng-model="newFormName" type="text" class="form-control" id="newFormName" placeholder="New Form Name"></td>
+                <td><input require data-ng-model="newFormName" type="text" class="form-control" id="newFormName" placeholder="New Form Name"></td>
                 <td>
-                    <button data-ng-click="addForm()" class="glyphicon glyphicon-plus"></button>
-                    <button data-ng-click="updateForm()" class="glyphicon glyphicon-pencil"></button>
+                    <button data-ng-click="addForm(newFormName)" class="glyphicon glyphicon-plus"></button>
+                    <button data-ng-click="updateForm(newFormName)" class="glyphicon glyphicon-ok"></button>
                 </td>
             </tr>
 
 
             <tr data-ng-repeat="form in forms">
-                <td>{{form.title}}</td>
+                <td data-ng-click="selectForm(form)">{{form.title}}</td>
                 <td>
                     <!-- pass by object preferred over pass by index in case of filtered index not matching original index -->
                     <button data-ng-click="deleteForm(form)" class="glyphicon glyphicon-remove"></button>
-                    <button data-ng-click="selectForm(form)" class="glyphicon glyphicon-pencil"></button>
+                    <button data-ng-click="updateForm(form)" class="glyphicon glyphicon-pencil"></button>
                 </td>
             </tr>
 
