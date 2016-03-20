@@ -63,7 +63,7 @@
                 if($scope.newFormName == ""){
                     window.alert("please don't leave the form's name blank");
                 } else {
-                    $form["title"] = newFormName;
+                    $form["title"] = $scope.newFormName;
                 }
             }
 
