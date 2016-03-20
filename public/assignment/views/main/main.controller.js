@@ -32,7 +32,10 @@
                         break;
                     }
                 }
+
                 $scope.showAdmin = res;
+
+
             } else {
                 $scope.Username = null;
                 $scope.showUsername = false;

@@ -9,13 +9,18 @@
 
     function FormsController($scope, $location, FormsService, UserService){
         $scope.location = $location;
-        $scope.selectedForm = null;
 
         UserService.user(function($user){
             $scope.user = $user;
             if($user != null){
                 FormsService.findAllFormsForUser($scope.user["_id"], function($userForms){
                     $scope.forms = $userForms;
+                    FormsService.form(function($f){
+                        $scope.selectedForm = $f;
+                        if($f != null){
+                            $scope.newFormName = $f["title"];
+                        }
+                    });
                 });
             }
         });
@@ -54,7 +59,22 @@
         };
 
         $scope.updateForm = function($form){
-            console.log("updating " + $scope.username + "'s form, id#" + $form["_id"]);
+            if($scope.selectedForm["_id"] == $form["_id"]){
+                if($scope.newFormName == ""){
+                    window.alert("please don't leave the form's name blank");
+                } else {
+                    $form["title"] = newFormName;
+                }
+            }
+
+            $scope.newFormName = $form["title"];
+            $scope.selectedForm = $form;
+            FormsService.setForm($form, function($res){
+                if($res != $form){
+                    console.log("form not selected correctly for editing");
+                }
+            });
+            console.log("updating " + $scope.Username + "'s form, id#" + $form["_id"]);
            $location.url('/form-fields');
         };
 
@@ -68,13 +88,14 @@
 
         $scope.selectForm  = function($form){
             $scope.newFormName = $form["title"];
-            $scope.selectedform = $form;
+            $scope.selectedForm = $form;
             FormsService.setForm($form, function($res){
                 if($res != $form){
                     console.log("form not selected correctly for editing");
                 }
             });
         };
+
         console.log("forms controller finished loading");
     }
 })();

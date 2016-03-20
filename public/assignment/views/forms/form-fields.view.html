@@ -1,7 +1,7 @@
 
 <div class="container-fluid">
         <div class="col-sm-9 col-md-10 main">
-            <h1 class="page-header">Form: {{formTitle}}</h1>
+            <h1 class="page-header">Form: {{form.title}}</h1>
             <ul class="nav nav-pills">
                 <li><a href="/forms">Forms</a></li>
                 <li class="active"><a href="#">Fields</a></li>
@@ -45,8 +45,8 @@
                     <tr>
                         <td>
                             Add New Field:
-                            <select data-ng-model="newField" class="form-control">
-                                <option>Text</option>
+                            <select data-ng-model="newFieldType" class="form-control" placeholder="Text">
+                                <option >Text</option>
                                 <option>Date</option>
                                 <option>Dropdown</option>
                                 <option>Checkbox</option>
@@ -54,9 +54,8 @@
                                 <option>Paragraph</option>
                             </select>
                         </td>
-                        <td><span data-ng-click="addField(newField)" class="glyphicon glyphicon-plus"></span></td>
+                        <td><span data-ng-click="addField(newFieldType)" class="glyphicon glyphicon-plus"></span></td>
                     </tr>
-                    </tbody>
                 </table>
             </div>
         </div>

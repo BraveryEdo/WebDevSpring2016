@@ -15,18 +15,28 @@
         });
 
         $scope.editField = function($field){
-            window.alert("edit");
-            console.log($field);
+            var newForm = $scope.form;
+            for(var i = 0; i < newForm['fields'].length; i++){
+                if(newForm['fields'][i]["_id"] == $field["_id"]){
+                    newForm['fields'][i] = $field;
+                }
+            }
+
+            FormsService.updateFormById($scope.form["_id"], newForm, function($updatedForm){
+                $scope.form = $updatedForm;
+                window.alert("name change saved");
+            });
         };
 
 
         $scope.deleteField = function($field){
             console.log("trying to delete");
             var newForm = $scope.form;
-            newForm['fields'].filter(function (u) {
+            var newFormFields = $scope.form['fields'].filter(function (u) {
                 return u['_id'] !== $field['_id'];
             });
 
+            newForm['fields'] = newFormFields;
             FormsService.updateFormById($scope.form["_id"], newForm, function($updatedForm){
                 $scope.form = $updatedForm;
             });
@@ -36,6 +46,33 @@
             window.alert("move");
             console.log($field);
         };
+
+        $scope.addField = function($newType){
+            switch($newType){
+                case "Text":
+
+                    break;
+                case "Date":
+
+                    break;
+                case "Dropdown":
+
+                    break;
+                case "Checkbox":
+
+                    break;
+                case "Radio Button":
+
+                    break;
+                case "Paragraph":
+
+                    break;
+                default:
+                    console.log("unknown field type, update forms-field controller");
+                    break;
+            }
+        };
+
         console.log("forms-fields controller finished loading");
     }
 })();

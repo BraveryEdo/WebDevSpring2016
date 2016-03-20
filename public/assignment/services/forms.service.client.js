@@ -17,6 +17,11 @@
 
         var service = {};
 
+        service.logout = function(callback){
+            currentForm = null;
+            callback(currentForm);
+        };
+
         service.form = function(callback){
             callback(currentForm);
         };

@@ -5,10 +5,15 @@
 (function(){
     angular
         .module("FormMakerApp")
-        .controller("HeaderController", ['$scope', '$location', 'UserService', HeaderController]);
-    function HeaderController($scope, $location, UserService){
+        .controller("HeaderController", ['$scope', '$location', 'UserService', 'FormsService', HeaderController]);
+    function HeaderController($scope, $location, UserService, FormsService){
         $scope.logout = function (){
             UserService.logout(function(res){
+                FormsService.logout(function($res){
+                    if($res == null){
+                        console.log("cleaned up form data");
+                    }
+                });
                 if(res == null){
                     console.log("successfully logged user out");
                     $location.url('/');
