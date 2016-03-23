@@ -23,7 +23,7 @@
 
 
             <tr data-ng-repeat="form in forms">
-                <td data-ng-click="selectForm(form)"><button>{{form.title}}</button></td>
+                <td class="form-button" data-ng-class="{'active-button': form['_id'] == selectedForm['_id']}" data-ng-click="selectForm(form)"><button >{{form.title}}</button></td>
                 <td>
                     <!-- pass by object preferred over pass by index in case of filtered index not matching original index -->
                     <button data-ng-click="deleteForm(form)" class="glyphicon glyphicon-remove"></button>

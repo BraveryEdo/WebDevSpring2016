@@ -32,7 +32,7 @@
             if($scope.selectedForm == null){
                 fields = [];
             } else {
-                fields = $scope.slectedForm["fields"];
+                fields = $scope.selctedForm["fields"];
             }
 
             if($name == "" || $name == null){
@@ -59,13 +59,6 @@
         };
 
         $scope.updateForm = function($form){
-            if($scope.selectedForm["_id"] == $form["_id"]){
-                if($scope.newFormName == ""){
-                    window.alert("please don't leave the form's name blank");
-                } else {
-                    $form["title"] = $scope.newFormName;
-                }
-            }
 
             $scope.newFormName = $form["title"];
             $scope.selectedForm = $form;

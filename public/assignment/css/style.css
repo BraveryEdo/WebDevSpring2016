@@ -93,3 +93,8 @@ body {
         background-color: transparent;
     }
 }
+
+.active-button{
+    color: #00131a;
+    background-color: #0099cc;
+}

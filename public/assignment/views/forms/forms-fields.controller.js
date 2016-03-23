@@ -48,29 +48,41 @@
         };
 
         $scope.addField = function($newType){
+            var newField = null;
+            var newForm = $scope.form;
             switch($newType){
                 case "Text":
-
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "text": ""};
                     break;
                 case "Date":
-
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "date": null};
                     break;
                 case "Dropdown":
-
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": {}};
                     break;
                 case "Checkbox":
-
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": {}};
                     break;
                 case "Radio Button":
-
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": {}};
                     break;
                 case "Paragraph":
-
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "text": ""};
                     break;
                 default:
-                    console.log("unknown field type, update forms-field controller");
+                    console.log("unknown field type, update form-fields controller");
                     break;
             }
+            if(newField != null) {
+                newForm["fields"].push(newField);
+                FormsService.updateFormById($scope.form["_id"], newForm, function($updatedForm){
+                    $scope.form = $updatedForm;
+                });
+            }
+        };
+
+        $scope.addOption = function($field, $option){
+
         };
 
         console.log("forms-fields controller finished loading");
