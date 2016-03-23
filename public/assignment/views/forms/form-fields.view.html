@@ -9,27 +9,26 @@
 
             <div class="table table-responsive">
                 <table class="table table-striped">
+                    <tbody class="form-group" data-ng-repeat='field in form["fields"]'>
 
-                    <div class="form-group">
-                        <tbody>
-                        <tr data-ng-repeat='field in form["fields"]'>
+                        <tr>
                             <td data-ng-switch="field['type']">
                                 {{field.title}}:
 
                                 <input data-ng-switch-when="Text" type="text" class="form-control" data-ng-model='field.text'>
 
                                 <select data-ng-switch-when="Dropdown" class="form-control">
-                                    <option data-ng-model='option.text' data-ng-repeat="option in field['options']">{{option.text}}</option>
+                                    <option data-ng-model="option" data-ng-repeat="option in field['options']">{{option['text']}}</option>
                                 </select>
 
                                 <input data-ng-switch-when="Date" data-ng-model="field.date" type="date" class="form-control">
 
                                 <div data-ng-switch-when="Radio Button">
-                                    <label data-ng-model="option.text" data-ng-repeat="option in field['options']"><input type="radio" name="optradio"></label>
+                                    <label data-ng-model="option" data-ng-repeat="option in field['options']"><input type="radio" name="optradio">{{option['text']}}</label>
                                 </div>
 
                                 <div data-ng-switch-when="Checkbox">
-                                    <label data-ng-model="option.text" data-ng-repeat="option in field['options']"><input type="checkbox" name="optcheck"></label>
+                                    <label data-ng-model="option" data-ng-repeat="option in field['options']"><input type="checkbox" name="optcheck">{{option['text']}}</label>
                                 </div>
 
                                 <p data-ng-model="field.text" data-ng-switch-when="Paragraph"></p>
@@ -37,16 +36,22 @@
                                 <p data-ng-switch-default>unknown field type: {{field['type']}}</p>
 
                             </td>
-
                             <td>
                                 <span data-ng-click="editField(field)" class="glyphicon glyphicon-ok"></span>
-                                <span data-ng-click="addOption(field)" class="glyphicon glyphicon-plus" data-ng-if="field['type'] == 'Radio Button' || field['type'] == 'Dropdown' || field['type'] == 'Checkbox'"></span>
+                                <span data-ng-click="toggleOption(field)" class="glyphicon glyphicon-plus" data-ng-if="!showOption(field) && (field['type'] == 'Radio Button' || field['type'] == 'Dropdown' || field['type'] == 'Checkbox')"></span>
+                                <span data-ng-click="toggleOption(field)" class="glyphicon glyphicon-minus" data-ng-if="showOption(field) &&(field['type'] == 'Radio Button' || field['type'] == 'Dropdown' || field['type'] == 'Checkbox')"></span>
                                 <span data-ng-click="moveField(field)" class="glyphicon glyphicon-list" aria-hidden="true"></span>
                                 <span data-ng-click="deleteField(field)" class="glyphicon glyphicon-remove"></span>
                             </td>
                         </tr>
+                        <tr>
+                            <td data-ng-if="showOption(field)">
+                                <input data-ng-model="newOptionText" type="text" placeholder="New Option">
+                                <span data-ng-click="addOption(field, newOptionText)" class="glyphicon glyphicon-check"></span>
+                            </td>
+                        </tr>
+                    </tbody>
 
-                        </div>
                     <tr>
                         <td>
                             Add New Field: <input type="text" class="form-controll" data-ng-model="newFieldTitle" placeholder="Title">
