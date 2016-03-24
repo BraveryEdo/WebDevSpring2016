@@ -11,7 +11,7 @@
     <link rel="icon" href="icons/favicon.ico">
     <title>Form Maker</title>
     <!-- Bootstrap core CSS -->
-    <link href="assignment/css/style.css" rel="stylesheet">
+    <link href="assignment/client/css/style.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
     <base href="/">
@@ -54,20 +54,20 @@
     <!-- Angular JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
-    <script src="assignment/js/app.js"></script>
-    <script src="assignment/js/config.js"></script>
-    <script src="assignment/services/user.service.client.js"></script>
-    <script src="assignment/services/forms.service.client.js"></script>
-    <script src="assignment/views/main/main.controller.js"></script>
-    <script src="assignment/views/header/header.controller.js"></script>
-    <script src="assignment/views/sidebar/sidebar.controller.js"></script>
-    <script src="assignment/views/home/home.controller.js"></script>
-    <script src="assignment/views/admin/admin.controller.js"></script>
-    <script src="assignment/views/forms/forms.controller.js"></script>
-    <script src="assignment/views/forms/forms-fields.controller.js"></script>
-    <script src="assignment/views/users/login.controller.js"></script>
-    <script src="assignment/views/users/profile.controller.js"></script>
-    <script src="assignment/views/users/register.controller.js"></script>
+    <script src="assignment/client/app.js"></script>
+    <script src="assignment/client/config.js"></script>
+    <script src="assignment/client/services/user.service.client.js"></script>
+    <script src="assignment/client/services/forms.service.client.js"></script>
+    <script src="assignment/client/views/main/main.controller.js"></script>
+    <script src="assignment/client/views/header/header.controller.js"></script>
+    <script src="assignment/client/views/sidebar/sidebar.controller.js"></script>
+    <script src="assignment/client/views/home/home.controller.js"></script>
+    <script src="assignment/client/views/admin/admin.controller.js"></script>
+    <script src="assignment/client/views/forms/forms.controller.js"></script>
+    <script src="assignment/client/views/forms/forms-fields.controller.js"></script>
+    <script src="assignment/client/views/users/login.controller.js"></script>
+    <script src="assignment/client/views/users/profile.controller.js"></script>
+    <script src="assignment/client/views/users/register.controller.js"></script>
 
     <!-- Processing's Javascript libraries for audio and graphics -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.16/processing.min.js"></script>
@@ -81,9 +81,9 @@
 
     <body data-ng-controller="MainController">
 
-        <div data-ng-include="'assignment/views/sidebar/sidebar.view.html'"></div>
+        <div data-ng-include="'assignment/client/views/sidebar/sidebar.view.html'"></div>
 
-        <div data-ng-include="'assignment/views/header/header.view.html'"></div>
+        <div data-ng-include="'assignment/client/views/header/header.view.html'"></div>
 
         <div class="mainView" data-ng-view></div>
     </body>

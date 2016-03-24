@@ -16,9 +16,8 @@
                 $scope.password2 = $res["password"];
                 $scope.fname = $res["firstName"];
                 $scope.lname = $res["lastName"];
-                $scope.email = $res["email"];
 
-                $scope.update = function($username, $password1,$password2, $fname, $lname, $email){
+                $scope.update = function($username, $password1,$password2, $fname, $lname){
                     if($password1 == $password2){
                         UserService.checkID($username, function($idCheck){
                             if($idCheck != null && $idCheck != $res["_id"]) {
@@ -31,8 +30,7 @@
                                         "lastName": $lname,
                                         "username": $username,
                                         "password": $password1,
-                                        "roles": $res["roles"],
-                                        "email": $email
+                                        "roles": $res["roles"]
                                     },
                                     function ($updated) {
                                         if ($updated != null) {
@@ -44,7 +42,6 @@
                                                     $scope.password2 = $result["password"];
                                                     $scope.fname = $result["firstName"];
                                                     $scope.lname = $result["lastName"];
-                                                    $scope.email = $result["email"];
                                                 });
 
                                             UserService.logout(function ($r) {

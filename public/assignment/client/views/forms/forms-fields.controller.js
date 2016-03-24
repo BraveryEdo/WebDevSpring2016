@@ -43,11 +43,6 @@
             });
         };
 
-        $scope.moveField = function($field){
-            window.alert("move");
-            console.log($field);
-        };
-
         $scope.addField = function($newType){
             var newField = null;
             var newForm = $scope.form;

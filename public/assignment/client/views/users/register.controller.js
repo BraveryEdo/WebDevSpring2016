@@ -10,9 +10,9 @@
     function RegisterController($scope , $location, UserService){
         $scope.locaiton = $location;
 
-        $scope.register = function ($username, $password1, $password2, $email){
+        $scope.register = function ($username, $password1, $password2){
 
-            if($username == null || $password1 == null || $password2 == null || $email == null){
+            if($username == null || $password1 == null || $password2 == null){
                 console.log("something is blank");
             } else {
 
