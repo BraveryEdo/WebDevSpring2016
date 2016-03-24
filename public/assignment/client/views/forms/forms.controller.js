@@ -27,7 +27,8 @@
 
 
 
-        $scope.addForm = function($name){
+        $scope.addForm = addForm;
+        function addForm($name){
             var fields;
             if($scope.selectedForm == null){
                 fields = [];
@@ -51,6 +52,7 @@
                     } else {
                         FormsService.findAllFormsForUser($scope.user["_id"], function ($userForms) {
                             $scope.forms = $userForms;
+                            selectForm(form);
                         });
                     }
 
@@ -79,7 +81,8 @@
             });
         };
 
-        $scope.selectForm  = function($form){
+        $scope.selectForm  = selectForm;
+        function selectForm($form){
             $scope.newFormName = $form["title"];
             $scope.selectedForm = $form;
             FormsService.setForm($form, function($res){

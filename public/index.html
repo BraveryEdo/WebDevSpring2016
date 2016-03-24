@@ -13,6 +13,7 @@
     <!-- Bootstrap core CSS -->
     <link href="assignment/client/css/style.css" rel="stylesheet">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
 
     <base href="/">
 
@@ -25,9 +26,8 @@
     <!-- libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script> window.jQuery || document.write('<script src="https://code.jquery.com/jquery-1.12.0.min.js"><\/script>')</script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/holder/2.3.1/holder.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.2.0/require.min.js"></script>
 
     <!-- favicons -->
 
@@ -51,13 +51,22 @@
     <meta name="msapplication-config" content="icons/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 
-    <!-- Angular JS -->
+    <!-- Angular/Require JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-route.js"></script>
+    <!--
+    <script src="assignment/server/models/user.mock.json"></script>
+    <script src="assignment/server/models/form.mock.json"></script>
+    <script src="assignment/server/models/user.model.server.js"></script>
+    <script src="assignment/server/models/form.model.server.js"></script>
+    <script src="assignment/server/services/user.service.server.js"></script>
+    <script src="assignment/server/services/forms.service.server.js"></script>
+    <script src="assignment/server/app.js"></script>-->
+
     <script src="assignment/client/app.js"></script>
     <script src="assignment/client/config.js"></script>
-    <script src="assignment/client/services/user.service.client.js"></script>
     <script src="assignment/client/services/forms.service.client.js"></script>
+    <script src="assignment/client/services/user.service.client.js"></script>
     <script src="assignment/client/views/main/main.controller.js"></script>
     <script src="assignment/client/views/header/header.controller.js"></script>
     <script src="assignment/client/views/sidebar/sidebar.controller.js"></script>
@@ -70,10 +79,9 @@
     <script src="assignment/client/views/users/register.controller.js"></script>
 
     <!-- Processing's Javascript libraries for audio and graphics -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.16/processing.min.js"></script>
-    <script src="http://coursescript.com/notes/interactivecomputing/p5/p5.min.js"></script>
-    <script src="http://coursescript.com/notes/interactivecomputing/p5/addons/p5.dom.min.js"></script>
-    <script src="http://coursescript.com/notes/interactivecomputing/p5/addons/p5.sound.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.23/addons/p5.sound.min.js"></script>
     <script src="project/dependencies/angular-p5.js"></script>
     <script src="project/views/home/project.controller.js"></script>
 

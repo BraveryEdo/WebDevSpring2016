@@ -7,18 +7,17 @@
         .module("FormMakerApp")
         .factory("UserService", UserService);
 
-    function UserService($http) {
+    function UserService() {
         var currentUser = null;
-        var users = [];
-        function updateUsers() {
-            $http.get("/rest/user")
-                .success(function(response){
-                    users = response;
-                });
-        }
-        updateUsers();
-        //was having trouble defining all the functions here
-        //so added them to service array as they are created
+        var users =
+            [
+                {"_id": 123, "firstName": "Alice",         "lastName": "Wonderland",        "username": "alice",         "password": "alice"},
+                {"_id": 234, "firstName": "Bob",        "lastName": "Hope",                 "username": "bob",         "password": "bob"},
+                {"_id": 345, "firstName": "Charlie","lastName": "Brown",                 "username": "charlie", "password": "charlie"},
+                {"_id": 456, "firstName": "Dan",        "lastName": "Craig",                 "username": "dan",         "password": "dan"},
+                {"_id": 567, "firstName": "Edward","lastName": "Norton",                "username": "ed",        "password": "ed"}
+            ];
+        // require("user.mock.json");
         var service = {};
 
         service.user = function(callback){
@@ -26,8 +25,8 @@
         };
 
         service.setUser = function(id, callback){
-            updateUsers();
             var result = null;
+
             for (var i = 0; i < users.length; i++) {
                 if (users[i]["_id"] == id){
                     currentUser = users[i];
@@ -41,11 +40,11 @@
         service.logout = function(callback){
             currentUser = null;
             callback(currentUser);
-        };
+        }
 
         service.checkID = function(username, callback){
-            updateUsers();
             var result = null;
+
             for (var i = 0; i < users.length; i++) {
                 if (users[i]["username"] == username){
                     result = users[i]["_id"];
@@ -57,8 +56,8 @@
         };
 
         service.findUserByCredentials = function (username, password, callback) {
-            updateUsers();
             var result = null;
+
             for (var i = 0; i < users.length; i++) {
                 if (users[i]["username"] == username && users[i]["password"] == password) {
                     result = users[i];
@@ -69,18 +68,15 @@
         };
 
         service.findAllUsers = function (callback) {
-            updateUsers();
             callback(users);
         };
 
         service.createUser = function (user, callback) {
-            updateUsers();
             users.push(user);
             service.findUserByCredentials(user["username"], user["password"], callback);
         };
 
         service.deleteUserById = function (userId, callback) {
-            updateUsers();
             users = users.filter(function (u) {
                 return u["_id"] !== userId;
             });

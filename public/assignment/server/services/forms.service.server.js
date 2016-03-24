@@ -7,16 +7,14 @@
         .module("FormMakerApp")
         .factory("FormsService", FormsService);
 
-    function FormsService($http) {
+    function FormsService() {
         var currentForm = null;
-        var forms = [];
-        $http.get("/rest/form")
-            .success(function(response){
-                forms = response;
-            });
+        var forms = [
+            {"_id": "000", "title": "Contacts", "userId": 123, "fields": [{"_id": 0, "type": "Text", "title": "alice", "text": "555-555-5555", "addOption": false},]},
+            {"_id": "010", "title": "ToDo",     "userId": 123, "fields": [{"_id": 0, "type": "Text", "title": "go shopping", "text": "before friday's party"},{"_id": 1, "type": "Text", "title": "finish writing paper", "text": "continue with chapter 3 research", "addOption": false},]},
+            {"_id": "020", "title": "CDs",      "userId": 234, "fields": [{"_id": 0, "type": "Text", "title": "Pink Floyd", "text": "The Dark Side of the Moon"}, {"_id": 1, "type": "Text", "title": "Pendulum", "text": "Hold Your Colour", "addOption": false},]},
+        ];
 
-        //was having trouble defining all the functions here
-        //so added them to service array as they are created
         var service = {};
 
         service.logout = function(callback){

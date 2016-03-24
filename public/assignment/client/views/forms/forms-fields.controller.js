@@ -13,6 +13,7 @@
         $scope.newOptionText = "";
         FormsService.form(function($f){
             $scope.form = $f;
+
         });
 
         $scope.editField = function($field){
