@@ -10,6 +10,11 @@
     function UserService($http) {
         var currentUser = null;
         var users = [];
+
+        //was having trouble defining all the functions here
+        //so added them to service array as they are created
+        var service = {};
+
         function updateUsers() {
             $http.get("/rest/user")
                 .success(function(response){
@@ -17,25 +22,14 @@
                 });
         }
         updateUsers();
-        //was having trouble defining all the functions here
-        //so added them to service array as they are created
-        var service = {};
-
         service.user = function(callback){
             callback(currentUser);
         };
 
-        service.setUser = function(id, callback){
-            updateUsers();
-            var result = null;
-            for (var i = 0; i < users.length; i++) {
-                if (users[i]["_id"] == id){
-                    currentUser = users[i];
-                    result = currentUser;
-                    break;
-                }
-            }
-            callback(result);
+        service.setUser = function(user, callback){
+            var result = users.filter(function(u){return u['_id'] == user['_id'];});
+            currentUser = result[0];
+            callback(result[0]);
         };
 
         service.logout = function(callback){
@@ -43,29 +37,10 @@
             callback(currentUser);
         };
 
-        service.checkID = function(username, callback){
-            updateUsers();
-            var result = null;
-            for (var i = 0; i < users.length; i++) {
-                if (users[i]["username"] == username){
-                    result = users[i]["_id"];
-                    break;
-                }
-            }
-
-            callback(result);
-        };
-
         service.findUserByCredentials = function (username, password, callback) {
             updateUsers();
-            var result = null;
-            for (var i = 0; i < users.length; i++) {
-                if (users[i]["username"] == username && users[i]["password"] == password) {
-                    result = users[i];
-                    break;
-                }
-            }
-            callback(result);
+            var result = users.filter(function(u){return (u['username'] == username && u['password'] == password);});
+            callback(result[0]);
         };
 
         service.findAllUsers = function (callback) {
@@ -74,18 +49,25 @@
         };
 
         service.createUser = function (user, callback) {
-            $http.post("/rest/user", user)
-                 .success(callback);
+            var check = users.filter(function(u){return u['username'] == user['username'];});
+            if(check[0] != null) {
+                $http.post("/rest/user", user)
+                    .success(function (u) {
+                        callback(u);
+                    });
+            } else {
+                callback(check[0]);
+            }
         };
 
         service.deleteUserById = function (userId, callback) {
             $http.delete("/rest/user"+userId)
-                .success(callback);
+                .success(function($users){ users = $users;callback(users);});
         };
 
         service.updateUser = function (user, callback) {
             $http.put("/rest/user"+user['_id'], user)
-                .success(callback);
+                .success(function(u){ callback(u);});
         };
 
         console.log("finished loading user service functions");

@@ -8,10 +8,10 @@
         .factory("FormsService", FormsService);
 
     function FormsService($http) {
-        var currentForm = null;
+        var selectedForm = null;
         var forms = [];
         function updateForms() {
-            $http.get("/rest/user")
+            $http.get("/rest/form")
                 .success(function(response){
                     forms = response;
                 });
@@ -22,63 +22,49 @@
         var service = {};
 
         service.logout = function(callback){
-            currentForm = null;
-            callback(currentForm);
+             selectedForm = null;
+            callback(selectedForm);
         };
 
         service.form = function(callback){
-            callback(currentForm);
+            callback(selectedForm);
         };
 
         service.setForm = function(form, callback){
-            currentForm =  form;
-            callback(currentForm);
-        };
-
-        service.pushForm = function(form, callback){
-            $http.put("/rest/form", form)
-                .success(callback);
+             selectedForm =  form;
+            callback(selectedForm);
         };
 
         service.createFormForUser = function(userId, form, callback){
-            form['_id'] = (new Date).getTime();
-            form['userId'] = userId;
+            var uForm = form;
+            uForm['_id'] = (new Date).getTime();
+            uForm['userId'] = userId;
 
-            $http.post("/rest/form", form)
-                .success(callback);
-
+            if(service.findAllFormsForUser(userId), function($f){return $f.filter(function (f){return f['title'] == form['title'];});}){
+                uForm = null;
+                callback(uForm);
+            } else {
+                $http.post("/rest/form", uForm)
+                    .success(callback(uForm));
+            }
         };
 
         service.findAllFormsForUser = function(userId, callback){
-            var found = [];
-
-            for(var i = 0; i <  forms.length; i++){
-                if(forms[i]["userId"] == userId){
-                    found.push(forms[i]);
-                }
-            }
-
-            callback(found);
+            $http.get("/rest/form")
+                .success(function($f){
+                    var uForms = $f.filter(function (f) { return f['userId'] == userId;});
+                    callback(uForms);
+                });
         };
 
         service.deleteFormById = function(formId, callback){
-            forms = forms.filter(function (u) {
-                return u["_id"] !== formId;
-            });
-            callback(forms);
+            $http.delete("/rest/form/"+formId)
+                .success(callback);
         };
 
         service.updateFormById = function(formId, newForm, callback){
-            var $res = null;
-            for(var i = 0; i <  forms.length; i++){
-                if(forms[i]["_id"] == formId){
-                    newForm["_id"] = formId;
-                    forms[i] = newForm;
-                    $res = forms[i];
-                    break;
-                }
-            }
-            callback($res);
+            $http.put("/rest/form/"+formId, newForm)
+                .success(function(f){callback(f);});
         };
 
 

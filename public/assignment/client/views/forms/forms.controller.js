@@ -12,17 +12,17 @@
 
         UserService.user(function($user){
             $scope.user = $user;
-            if($user != null){
-                FormsService.findAllFormsForUser($scope.user["_id"], function($userForms){
-                    $scope.forms = $userForms;
-                    FormsService.form(function($f){
-                        $scope.selectedForm = $f;
-                        if($f != null){
-                            $scope.newFormName = $f["title"];
-                        }
-                    });
+
+            FormsService.findAllFormsForUser($scope.user["_id"], function($userForms){
+                $scope.forms = $userForms;
+                FormsService.form(function($f){
+                    $scope.selectedForm = $f;
+                    if($f != null){
+                        $scope.newFormName = $f["title"];
+                    }
                 });
-            }
+            });
+
         });
 
 
@@ -33,7 +33,7 @@
             if($scope.selectedForm == null){
                 fields = [];
             } else {
-                fields = $scope.selctedForm["fields"];
+                fields = $scope.selctedForm['fields'];
             }
 
             if($name == "" || $name == null){
@@ -52,7 +52,7 @@
                     } else {
                         FormsService.findAllFormsForUser($scope.user["_id"], function ($userForms) {
                             $scope.forms = $userForms;
-                            selectForm(form);
+                            selectForm($res);
                         });
                     }
 
@@ -61,24 +61,17 @@
         };
 
         $scope.updateForm = function($form){
-
-            $scope.newFormName = $form["title"];
-            $scope.selectedForm = $form;
-            FormsService.setForm($form, function($res){
-                if($res != $form){
-                    console.log("form not selected correctly for editing");
-                }
-            });
+            selectForm($form);
             console.log("updating " + $scope.Username + "'s form, id#" + $form["_id"]);
            $location.url('/form-fields');
         };
 
         $scope.deleteForm  = function($form){
-            FormsService.deleteFormById($form["_id"], function($res){
+            FormsService.deleteFormById($form["_id"], (function(){
                 FormsService.findAllFormsForUser($scope.user["_id"], function($userForms){
                     $scope.forms = $userForms;
                 });
-            });
+            })());
         };
 
         $scope.selectForm  = selectForm;

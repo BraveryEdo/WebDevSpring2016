@@ -39,7 +39,7 @@
             });
 
             newForm['fields'] = newFormFields;
-            FormsService.updateFormById($scope.form["_id"], newForm, function($updatedForm){
+            FormsService.updateFormById($scope.form['_id'], newForm, function($updatedForm){
                 $scope.form = $updatedForm;
             });
         };

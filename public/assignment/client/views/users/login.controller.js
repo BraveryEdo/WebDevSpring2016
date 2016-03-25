@@ -15,24 +15,20 @@
                 console.log("something is blank");
             } else {
 
-                UserService.checkID(username,
-                    function ($result) {
-                        if ($result != null) {
-                            UserService.findUserByCredentials(username, password, function($res){
-                                if($res != null){
-                                    $scope.user = $res;
-                                    UserService.setUser($result, function($r){
+                UserService.findUserByCredentials(username, password, function($res){
+                    if($res != null){
+                        UserService.setUser($res, function($r){
+                            $scope.user = $r;
+                        });
+                        $location.url("/");
+                    } else {
+                        window.alert("Wrong username/password combination");
+                    }
+                });
 
-                                    });
-                                    $location.url("/");
-                                } else {
-                                    window.alert("Wrong username/password combination");
-                                }
-                            });
-                        } else {
-                            window.alert("This username does not exist in our records");
-                        }
-                    });
+
+
+
             }
         };
 

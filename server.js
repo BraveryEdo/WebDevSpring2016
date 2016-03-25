@@ -50,7 +50,7 @@ app.get("/rest/user", function(req, res) {
 
 app.get("/rest/user/:id", function(req, res) {
     var user = users.filter(function (u) {
-        return u["_id"] !== req.params["id"];
+        return u['_id'] !== req.params['id'];
     });
     res.json(user);
 });
@@ -61,7 +61,7 @@ app.get("/rest/form", function(req, res) {
 
 app.get("/rest/form/:id", function(req, res) {
     var form = forms.filter(function (f) {
-        return f["_id"] !== req.params["id"];
+        return f['_id'] !== req.params['id'];
     });
     res.json(form);
 });
@@ -69,28 +69,30 @@ app.get("/rest/form/:id", function(req, res) {
 app.put("/rest/user/:id", function(req, res) {
     var user = req.body;
     for(var i = 0; i < users.length; i++){
-        if(users[i]['_id'] == user['_id']){
+        if(users[i]['_id'] == req.params['id']){
             users[i]['title'] = user['title'];
             users[i]['firstName'] = user['firstName'];
             users[i]['lastName'] = user['lastName'];
             users[i]['username'] = user['username'];
             users[i]['password'] = user['password'];
             users[i]['roles'] = user['roles'];
+            res.json(users[i]);
         }
     }
-    res.json(users);
+    res.json(null);
 });
 
-app.put("/rest/form", function(req, res) {
+app.put("/rest/form:id", function(req, res) {
     var form = req.body;
     for(var i = 0; i < forms.length; i++){
-        if(forms[i]['_id'] == form['id']){
+        if(req.params['id'] == form['id']){
             forms[i]['userId'] == form['userId'];
             forms[i]['title'] == form['title'];
             forms[i]['fields'] == form['fields'];
+            res.json(forms[i]);
         }
     }
-    res.json(forms);
+    res.json(null);
 });
 //delete
 app.delete("/rest/user/:id", function(req, res) {
@@ -107,7 +109,7 @@ app.delete("/rest/user/:id", function(req, res) {
 app.delete("/rest/form/:id", function(req, res) {
     var index;
     for(index = 0; index < forms.length; index++){
-        if(req.params["id"] == forms[index]['_id']){
+        if(req.params['id'] == forms[index]['_id']){
             forms.splice(index, 1);
             break;
         }

@@ -1,7 +1,6 @@
 /**
  * Created by EDO on 3/23/2016.
  */
-var model = require('nodejs-model');
 
 var user = model("User")
     .attr('firstName', {})
