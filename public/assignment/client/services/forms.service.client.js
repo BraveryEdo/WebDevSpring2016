@@ -10,11 +10,13 @@
     function FormsService($http) {
         var currentForm = null;
         var forms = [];
-        $http.get("/rest/form")
-            .success(function(response){
-                forms = response;
-            });
-
+        function updateForms() {
+            $http.get("/rest/user")
+                .success(function(response){
+                    forms = response;
+                });
+        }
+        updateForms();
         //was having trouble defining all the functions here
         //so added them to service array as they are created
         var service = {};
@@ -34,29 +36,17 @@
         };
 
         service.pushForm = function(form, callback){
-            forms.push(form);
-            callback(forms);
+            $http.put("/rest/form", form)
+                .success(callback);
         };
 
         service.createFormForUser = function(userId, form, callback){
-            form["_id"] = (new Date).getTime();
-            form["userId"] = userId;
+            form['_id'] = (new Date).getTime();
+            form['userId'] = userId;
 
-            service.findAllFormsForUser(userId, function($allForms){
-                var $result = "true";
-                for(var i = 0; i < $allForms.length; i++){
-                    if($allForms[i]["title"] == form["title"]){
-                        $result = "false";
-                        break;
-                    }
-                }
+            $http.post("/rest/form", form)
+                .success(callback);
 
-                if($result == "false"){
-                    callback(null);
-                } else {
-                    service.pushForm(form, callback);
-                }
-            });
         };
 
         service.findAllFormsForUser = function(userId, callback){

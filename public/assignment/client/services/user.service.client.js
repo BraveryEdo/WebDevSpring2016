@@ -74,27 +74,18 @@
         };
 
         service.createUser = function (user, callback) {
-            updateUsers();
-            users.push(user);
-            service.findUserByCredentials(user["username"], user["password"], callback);
+            $http.post("/rest/user", user)
+                 .success(callback);
         };
 
         service.deleteUserById = function (userId, callback) {
-            updateUsers();
-            users = users.filter(function (u) {
-                return u["_id"] !== userId;
-            });
-            callback(users);
+            $http.delete("/rest/user"+userId)
+                .success(callback);
         };
 
         service.updateUser = function (user, callback) {
-            for (var i = 0; i < users.length; ++i) {
-                if (users[i]._id == user["_id"]) {
-                    users[i] = user;
-                    break;
-                }
-            }
-            service.findUserByCredentials(user.username, user.password, callback);
+            $http.put("/rest/user"+user['_id'], user)
+                .success(callback);
         };
 
         console.log("finished loading user service functions");
