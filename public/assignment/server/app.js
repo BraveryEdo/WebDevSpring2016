@@ -3,9 +3,7 @@
  */
 "use strict";
 (function() {
-  angular.module('FormMakerApp').exports = {
-    f1: function(){
-      return;
-    }
-  };
+  module.exports = function(app, model, db){
+
+  }
 })();
