@@ -22,7 +22,7 @@
                     {        "_id":567, "firstName":"Edward",           "lastName":"Norton",
                         "username":"ed",     "password":"ed",      "roles": ["student"]                }
                 ];
-        // require("user.mock.json");
+
         var service = {};
 
         service.user = function(callback){

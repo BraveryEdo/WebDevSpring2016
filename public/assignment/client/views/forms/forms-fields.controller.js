@@ -17,16 +17,18 @@
         });
 
         $scope.editField = function($field){
-            var newForm = $scope.form;
+            var newForm = null;
+            FormsService.form(function(f){
+                newForm = f;
+            });
             for(var i = 0; i < newForm['fields'].length; i++){
                 if(newForm['fields'][i]['_id'] == $field['_id']){
                     newForm['fields'][i] = $field;
                 }
             }
-
             FormsService.updateFormById($scope.form['_id'], newForm, function($updatedForm){
                 $scope.form = $updatedForm;
-                window.alert("name change saved");
+                window.alert("change saved!");
             });
         };
 
@@ -46,7 +48,10 @@
 
         $scope.addField = function($newType){
             var newField = null;
-            var newForm = $scope.form;
+            var newForm = null;
+            FormsService.form(function(f){
+                newForm = f;
+            });
             var empty = [];
             switch($newType){
                 case "Text":
@@ -75,7 +80,7 @@
             }
             if(newField != null) {
                 newForm["fields"].push(newField);
-                FormsService.updateFormById($scope.form["_id"], newForm, function($updatedForm){
+                FormsService.updateFormById(newForm['_id'], newForm, function($updatedForm){
                     $scope.form = $updatedForm;
                 });
             }
@@ -85,12 +90,12 @@
             $scope.newOptionText = $newOptionText;
             var newForm = $scope.form;
             var fields = $scope.form['fields'];
-            console.log(fields);
+
             for(var i = 0; i < fields.length; i++){
                 if(fields[i]['_id'] == $field['_id']){
                     var options = fields[i]['options'];
-                    console.log("trying to add: " + $scope.newOptionText);
-                    options[options.length] = {'_id': (new Date).getTime(),'text': $scope.newOptionText};
+                    console.log("adding option: " + $scope.newOptionText);
+                    options.push({'_id': (new Date).getTime(),'text': $scope.newOptionText});
                     fields[i]['options'] = options;
                     fields[i]['addOption'] = false;
                     newForm['fields'] = fields;

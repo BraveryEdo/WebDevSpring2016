@@ -22,11 +22,13 @@
                 });
         }
         updateUsers();
+
         service.user = function(callback){
             callback(currentUser);
         };
 
         service.setUser = function(user, callback){
+            updateUsers();
             var result = users.filter(function(u){return u['_id'] == user['_id'];});
             currentUser = result[0];
             callback(result[0]);
@@ -49,10 +51,12 @@
         };
 
         service.createUser = function (user, callback) {
+            updateUsers();
             var check = users.filter(function(u){return u['username'] == user['username'];});
             if(check[0] != null) {
                 $http.post("/rest/user", user)
                     .success(function (u) {
+                        updateUsers();
                         callback(u);
                     });
             } else {
@@ -61,13 +65,19 @@
         };
 
         service.deleteUserById = function (userId, callback) {
-            $http.delete("/rest/user"+userId)
+            $http.delete("/rest/user/"+userId)
                 .success(function($users){ users = $users;callback(users);});
         };
 
         service.updateUser = function (user, callback) {
-            $http.put("/rest/user"+user['_id'], user)
-                .success(function(u){ callback(u);});
+            var check = users.filter(function(u){return (u['username'] == user['username'] && u['_id'] !== user['_id']);})
+            if(check[0] == null){
+                $http.put("/rest/user/"+user['_id'], user)
+                    .success(function(u){ updateUsers();callback(u);});
+            } else {
+                callback(null);
+            }
+
         };
 
         console.log("finished loading user service functions");

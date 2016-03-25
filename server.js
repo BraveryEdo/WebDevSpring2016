@@ -68,6 +68,7 @@ app.get("/rest/form/:id", function(req, res) {
 //update
 app.put("/rest/user/:id", function(req, res) {
     var user = req.body;
+    var result = null;
     for(var i = 0; i < users.length; i++){
         if(users[i]['_id'] == req.params['id']){
             users[i]['title'] = user['title'];
@@ -76,23 +77,26 @@ app.put("/rest/user/:id", function(req, res) {
             users[i]['username'] = user['username'];
             users[i]['password'] = user['password'];
             users[i]['roles'] = user['roles'];
-            res.json(users[i]);
+            result = users[i];
+            break;
         }
     }
-    res.json(null);
+    res.json(result);
 });
 
-app.put("/rest/form:id", function(req, res) {
+app.put("/rest/form/:id", function(req, res) {
     var form = req.body;
+    var result = null;
     for(var i = 0; i < forms.length; i++){
-        if(req.params['id'] == form['id']){
-            forms[i]['userId'] == form['userId'];
-            forms[i]['title'] == form['title'];
-            forms[i]['fields'] == form['fields'];
-            res.json(forms[i]);
+        if(req.params['id'] == forms[i]['_id']){
+            forms[i]['userId'] = form['userId'];
+            forms[i]['title'] = form['title'];
+            forms[i]['fields'] = form['fields'];
+            result = forms[i];
+            break;
         }
     }
-    res.json(null);
+    res.json(result);
 });
 //delete
 app.delete("/rest/user/:id", function(req, res) {

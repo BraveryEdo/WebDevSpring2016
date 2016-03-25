@@ -16,10 +16,7 @@
             FormsService.findAllFormsForUser($scope.user["_id"], function($userForms){
                 $scope.forms = $userForms;
                 FormsService.form(function($f){
-                    $scope.selectedForm = $f;
-                    if($f != null){
-                        $scope.newFormName = $f["title"];
-                    }
+                    selectForm($f);
                 });
             });
 
@@ -37,7 +34,7 @@
             }
 
             if($name == "" || $name == null){
-                window.alert("The form needs a name");
+                window.alert("Please set a name or select a form");
             } else {
                 var form = {
                     "_id": (new Date).getTime(),
@@ -58,12 +55,18 @@
 
                 });
             }
-        };
+        }
 
         $scope.updateForm = function($form){
-            selectForm($form);
-            console.log("updating " + $scope.Username + "'s form, id#" + $form["_id"]);
-           $location.url('/form-fields');
+            if($scope.selectedForm !== null && $scope.selectedForm['_id'] == $form['_id']){
+                $form['title'] = $scope.newFormName;
+            }
+            FormsService.updateFormById($form['_id'], $form, function(res){
+                console.log("updating " + $scope.Username + "'s form, id#" + $form["_id"]);
+                selectForm(res);
+                $location.url('/form-fields');
+            });
+
         };
 
         $scope.deleteForm  = function($form){
@@ -75,15 +78,19 @@
         };
 
         $scope.selectForm  = selectForm;
-        function selectForm($form){
-            $scope.newFormName = $form["title"];
-            $scope.selectedForm = $form;
-            FormsService.setForm($form, function($res){
-                if($res != $form){
-                    console.log("form not selected correctly for editing");
-                }
-            });
-        };
+        function selectForm($form) {
+            //if ($scope.selectedForm == null||($scope.selectedForm['_id'] !== $form['_id'])){
+                FormsService.setForm($form, function ($res) {
+                    if($res !== null){
+                        $scope.newFormName = $res["title"];
+                        $scope.selectedForm = $res;
+                    } else {
+                        $scope.newFormName = null;
+                        $scope.selectedForm = null;
+                    }
+                });
+
+        }
 
         console.log("forms controller finished loading");
     }
