@@ -45,7 +45,7 @@
                         })
                     .when('/project',
                         {
-                            templateUrl: 'project/views/home/project.view.html',
+                            templateUrl: 'project/client/views/home/project.view.html',
                             controller: 'ProjectController'
                         })
                     .otherwise({
