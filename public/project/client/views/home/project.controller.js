@@ -21,15 +21,7 @@
                 var streamSource;
                 var analyser, context;
                 var streamData = new Uint8Array(128);
-                var volume;
 
-                //graphics intermediary between data and screen
-                var g;
-
-                var ball;
-
-                var g_x = 1000;
-                var g_y = 700;
 
 
                 //reserved p5 method
@@ -60,8 +52,7 @@
                 p.setup = function(){
                     setRes();
                     p.createCanvas(width, height);
-                    g = p.createGraphics(g_x, g_y);
-                    g.noStroke();
+                    p.noStroke();
 
                     resize();
 
@@ -111,6 +102,8 @@
                     if(p.mouseX > 0){
                         trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
                         streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=4e842f222306d63d61112b8daed9af68');
+                    } else {
+                        console.log("w: " + width + " , h: " + height);
                     }
                 };
 
@@ -125,46 +118,40 @@
                 p.windowResized = resize;
                 function resize(){
                     setRes();
-                    p.resizeCanvas(height, width);
+                    p.resizeCanvas(width, height);
                     p.noStroke();
                     p.background(255);
                 }
 
                 function setRes(){
-                    height = window.innerHeight*2/3;
-                    width  = window.innerWidth*2/3;
+                    height = Math.min(window.innerHeight*0.8, 700);
+                    width = document.body.clientWidth*0.8;
                 }
 
                 //reserved p5 method
                 p.draw = function(){
                     p.clear();
-                    g.clear();
-
 
                     var nBins = streamData.length;
-                    var xWidth = Math.floor(g_x/nBins);
-                    g.noStroke();
-                    g.fill(255, 128, 128, 128);
-                    g.beginShape();
+                    var xWidth = Math.floor(width/nBins);
+                    p.noStroke();
+                    p.fill(255, 128, 128, 128);
+                    p.beginShape();
                     for(var i = 0; i < nBins; i++){
                         if(i == 0){
-                            g.vertex(0,g_y);
+                            p.vertex(0,height);
                         } else {
-                            g.vertex((i-1)*xWidth, g_y-streamData[i-1]);
+                            p.vertex((i-1)*xWidth, height-streamData[i-1]);
                         }
-                        g.vertex(i*xWidth, g_y-streamData[i+1]);
+                        p.vertex(i*xWidth, height-streamData[i+1]);
                     }
-                    g.vertex(g_x, g_y);
-                    g.endShape('CLOSE');
+                    p.vertex(width, height);
+                    p.endShape('CLOSE');
 
-                    g.stroke(20);
-                    g.fill(0);
-                    g.line(0,0, g_x, g_y);
-                    g.line(g_x,0,0, g_y);
-
-
-                    p.image(g, 0, 0, g_x, g_y, 0, 0, g_x, g_y);
-
+                    p.stroke(20);
+                    p.fill(0);
+                    p.line(0,0, width, height);
+                    p.line(width,0,0, height);
 
                 };
 
