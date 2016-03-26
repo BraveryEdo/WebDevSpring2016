@@ -10,7 +10,7 @@
             return function(p){
                 //JSON
                 var clientID = '3ec04edf098e7efab4adfa28ea79ba39';
-                //var clientSecret = 'eaaa1cef71e0d6dab383127009b1bed7';
+
                 var userID = '8379765';
                 var width, height;
                 var trackIDs = [];
@@ -22,6 +22,15 @@
                 var analyser, context;
                 var streamData = new Uint8Array(128);
                 var volume;
+
+                //graphics intermediary between data and screen
+                var g;
+
+                var ball;
+
+                var g_x = 1000;
+                var g_y = 700;
+
 
                 //reserved p5 method
                 p.preload = function(){
@@ -49,15 +58,12 @@
 
                 //reserved p5 method
                 p.setup = function(){
-                    //width = 480;
-                    //height = 270;
-
-                    height = angular.element('#p5SketchDiv').height();
-                    width = angular.element('#p5SketchDiv').width();
+                    setRes();
                     p.createCanvas(width, height);
-                    p.noStroke();
-                    p.background(255);
+                    g = p.createGraphics(g_x, g_y);
+                    g.noStroke();
 
+                    resize();
 
                     context = new(window.AudioContext || window.webkitAudioContext);
 
@@ -78,16 +84,21 @@
                     });
 
                     streamSource.on('error', function(err) {
-                        alert("soundcloud link seems to be broken... :(");
+                        alert("Trouble connecting to soundcloud, please try again");
                     });
 
                     trackNr = Math.floor(Math.random() * trackIDs.length); // create a random start number
+                    displayTrackName(trackNr);
                     var src = 'http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=4e842f222306d63d61112b8daed9af68';
                     streamSource.setSource(src); // init src to play
 
                     //20 miliseconds = 50 updates everysecond
                     setInterval(sampleAudioStream, 16);   //analyse stream every 16 milliseconds
                 };
+
+                function displayTrackName(trackNr){
+                    console.log('Name: ' + trackNames[trackNr] + ', ID: ' + trackIDs[trackNr]);
+                }
 
                 p.sampleAudioStream = sampleAudioStream;
                 function sampleAudioStream(){
@@ -97,36 +108,64 @@
 
                 //reserved p5 method
                 p.mousePressed = function() {
-                    trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
-                    streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=4e842f222306d63d61112b8daed9af68');
-                };
-
-                p.windowResized = function(){
-                    height = angular.element('#p5SketchDiv').height();
-                    width = angular.element('#p5SketchDiv').width();
-                    p.resizeCanvas(height, width);
+                    if(p.mouseX > 0){
+                        trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
+                        streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=4e842f222306d63d61112b8daed9af68');
+                    }
                 };
 
                 //reserved p5 method
-                p.draw = function(){
+                p.touchStarted = function() {
+                    if(p.touchX > 0){
+                        trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
+                        streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=4e842f222306d63d61112b8daed9af68');
+                    }
+                };
 
+                p.windowResized = resize;
+                function resize(){
+                    setRes();
+                    p.resizeCanvas(height, width);
+                    p.noStroke();
                     p.background(255);
-                    p.fill(255, 128, 128, 128);
+                }
+
+                function setRes(){
+                    height = window.innerHeight*2/3;
+                    width  = window.innerWidth*2/3;
+                }
+
+                //reserved p5 method
+                p.draw = function(){
+                    p.clear();
+                    g.clear();
+
 
                     var nBins = streamData.length;
-                    var xWidth = Math.floor(width/nBins);
-                    p.beginShape();
+                    var xWidth = Math.floor(g_x/nBins);
+                    g.noStroke();
+                    g.fill(255, 128, 128, 128);
+                    g.beginShape();
                     for(var i = 0; i < nBins; i++){
-
-
                         if(i == 0){
-                            p.vertex(0,height);
+                            g.vertex(0,g_y);
                         } else {
-                            p.vertex((i-1)*xWidth, height-streamData[i-1]);
+                            g.vertex((i-1)*xWidth, g_y-streamData[i-1]);
                         }
-                        p.vertex(i*xWidth, height-streamData[i+1]);
+                        g.vertex(i*xWidth, g_y-streamData[i+1]);
                     }
-                    p.endShape();
+                    g.vertex(g_x, g_y);
+                    g.endShape('CLOSE');
+
+                    g.stroke(20);
+                    g.fill(0);
+                    g.line(0,0, g_x, g_y);
+                    g.line(g_x,0,0, g_y);
+
+
+                    p.image(g, 0, 0, g_x, g_y, 0, 0, g_x, g_y);
+
+
                 };
 
                 //reserved p5 method
