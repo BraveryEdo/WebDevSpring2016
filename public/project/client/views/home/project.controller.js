@@ -21,7 +21,8 @@
                 var streamSource;
                 var analyser, context;
                 var streamData = new Uint8Array(128);
-
+                var t = 0;
+                var start = (new Date).getSeconds();
                 //reserved p5 method
                 p.preload = function(){
                     SC.initialize({
@@ -59,7 +60,7 @@
                     //Create a Stream-Instance audio via audiostreamsource.js by Gregg Tavares
                     streamSource = audioStreamSource.create({
                         context: context, // a WebAudio context
-                        loop: false, // true or false if you want it to loop
+                        loop: true, // true or false if you want it to loop
                         autoPlay: false, // true to autoplay (you don't want this. See below)
                         crossOrigin: false, // true to try to get crossOrigin permission
                     });
@@ -96,6 +97,7 @@
                         trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
                         streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID);
                     }
+
                 };
 
                 //reserved p5 method
@@ -120,31 +122,91 @@
                 }
 
                 function displayInterface(){
-                    console.log('Name: ' + trackNames[trackNr] + ', ID: ' + trackIDs[trackNr]);
+                    //console.log('Name: ' + trackNames[trackNr] + ', ID: ' + trackIDs[trackNr]);
                 }
 
-                //reserved p5 method
-                p.draw = function(){
-                    p.clear();
 
-                    var nBins = streamData.length;
-                    var xWidth = Math.floor(width/nBins);
-                    p.noStroke();
-                    p.fill(255, 128, 128, 128);
-                    p.beginShape();
-                    for(var i = 0; i < nBins; i++){
-                        if(i == 0){
-                            p.vertex(0,height);
-                        } else {
-                            p.vertex((i-1)*xWidth, height-streamData[i-1]);
-                        }
-                        p.vertex(i*xWidth, height-streamData[i+1]);
+                function spectro(){
+                    var gmax = 100;
+                    var w = 1;
+                    for(var i  = 0; i < streamData.length-1; i++){
+                        var s = 2.75;
+                        if(i*s > 2*width/5.0) {break;}
+
+                        var y1 = height;
+                        var y12 = streamData[i];
+
+                        var y2 = streamData[i+w];
+                        p.noStroke();
+                        p.fill(255, 128, 128, 60);
+                            //left
+                        p.beginShape();
+                        p.vertex(s*i, y1, 0);
+                        p.vertex(s*i, y1-y12, 0);
+                        p.vertex(s*i, y1-y12, 0);
+                        p.vertex(s*(i+w), y1-y2, 0);
+
+                        p.vertex(s*i, y1, 0);
+                        p.vertex(s*i, y1+y12, 0);
+                        p.vertex(s*i, y1+y12, 0);
+                        p.vertex(s*(i+w), y1+y2, 0);
+                        p.endShape('CLOSE');
+
+                        //right
+                        //graphics.beginShape();
+                        p.beginShape();
+                        p.vertex(width-s*i, y1, 0);
+                        p.vertex(width-s*i, y1-y12, 0);
+                        p.vertex(width-s*i, y1-y12, 0);
+                        p.vertex(width-s*(i+w), y1-y2, 0);
+
+                        p.vertex(width-s*i, y1, 0);
+                        p.vertex(width-s*i, y1+y12, 0);
+                        p.vertex(width-s*i, y1+y12, 0);
+                        p.vertex(width-s*(i+w), y1+y2, 0);
+                        p.endShape('CLOSE');
+
                     }
-                    p.vertex(width, height);
-                    p.endShape('CLOSE');
+                }
 
-                    displayInterface();
+                function aurora(){
 
+                    var s  = (width/2)/(streamData.length + 50);
+                    var s2 = 7;
+
+                    var gmax = 100*Math.cos(t)
+
+                    var y_pos = height/2.5;
+                    //aurora(i, 255.0*sin(i*.05), 100.0, 0.0, floor(200*sin(10*PI*t/gmax)));
+                    for(var i = 0; i < streamData.length; i++) {
+
+                        var r = 255.0*Math.sin(i*.05);
+                        var g = 100;
+                        var b = 100*Math.tan(i*0.5);
+                        var a = 128;
+
+                        var x1 = i*s;
+                        var y1 = streamData[i];
+
+                        p.stroke(r, g, b, a);
+                        //left
+                        p.line(x1, y_pos, x1, y_pos - y1);
+                        p.line(x1, y_pos + 1 , x1, y_pos + y1);
+                        //right
+                        p.line(width - x1, y_pos, width - x1, y_pos - y1);
+                        p.line(width - x1, y_pos + 1, width - x1, y_pos + y1);
+                    }
+
+                }
+
+
+                //reserved p5 method
+                p.draw = function() {
+                    p.clear();
+                    //simpleSpectro();
+                    spectro();
+                    aurora();
+                    t = (new Date).getSeconds() - start;
                 };
 
                 //reserved p5 method
