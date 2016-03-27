@@ -22,8 +22,6 @@
                 var analyser, context;
                 var streamData = new Uint8Array(128);
 
-
-
                 //reserved p5 method
                 p.preload = function(){
                     SC.initialize({
@@ -79,17 +77,12 @@
                     });
 
                     trackNr = Math.floor(Math.random() * trackIDs.length); // create a random start number
-                    displayTrackName(trackNr);
-                    var src = 'http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=4e842f222306d63d61112b8daed9af68';
+                    var src = 'http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID;
                     streamSource.setSource(src); // init src to play
 
                     //20 miliseconds = 50 updates everysecond
                     setInterval(sampleAudioStream, 16);   //analyse stream every 16 milliseconds
                 };
-
-                function displayTrackName(trackNr){
-                    console.log('Name: ' + trackNames[trackNr] + ', ID: ' + trackIDs[trackNr]);
-                }
 
                 p.sampleAudioStream = sampleAudioStream;
                 function sampleAudioStream(){
@@ -101,9 +94,7 @@
                 p.mousePressed = function() {
                     if(p.mouseX > 0){
                         trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
-                        streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=4e842f222306d63d61112b8daed9af68');
-                    } else {
-                        console.log("w: " + width + " , h: " + height);
+                        streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID);
                     }
                 };
 
@@ -111,7 +102,7 @@
                 p.touchStarted = function() {
                     if(p.touchX > 0){
                         trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
-                        streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=4e842f222306d63d61112b8daed9af68');
+                        streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID);
                     }
                 };
 
@@ -126,6 +117,10 @@
                 function setRes(){
                     height = Math.min(window.innerHeight*0.8, 700);
                     width = document.body.clientWidth*0.8;
+                }
+
+                function displayInterface(){
+                    console.log('Name: ' + trackNames[trackNr] + ', ID: ' + trackIDs[trackNr]);
                 }
 
                 //reserved p5 method
@@ -148,10 +143,7 @@
                     p.vertex(width, height);
                     p.endShape('CLOSE');
 
-                    p.stroke(20);
-                    p.fill(0);
-                    p.line(0,0, width, height);
-                    p.line(width,0,0, height);
+                    displayInterface();
 
                 };
 

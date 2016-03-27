@@ -7,7 +7,6 @@
     <list default="true" id="4f40dfa0-1ed0-4ee6-80fc-6b5f9b23de9a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/project/client/views/home/project.controller.js" afterPath="$PROJECT_DIR$/public/project/client/views/home/project.controller.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/project/client/views/home/project.view.html" afterPath="$PROJECT_DIR$/public/project/client/views/home/project.view.html" />
     </list>
     <ignored path="WebDevSpring2016.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -31,8 +30,8 @@
       <file leaf-file-name="project.controller.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/project/client/views/home/project.controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4763033">
-              <caret line="115" column="18" selection-start-line="115" selection-start-column="18" selection-end-line="115" selection-end-column="18" />
+            <state vertical-scroll-proportion="2.0947866">
+              <caret line="104" column="136" selection-start-line="104" selection-start-column="136" selection-end-line="104" selection-end-column="136" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
               </folding>
@@ -180,7 +179,7 @@
   </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="-7" />
-    <option name="width" value="947" />
+    <option name="width" value="980" />
     <option name="height" value="1087" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -844,11 +843,17 @@
       <option name="project" value="LOCAL" />
       <updated>1459036708975</updated>
     </task>
-    <option name="localTasksCounter" value="43" />
+    <task id="LOCAL-00043" summary="project 3&#10;swapped x and y in resize function">
+      <created>1459036718810</created>
+      <option name="number" value="00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1459036718810</updated>
+    </task>
+    <option name="localTasksCounter" value="44" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="0" width="947" height="1087" extended-state="0" />
+    <frame x="-7" y="0" width="980" height="1087" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29454172" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -1300,8 +1305,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/project/client/views/home/project.controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4763033">
-          <caret line="115" column="18" selection-start-line="115" selection-start-column="18" selection-end-line="115" selection-end-column="18" />
+        <state vertical-scroll-proportion="2.0947866">
+          <caret line="104" column="136" selection-start-line="104" selection-start-column="136" selection-end-line="104" selection-end-column="136" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
           </folding>
