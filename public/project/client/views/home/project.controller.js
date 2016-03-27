@@ -156,9 +156,10 @@
 
                 function spectro(){
                     var gmax = 100;
+                    var w = 5;
                     var s = (width/2)/(Math.max(1 ,streamData.length-5));
                     var c = {'r': 255, 'g': 128, 'b': 128, 'a': 60};
-                    for(var i  = 0; i < streamData.length-1; i++){
+                    for(var i  = 0; i < streamData.length-1; i+=5){
 
                         var base = height;
                         var y1 = streamData[i];
@@ -296,6 +297,8 @@
                     ring_radius[4] = 100 - r2/1.5;
                     ring_radius[5] = 46 + r/2;
                 }
+
+
                 //reserved p5 method
                 p.draw = function() {
                     setRingData();
