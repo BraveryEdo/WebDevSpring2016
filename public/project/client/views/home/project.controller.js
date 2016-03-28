@@ -25,6 +25,7 @@
 
                 var n_rings = 6;
                 var ring_radius = [];
+                var showSun = false;
 
                 //reserved p5 method
                 p.preload = function(){
@@ -123,10 +124,6 @@
                 function setRes(){
                     height = Math.min(window.innerHeight*0.8, 700);
                     width = document.body.clientWidth*0.8;
-                }
-
-                function displayInterface(){
-                    //console.log('Name: ' + trackNames[trackNr] + ', ID: ' + trackIDs[trackNr]);
                 }
 
                 function reflectBot(x1, y1, x2, y2, color){
@@ -298,6 +295,18 @@
                     ring_radius[5] = 46 + r/2;
                 }
 
+                p.keyPressed = function(){
+                    if(p.keyCode == 83){//keycode for s
+                        showSun = !showSun;
+                    } else {
+                        console.log(p.keyCode);
+                    }
+                };
+
+
+                function displayInterface(){
+                    //console.log('Name: ' + trackNames[trackNr] + ', ID: ' + trackIDs[trackNr]);
+                }
 
                 //reserved p5 method
                 p.draw = function() {
@@ -306,7 +315,7 @@
                     p.background(0);
                     spectro();
                     aurora();
-                    triSunPattern();
+                    if(showSun) triSunPattern();
                     t++;
                 };
 
