@@ -26,7 +26,6 @@
                 var n_rings = 6;
                 var ring_radius = [];
                 var showSun = false;
-
                 //reserved p5 method
                 p.preload = function(){
                     SC.initialize({
@@ -67,7 +66,7 @@
                         context: context, // a WebAudio context
                         loop: true, // true or false if you want it to loop
                         autoPlay: false, // true to autoplay (you don't want this. See below)
-                        crossOrigin: false, // true to try to get crossOrigin permission
+                        crossOrigin: false // true to try to get crossOrigin permission
                     });
 
                     analyser = context.createAnalyser();
@@ -98,9 +97,12 @@
 
                 //reserved p5 method
                 p.mousePressed = function() {
-                    if(p.mouseX > 0){
+                    if(p.mouseX > 0 && p.mouseX < width &&
+                        p.mouseY > 0 && p.mouseY < height){
                         trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
                         streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID);
+                    } else {
+                        p.stop();
                     }
 
                 };
@@ -198,7 +200,7 @@
                 }
 
                 function triSunPattern(){
-                    var s = Math.sin(t);
+                    var s = Math.sin(t*0.5);
 
                     p.stroke(0);
                     p.fill(Math.random()*255, 222, Math.random()*255, 100);
@@ -225,8 +227,8 @@
                     p.fill(0, 0, 0, 0);
                     p.stroke(255);
                     //equalizerRing(width/2.0, height/2.0, num_bars, t);
-                    ring(width/2.0, height/2.0, 100, 177.5, -.75*t+2*s, false);
-                    ring(width/2.0, height/2.0, 100, 175, -.75*t+2*s + Math.PI/100, true);
+                    //ring(width/2.0, height/2.0, 100, 177.5, -.75*t+2*s, false);
+                    //ring(width/2.0, height/2.0, 100, 175, -.75*t+2*s + Math.PI/100, true);
                 }
 
                 //creates a ring of outward facing triangles
@@ -319,11 +321,9 @@
                     t++;
                 };
 
-                //reserved p5 method
                 p.stop = function(){
                     streamSource.stop();
-                };
-
+                }
 
             };
         }])

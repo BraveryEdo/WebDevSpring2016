@@ -15,37 +15,31 @@
             if($username == null || $password1 == null || $password2 == null){
                 console.log("something is blank");
             } else {
+                if($password1 !== $password2){
+                    console.log($password1 + " : " + $password2);
+                    window.alert("passwords do not match, please check passwords before trying again");
+                } else {
 
-                UserService.checkID($username,
-                    function($result){
-                        if($result != null){
-                            window.alert("This username already exists");
-                        } else {
-                            if($password1 !== $password2){
-                                console.log($password1 + " : " + $password2);
-                                window.alert("passwords do not match, please check passwords before trying again");
+                    var user = {
+                        "_id": (new Date()).getTime(),
+                        "firstName": "",
+                        "lastName": "",
+                        "username": $username,
+                        "password": $password1,
+                        "roles": ["Student"]
+                    };
+
+                    UserService.createUser(user,
+                        function($res){
+                            if($res != null){
+                                console.log("user successfully registered");
+                                window.alert("thanks for registering, You can now login");
+                                $location.url("/login");
                             } else {
-
-                                var user = {
-                                    "_id": (new Date()).getTime(),
-                                    "firstName": "",
-                                    "lastName": "",
-                                    "username": $username,
-                                    "password": $password1,
-                                    "roles": ["Student"]
-                                };
-
-                                UserService.createUser(user,
-                                    function($res){
-                                        if($res != null){
-                                            console.log("user successfully registered");
-                                            window.alert("thanks for registering, You can now login");
-                                            $location.url("/login");
-                                        }});
+                                window.alert("This username already exists");
                             }
-                        }
-                    }
-                )
+                        });
+                }
             }
         };
 

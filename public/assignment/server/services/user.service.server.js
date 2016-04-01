@@ -1,106 +1,43 @@
-/**
- * Created by EDO on 3/10/2016.
- */
-"use strict";
-(function() {
-    angular
-        .module("FormMakerApp")
-        .factory("UserService", UserService);
+"use strict"
+module.exports = function(app, db, mongoose, passport, LocalStrategy, userModel){
+    app.get("/api/user", getAllUsers);
+    app.get("/api/user/:id", getUserById);
+    app.post("/api/user", createNewUser);
+    app.put("/api/user/:id", updateUserById);
+    app.delete("/api/user/:id", removeUserById);
 
-    function UserService() {
-        var currentUser = null;
-        var users =
-                [
-                    {        "_id":123, "firstName":"Alice",            "lastName":"Wonderland",
-                        "username":"alice",  "password":"alice",   "roles": ["student"]                },
-                    {        "_id":234, "firstName":"Bob",              "lastName":"Hope",
-                        "username":"bob",    "password":"bob",     "roles": ["admin"]                },
-                    {        "_id":345, "firstName":"Charlie",          "lastName":"Brown",
-                        "username":"charlie","password":"charlie", "roles": ["faculty"]                },
-                    {        "_id":456, "firstName":"Dan",              "lastName":"Craig",
-                        "username":"dan",    "password":"dan",     "roles": ["faculty", "admin"]},
-                    {        "_id":567, "firstName":"Edward",           "lastName":"Norton",
-                        "username":"ed",     "password":"ed",      "roles": ["student"]                }
-                ];
-
-        var service = {};
-
-        service.user = function(callback){
-            callback(currentUser);
-        };
-
-        service.setUser = function(id, callback){
-            var result = null;
-
-            for (var i = 0; i < users.length; i++) {
-                if (users[i]["_id"] == id){
-                    currentUser = users[i];
-                    result = currentUser;
-                    break;
-                }
-            }
-            callback(result);
-        };
-
-        service.logout = function(callback){
-            currentUser = null;
-            callback(currentUser);
-        }
-
-        service.checkID = function(username, callback){
-            var result = null;
-
-            for (var i = 0; i < users.length; i++) {
-                if (users[i]["username"] == username){
-                    result = users[i]["_id"];
-                    break;
-                }
-            }
-
-            callback(result);
-        };
-
-        service.findUserByCredentials = function (username, password, callback) {
-            var result = null;
-
-            for (var i = 0; i < users.length; i++) {
-                if (users[i]["username"] == username && users[i]["password"] == password) {
-                    result = users[i];
-                    break;
-                }
-            }
-            callback(result);
-        };
-
-        service.findAllUsers = function (callback) {
-            callback(users);
-        };
-
-        service.createUser = function (user, callback) {
-            users.push(user);
-            service.findUserByCredentials(user["username"], user["password"], callback);
-        };
-
-        service.deleteUserById = function (userId, callback) {
-            users = users.filter(function (u) {
-                return u["_id"] !== userId;
-            });
-            callback(users);
-        };
-
-        service.updateUser = function (user, callback) {
-            for (var i = 0; i < users.length; ++i) {
-                if (users[i]._id == user["_id"]) {
-                    users[i] = user;
-                    break;
-                }
-            }
-            service.findUserByCredentials(user.username, user.password, callback);
-        };
-
-        console.log("finished loading user service functions");
-        return service;
+    function getAllUsers(req, res){
+        console.log("users.service.server.js:getAllUsers");
+        res.json(null);
     }
-    console.log("user service file loaded");
-})();
 
+    function getUserById(req, res){
+        var uid = req.params['id'];
+        console.log("users.service.server.js:getUserById");
+        console.log(uid);
+        res.json(null);
+
+    }
+
+    function createNewUser(req, res){
+        var newUser = req.body;
+        console.log("users.service.server.js:CreateNewUser");
+        res.json(null);
+    }
+
+    function updateUserById(req, res){
+        var uid = req.params['id'];
+        var newUser = req.body;
+        console.log("users.service.server.js:UpdateUserById");
+        console.log(uid);
+        res.json(null);
+    }
+
+    function removeUserById(req, res){
+        var uid = req.params['id'];
+        var requester = req.body;
+        console.log("users.service.server.js:removeUserById");
+        console.log(uid);
+        res.json(null);
+    }
+};
