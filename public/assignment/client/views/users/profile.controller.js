@@ -9,8 +9,8 @@
 
     function ProfileController($scope, $location, UserService){
         $scope.location = $location;
-        UserService.user(function($res){
-            if($res != null){
+        UserService.getCurrentUser()
+            .then(function($res){
                 $scope.username = $res["username"];
                 $scope.password1 = $res["password"];
                 $scope.password2 = $res["password"];
@@ -27,27 +27,30 @@
                                 "username": $username,
                                 "password": $password1,
                                 "roles": $res['roles']
-                            },
+                            })
+                            .then(
                             function ($updated) {
-                                if ($updated != null) {
-                                    UserService.logout(function ($r) {
-                                        if ($r == null) {
+                                    UserService.logout()
+                                        .then(function ($r) {
+                                            $scope.username = null;
+                                            $scope.user = null;
                                             $location.url('/');
                                             window.alert("information successfully updated, please log back in");
-                                        } else {
-                                            console.log("something went wrong while logging out");
+                                        }, function(err){
+                                            console.log("something went wrong while logging out " + err);
                                             window.alert("something went wrong while logging out, some info may not update until next login");
-                                        }});
-                                } else {
-                                    window.alert("Another user is already using this username");
-                                }});
+                                    });
+                                }, function(err){
+                                    window.alert("someone else already has this username ");
+                                    console.log(err);
+                                });
                     } else {
                         window.alert("passwords do not match, please verify that they are the same");
                     }
                 };
-            }
+        }, function(err){
+            console.log("no user logged in currently" + err);
         });
-
 
         console.log("profile controller finished loading");
     }

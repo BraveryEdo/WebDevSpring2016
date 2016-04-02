@@ -29,15 +29,14 @@
                         "roles": ["Student"]
                     };
 
-                    UserService.createUser(user,
-                        function($res){
-                            if($res != null){
-                                console.log("user successfully registered");
-                                window.alert("thanks for registering, You can now login");
-                                $location.url("/login");
-                            } else {
-                                window.alert("This username already exists");
-                            }
+                    UserService.register(user)
+                        .then(function($res){
+                            console.log("user successfully registered");
+                            window.alert("thanks for registering, You can now login");
+                            $location.url("/login");
+
+                        }, function(err){
+                            window.alert("This username already exists " + err);
                         });
                 }
             }

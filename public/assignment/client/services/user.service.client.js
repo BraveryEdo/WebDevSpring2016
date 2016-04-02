@@ -123,7 +123,7 @@
         function login(user) {
             var deferred = $q.defer();
 
-            $http.post("/api/login", user)
+            $http.get("/api/login", user)
                 .then(
                     function(response) {
                         deferred.resolve(response);

@@ -6,6 +6,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var cookieParser  = require('cookie-parser');
 var session       = require('express-session');
 var mongoose      = require('mongoose');
+var q = require("q");
 
 // create a default connection string
 var connectionString = "mongodb://localhost/webdev";
