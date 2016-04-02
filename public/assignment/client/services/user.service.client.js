@@ -7,81 +7,150 @@
         .module("FormMakerApp")
         .factory("UserService", UserService);
 
-    function UserService($http) {
+    function UserService($http, $q) {
+
         var currentUser = null;
-        var users = [];
 
-        //was having trouble defining all the functions here
-        //so added them to service array as they are created
-        var service = {};
-
-        function updateUsers() {
-            $http.get("/rest/user")
-                .success(function(response){
-                    users = response;
-                });
-        }
-        updateUsers();
-
-        service.user = function(callback){
-            callback(currentUser);
+        var service = {
+            register: registerUser,
+            login: login,
+            logout: logout,
+            updateUser: updateUser,
+            getAllUsers: getAllUsers,
+            getUserById: getUserById,
+            removeUser: removeUser,
+            setUser: setUser,
+            getCurrentUser: getCurrentUser
         };
-
-        service.setUser = function(user, callback){
-            updateUsers();
-            var result = users.filter(function(u){return u['_id'] == user['_id'];});
-            currentUser = result[0];
-            callback(result[0]);
-        };
-
-        service.logout = function(callback){
-            currentUser = null;
-            callback(currentUser);
-        };
-
-        service.findUserByCredentials = function (username, password, callback) {
-            updateUsers();
-            var result = users.filter(function(u){return (u['username'] == username && u['password'] == password);});
-            callback(result[0]);
-        };
-
-        service.findAllUsers = function (callback) {
-            updateUsers();
-            callback(users);
-        };
-
-        service.createUser = function (user, callback) {
-            updateUsers();
-            var check = users.filter(function(u){return u['username'] == user['username'];});
-            if(check[0] != null) {
-                $http.post("/rest/user", user)
-                    .success(function (u) {
-                        updateUsers();
-                        callback(u);
-                    });
-            } else {
-                callback(check[0]);
-            }
-        };
-
-        service.deleteUserById = function (userId, callback) {
-            $http.delete("/rest/user/"+userId)
-                .success(function($users){ users = $users;callback(users);});
-        };
-
-        service.updateUser = function (user, callback) {
-            var check = users.filter(function(u){return (u['username'] == user['username'] && u['_id'] !== user['_id']);})
-            if(check[0] == null){
-                $http.put("/rest/user/"+user['_id'], user)
-                    .success(function(u){ updateUsers();callback(u);});
-            } else {
-                callback(null);
-            }
-
-        };
-
-        console.log("finished loading user service functions");
         return service;
+
+
+        function setUser(user){
+            currentUser = user;
+            getCurrentUser();
+        }
+
+        function getCurrentUser(){
+            var deferred = $q.defer();
+            if(currentUser != null) {
+                deferred.resolve(currentUser);
+            } else {
+                deferred.reject(currentUser);
+            }
+            return deferred.promise;
+        }
+
+        function getUserById(id) {
+            var deferred = $q.defer();
+
+            $http.get("/api/user/"+id)
+                .then(
+                    function(response) {
+                        deferred.resolve(response.data);
+                    },
+                    function(error) {
+                        deferred.reject(error);
+                    }
+                );
+
+            return deferred.promise;
+        }
+
+        function updateUser(user) {
+            var deferred = $q.defer();
+
+            $http.put("/api/user/" + user._id, user)
+                .then(
+                    function(response) {
+                        deferred.resolve(response.data);
+                    },
+                    function(error) {
+                        deferred.reject(error);
+                    }
+                );
+
+            return deferred.promise;
+        }
+
+        function removeUser(id) {
+            var deferred = $q.defer();
+
+            $http.delete("/api/user/" + id)
+                .then(
+                    function(response) {
+                        deferred.resolve(response.data);
+                    },
+                    function(error) {
+                        deferred.reject(error);
+                    }
+                );
+
+            return deferred.promise;
+        }
+
+        function getAllUsers() {
+            var deferred = $q.defer();
+
+            $http.get("/api/user")
+                .then(
+                    function(response) {
+                        deferred.resolve(response.data);
+                    },
+                    function(error) {
+                        deferred.reject(error);
+                    }
+                );
+
+            return deferred.promise;
+        }
+
+        function registerUser(user) {
+            var deferred = $q.defer();
+
+            $http.post("/api/user", user)
+                .then(
+                    function(response) {
+                        deferred.resolve(response);
+                    },
+                    function(error) {
+                        deferred.reject(error);
+                    }
+                );
+
+            return deferred.promise;
+        }
+
+        function login(user) {
+            var deferred = $q.defer();
+
+            $http.post("/api/login", user)
+                .then(
+                    function(response) {
+                        deferred.resolve(response);
+                    },
+                    function(error) {
+                        deferred.reject(error);
+                    }
+                );
+
+            return deferred.promise;
+        }
+
+        function logout() {
+            var deferred = $q.defer();
+
+            $http.post("/api/logout")
+                .then(
+                    function(response) {
+                        deferred.resolve(response);
+                    },
+                    function(error) {
+                        deferred.reject(error);
+                    }
+                );
+
+            return deferred.promise;
+        }
     }
     console.log("user service file loaded");
 })();

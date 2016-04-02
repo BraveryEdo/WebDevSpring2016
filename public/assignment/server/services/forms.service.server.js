@@ -2,7 +2,7 @@
  * Created by EDO on 3/10/2016.
  */
 "use strict";
-module.exports = function(app, db, mongoose, passport, LocalStrategy, formModel){
+module.exports = function(app, dp, mongoose, formModel){
     app.get("/api/form", getAllForms);
     app.get("/api/form/:id", getFormById);
     app.post("/api/form", createNewForm);
@@ -11,21 +11,24 @@ module.exports = function(app, db, mongoose, passport, LocalStrategy, formModel)
 
     function getAllForms(req, res){
         console.log("forms.service.server.js:getAllForms");
-        res.json(null);
+        var forms = formModel.getAllForms();
+        res.json(forms);
     }
 
     function getFormById(req, res){
         var fid = req.params['id'];
         console.log("forms.service.server.js:getFormById");
         console.log(fid);
-        res.json(null);
+        var form = formModel.getFormById(fid);
+        res.json(form);
 
     }
 
     function createNewForm(req, res){
         var newForm = req.body;
         console.log("forms.service.server.js:CreateNewForm");
-        res.json(null);
+        var created = formModel.createNewForm(newForm);
+        res.json(created);
     }
 
     function updateFormById(req, res){
@@ -33,15 +36,16 @@ module.exports = function(app, db, mongoose, passport, LocalStrategy, formModel)
         var newForm = req.body;
         console.log("forms.service.server.js:UpdateFormById");
         console.log(fid);
-        res.json(null);
+        var updated = formModel.updateFormById(fid, newForm);
+        res.json(updated);
     }
 
     function removeFormById(req, res){
         var fid = req.params['id'];
-        var requester = req.body;
         console.log("forms.service.server.js:removeFormById");
         console.log(fid);
-        res.json(null);
+        var removed = formModel.removeFormById(fid);
+        res.json(removed);
     }
 };
 

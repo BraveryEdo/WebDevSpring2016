@@ -15,23 +15,22 @@
                 console.log("something is blank");
             } else {
 
-                UserService.findUserByCredentials(username, password, function($res){
-                    if($res != null){
-                        UserService.setUser($res, function($r){
-                            $scope.user = $r;
-                        });
-                        $location.url("/");
-                    } else {
-                        window.alert("Wrong username/password combination");
-                    }
-                });
+                var tUser = {'username': username, 'password': password};
 
-
-
-
+                UserService.login(tUser)
+                    .then(function(response){
+                        UserService.setUser(response)
+                            .then(function(r){
+                            $scope.user = r;
+                            $location.url("/profile");
+                            }, function(err){
+                                console.log("unable to set current user after authentication passed " + err);
+                            });
+                    }, function(error){
+                        window.alert("unable to login: " + error);
+                    });
             }
         };
-
         console.log("login controller finished loading");
     }
 })();

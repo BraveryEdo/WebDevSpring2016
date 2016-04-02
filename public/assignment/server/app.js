@@ -3,12 +3,11 @@
  */
 "use strict";
 
-module.exports = function(app, db, mongoose, passport, LocalStrategy){
+module.exports = function (app, db, mongoose, passport, LocalStrategy){
 
-    var userModel = require("./models/user.model.js")(mongoose);
-    var formModel = require("./models/form.model.js")(mongoose);
-
-    require("./services/user.service.server.js")(app, db, mongoose, passport, LocalStrategy, userModel);
-    require("./services/form.service.server.js")(app, db, mongoose, passport, LocalStrategy, formModel);
+    require("./models/user.model.js")(mongoose),
+    require("./models/form.model.js")(mongoose),
+    require("./services/user.service.server.js")(app, db, passport, LocalStrategy, userModel),
+    require("./services/form.service.server.js")(app, db, formModel)
 
 };
