@@ -314,7 +314,7 @@
                 p.draw = function() {
                     setRingData();
                     p.clear();
-                    p.background(0);
+                    p.background(255);
                     spectro();
                     aurora();
                     if(showSun) triSunPattern();

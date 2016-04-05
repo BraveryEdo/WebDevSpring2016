@@ -6,7 +6,9 @@ var LocalStrategy = require('passport-local').Strategy;
 var cookieParser  = require('cookie-parser');
 var session       = require('express-session');
 var mongoose      = require('mongoose');
-var q = require("q");
+
+var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
+var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
 // create a default connection string
 var connectionString = "mongodb://localhost/webdev";
@@ -33,9 +35,6 @@ var app = express();
     app.use(session({'secret': 'IAteTheLastSamoa', resave: true, saveUninitialized: true}));
     app.use(express.static(__dirname + '/public'));
 
+require("./public/assignment/server/app.js")(app, db, mongoose);
 
-
-
-var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 app.listen(port, ipaddress);
