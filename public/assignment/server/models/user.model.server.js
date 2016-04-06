@@ -19,7 +19,7 @@ module.exports = function (app, userModel) {
         var un = user['username'];
         var pw = user['password'];
 
-        var luser = users.filer(function (u) {
+        var luser = users.filter(function (u) {
             return u['username'] == un && u['password'] == pw;
         });
 
@@ -43,7 +43,7 @@ module.exports = function (app, userModel) {
 
     function getUserById(uid) {
         return users.filter(function (u) {
-            return u['_id'] !== uid;
+            return u['_id'] == uid;
         });
     }
 
@@ -56,16 +56,16 @@ module.exports = function (app, userModel) {
         var result = null;
 
         getAllUsers()
-            .then(function(usrs){
+            .then(function (usrs) {
                 users = usrs;
-            }, function(err){
+            }, function (err) {
                 console.log("what happneed here " + err);
             });
-        var filt = users.filter(function(u){
+        var filt = users.filter(function (u) {
             return u['username'] == newUser['username'];
         });
 
-        if(filt.length > 0 && filt[0]['_id'] !== uid){
+        if (filt.length > 0 && filt[0]['_id'] !== uid) {
             return result;
         }
 

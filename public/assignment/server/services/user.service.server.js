@@ -1,5 +1,3 @@
-
-
 "use strict";
 module.exports = function (app, userModel) {
     app.get("/api/user", getAllUsers);
@@ -7,11 +5,19 @@ module.exports = function (app, userModel) {
     app.post("/api/user", createNewUser);
     app.put("/api/user/:id", updateUserById);
     app.delete("/api/user/:id", removeUserById);
-    app.get("/api/login", login);
+    app.post("/api/login", login);
     app.post("/api/logout", logout);
 
-
-
+    var service = {
+        login: login,
+        logout: logout,
+        getAllUsers: getAllUsers,
+        getUserById: getUserById,
+        createNewUser: createNewUser,
+        removeUserById: removeUserById,
+        updateUserById: updateUserById
+    };
+    return service;
 
     function login(req, res) {
         console.log("users.service.server.js:login");

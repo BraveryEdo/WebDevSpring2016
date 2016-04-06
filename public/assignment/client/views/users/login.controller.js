@@ -17,18 +17,18 @@
 
                 var tUser = {'username': username, 'password': password};
 
-                UserService.login(tUser)
-                    .then(function(response){
-                        UserService.setUser(response)
-                            .then(function(r){
-                            $scope.user = r;
-                            $location.url("/profile");
-                            }, function(err){
-                                console.log("unable to set current user after authentication passed " + err);
-                            });
-                    }, function(error){
-                        window.alert("unable to login: " + error);
-                    });
+                var response = UserService.login(tUser);
+                 if(response !== null){
+                        var setResp = UserService.setUser(response);
+                            if(setResp !== null) {
+                                $scope.user = setResp;
+                                $location.url("/profile");
+                            } else {
+                                console.log("unable to set current user after authentication passed");
+                            }
+                    } else {
+                        window.alert("login failed");
+                    }
             }
         };
         console.log("login controller finished loading");

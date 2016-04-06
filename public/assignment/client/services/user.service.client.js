@@ -7,7 +7,7 @@
         .module("FormMakerApp")
         .factory("UserService", UserService);
 
-    function UserService($http, $q) {
+    function UserService($http) {
 
         var currentUser = null;
 
@@ -31,125 +31,35 @@
         }
 
         function getCurrentUser(){
-            var deferred = $q.defer();
-            if(currentUser != null) {
-                deferred.resolve(currentUser);
-            } else {
-                deferred.reject(currentUser);
-            }
-            return deferred.promise;
+            return currentUser;
         }
 
         function getUserById(id) {
-            var deferred = $q.defer();
-
-            $http.get("/api/user/"+id)
-                .then(
-                    function(response) {
-                        deferred.resolve(response.data);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-
-            return deferred.promise;
+            return $http.get("/api/user/"+id);
         }
 
         function updateUser(user) {
-            var deferred = $q.defer();
-
-            $http.put("/api/user/" + user._id, user)
-                .then(
-                    function(response) {
-                        deferred.resolve(response.data);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-
-            return deferred.promise;
+            return $http.put("/api/user/" + user._id, user);
         }
 
         function removeUser(id) {
-            var deferred = $q.defer();
-
-            $http.delete("/api/user/" + id)
-                .then(
-                    function(response) {
-                        deferred.resolve(response.data);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-
-            return deferred.promise;
+            return $http.delete("/api/user/" + id);
         }
 
         function getAllUsers() {
-            var deferred = $q.defer();
-
-            $http.get("/api/user")
-                .then(
-                    function(response) {
-                        deferred.resolve(response.data);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-
-            return deferred.promise;
+           return $http.get("/api/user");
         }
 
         function registerUser(user) {
-            var deferred = $q.defer();
-
-            $http.post("/api/user", user)
-                .then(
-                    function(response) {
-                        deferred.resolve(response);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-
-            return deferred.promise;
+            return $http.post("/api/user", user);
         }
 
         function login(user) {
-            var deferred = $q.defer();
-
-            $http.get("/api/login", user)
-                .then(
-                    function(response) {
-                        deferred.resolve(response);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-
-            return deferred.promise;
+            return $http.post("/api/login", user);
         }
 
         function logout() {
-            var deferred = $q.defer();
-
-            $http.post("/api/logout")
-                .then(
-                    function(response) {
-                        deferred.resolve(response);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-
-            return deferred.promise;
+            return $http.post("/api/logout");
         }
     }
     console.log("user service file loaded");

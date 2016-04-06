@@ -7,7 +7,7 @@
         .module("FormMakerApp")
         .factory("FormsService", FormsService);
 
-    function FormsService($http, $q) {
+    function FormsService($http) {
         var selectedForm = null;
 
         var service = {
@@ -19,6 +19,7 @@
             deleteFormById: deleteFormById,
             updateFormById: updateFormById
         };
+        return service;
 
         function logout(){
             selectedForm = null;
@@ -26,13 +27,7 @@
         }
 
         function form(){
-            var deferred = $q.defer();
-            if(selectedForm != null) {
-                deferred.resolve(selectedForm);
-            } else {
-                deferred.reject(selectedForm);
-            }
-            return deferred.promise;
+            return selectedForm;
         }
 
         function setForm(form){
@@ -45,66 +40,25 @@
         }
 
         function createFormForUser(userId, form){
-            var deferred = $q.defer();
             var uForm = form;
             uForm['_id'] = (new Date).getTime();
             uForm['userId'] = userId;
-            $http.post("/api/form", uForm)
-                .then(
-                    function(response) {
-                        deferred.resolve(response.data);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-            return deferred.promise;
+            return $http.post("/api/form", uForm);
         }
 
         function findAllFormsForUser(userId){
-            var deferred = $q.defer();
-            $http.get("/api/form")
-                .then(function(response){
-                    var uForms = response.data.filter(function (f) { return f['userId'] == userId;});
-                    deferred.resolve(response.data);
-                }, function(error){
-                    deferred.reject(error);
-                });
-
-            return deferred.promise;
+            return $http.get("/api/uform/" + userId);
         }
 
         function deleteFormById(formId){
-            var deferred = $q.defer();
-            $http.delete("/api/form/"+formId)
-                .then(
-                    function(response) {
-                        deferred.resolve(response.data);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-            return deferred.promise;
+            return $http.delete("/api/form/"+formId);
         }
 
         function updateFormById(formId, newForm){
-            var deferred = $q.defer();
-            $http.put("/api/form/"+formId, newForm)
-                .then(
-                    function(response) {
-                        deferred.resolve(response.data);
-                    },
-                    function(error) {
-                        deferred.reject(error);
-                    }
-                );
-            return deferred.promise;
+            return $http.put("/api/form/"+formId, newForm);
         }
 
-
         console.log("finished loading form service functions");
-        return service;
     }
     console.log("form service file loaded");
 })();

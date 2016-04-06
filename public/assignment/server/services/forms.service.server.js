@@ -5,9 +5,20 @@
 module.exports = function (app, formModel) {
     app.get("/api/form", getAllForms);
     app.get("/api/form/:id", getFormById);
+    app.get("/api/uform/:id", findAllFormsForUser);
     app.post("/api/form", createNewForm);
     app.put("/api/form/:id", updateFormById);
     app.delete("/api/form/:id", removeFormById);
+
+    var service = {
+        getAllForms: getAllForms,
+        getFormById: getFormById,
+        findAllFormsForUser: findAllFormsForUser,
+        createNewForm: createNewForm,
+        updateFormById: updateFormById,
+        removeFormById: removeFormById
+    };
+    return service;
 
 
     function getAllForms(req, res) {
@@ -23,6 +34,14 @@ module.exports = function (app, formModel) {
         var form = formModel.getFormById(fid);
         res.json(form);
 
+    }
+
+    function findAllFormsForUser(req, res){
+        var uid = req.params['id'];
+        console.log("forms.service.server.js:findAllFormsForUser");
+        console.log(uid);
+        var forms = formModel.findAllFormsForUser(uid);
+        res.json(forms);
     }
 
     function createNewForm(req, res) {
