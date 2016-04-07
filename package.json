@@ -27,10 +27,12 @@
     "cookie-parser": "^1.4.1",
     "express": "~3.4.4",
     "express-session": "^1.13.0",
+    "fs": "0.0.2",
     "mongoose": "^4.4.11",
     "multer": "^1.1.0",
     "passport": "^0.3.2",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "q": "^1.4.1"
   },
   "devDependencies": {},
   "bundleDependencies": [],

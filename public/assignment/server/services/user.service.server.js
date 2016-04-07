@@ -1,5 +1,6 @@
 "use strict";
 module.exports = function (app, userModel) {
+    //console.log(app);
     app.get("/api/user", getAllUsers);
     app.get("/api/user/:id", getUserById);
     app.post("/api/user", createNewUser);
@@ -20,7 +21,6 @@ module.exports = function (app, userModel) {
     return service;
 
     function login(req, res) {
-        console.log("users.service.server.js:login");
         var u = req.body;
         var r = userModel.login(u);
         res.json(r);
@@ -28,6 +28,7 @@ module.exports = function (app, userModel) {
 
     function logout(req, res) {
         console.log("users.service.server.js:logout");
+        res.json(null);
     }
 
     function getAllUsers(req, res) {

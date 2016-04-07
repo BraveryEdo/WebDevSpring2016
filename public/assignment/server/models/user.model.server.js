@@ -1,8 +1,10 @@
 /**
  * Created by EDO on 3/23/2016.
  */
-
-module.exports = function (app, userModel) {
+"use strict";
+module.exports = function (db, mongoose){
+    var q = require('q');
+    var fs = require('fs');
     var users = [];
 
     var api = {
@@ -15,58 +17,66 @@ module.exports = function (app, userModel) {
     };
     return api;
 
+    function readUsersFile(){
+        users = JSON.parse(fs.readFileSync("public/assignment/server/models/user.mock.json"));
+    }
+
     function login(user) {
+        readUsersFile();
+
+        var deferred = q.defer();
         var un = user['username'];
         var pw = user['password'];
-
         var luser = users.filter(function (u) {
             return u['username'] == un && u['password'] == pw;
         });
 
-        return luser[0];
-
+        deferred.resolve(luser[0]);
+        return deferred.promise;
     }
 
     function getAllUsers() {
-        var file = new XMLHttpRequest();
-        file.overrideMimeType("application/json");
-        file.open("GET", "user.mock.json", true);
-        file.onreadystatechange = function () {
-            if (file.readyState == 4 && file.status == "200") {
-                users = JSON.parse(file.responseText);
-                return users;
-            } else {
-                return null;
-            }
-        };
+        var deferred = q.defer();
+        readUsersFile();
+        deferred.resolve(users);
+        return deferred.promise;
     }
 
     function getUserById(uid) {
-        return users.filter(function (u) {
+        var deferred = q.defer();
+        readUsersFile();
+        deferred.resolve(users.filter(function (u) {
             return u['_id'] == uid;
-        });
+        }));
+
+        return deferred.promise;
     }
 
     function createNewUser(newUser) {
+        var deferred = q.defer();
+        readUsersFile();
         users.push(newUser);
-        return newUser;
+        deferred.resolve(newUser);
+        return deferred.promise;
     }
 
     function updateUserById(uid, newUser) {
-        var result = null;
+        var deferred = q.defer();
 
         getAllUsers()
             .then(function (usrs) {
                 users = usrs;
             }, function (err) {
-                console.log("what happneed here " + err);
+                console.log("what happened here? " + err);
             });
+
         var filt = users.filter(function (u) {
             return u['username'] == newUser['username'];
         });
 
         if (filt.length > 0 && filt[0]['_id'] !== uid) {
-            return result;
+            deferred.resolve(null);
+            return deferred.promise;
         }
 
         for (var i = 0; i < users.length; i++) {
@@ -77,22 +87,27 @@ module.exports = function (app, userModel) {
                 users[i]['username'] = newUser['username'];
                 users[i]['password'] = newUser['password'];
                 users[i]['roles'] = newUser['roles'];
-                result = users[i];
+                deferred.resolve(users[i]);
                 break;
             }
         }
-        return result;
+
+        return deferred.promise;
     }
 
     function removeUserById(uid) {
+        var deferred = q.defer();
+        readUsersFile();
         var index;
         for (index = 0; index < users.length; index++) {
             if (uid == users[index]['_id']) {
                 users.splice(index, 1);
+                deferred.resolve(users);
                 break;
             }
         }
-        return users;
+
+        return deferred.promise;
     }
 
 };

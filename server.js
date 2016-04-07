@@ -7,6 +7,7 @@ var multer        = require('multer');
 //var session       = require('express-session');
 var mongoose      = require('mongoose');
 
+
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
@@ -34,11 +35,9 @@ var app = module.exports = express();
     //app.use(cookieParser());
     //app.use(session({'secret': 'IAteTheLastSamoa', resave: true, saveUninitialized: true}));
     app.use(express.static(__dirname + '/public'));
+    app.listen(port, ipaddress);
 
-app.listen(port, ipaddress);
-
-var serverApp = require("./public/assignment/server/app.js")(app, db, mongoose);
-console.log(serverApp);
+require("./public/assignment/server/app.js")(app, db, mongoose);
 
 
 

@@ -11,4 +11,4 @@ module.exports = function (app, db, mongoose) {
     var fss = require("./services/forms.service.server.js")(app, formModel);
     //console.log(uss, fss);
 
-}();
+};

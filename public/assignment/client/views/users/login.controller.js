@@ -7,7 +7,7 @@
         .module("FormMakerApp")
         .controller("LoginController", ['$scope', '$location', 'UserService', LoginController]);
 
-    function LoginController($scope, $location, UserService) {
+    function LoginController($scope, $location, UserService, $q) {
         $scope.location = $location;
 
         $scope.login = function (username, password){
@@ -15,20 +15,37 @@
                 console.log("something is blank");
             } else {
 
-                var tUser = {'username': username, 'password': password};
+                var info = {'username': username, 'password': password};
 
-                var response = UserService.login(tUser);
-                 if(response !== null){
-                        var setResp = UserService.setUser(response);
-                            if(setResp !== null) {
-                                $scope.user = setResp;
-                                $location.url("/profile");
+                UserService.login(info)
+                    .then(function(response){
+                        if(response == null || response == undefined){
+                            window.alert("login failed");
+                        } else {
+                            console.log(response);
+                            UserService.setUser(response.data);
+                            $scope.user = response.data;
+                            $scope.Username = response.data['username'];
+                            $scope.showUsername = true;
+                            $scope.showRegister = false;
+                            $scope.showLogin = false;
+                            console.log(response.data);
+                            var roles = response.data['roles'];
+                            var res = false;
+                            if (roles !== null) {
+                                for (var i = 0; i < roles.length; i++) {
+                                    if (roles[i] == "admin" || roles[i] == "Admin" || roles[i] == "ADMIN") {
+                                        res = true;
+                                        break;
+                                    }
+                                }
                             } else {
-                                console.log("unable to set current user after authentication passed");
+                                console.log("roles null: " + roles);
                             }
-                    } else {
-                        window.alert("login failed");
-                    }
+                            $scope.showAdmin = res;
+                            $location.url("/profile");
+                        }
+                    });
             }
         };
         console.log("login controller finished loading");

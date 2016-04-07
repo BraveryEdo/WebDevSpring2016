@@ -7,7 +7,7 @@
         .module("FormMakerApp")
         .factory("UserService", UserService);
 
-    function UserService($http) {
+    function UserService($http, $q) {
 
         var currentUser = null;
 
@@ -31,35 +31,81 @@
         }
 
         function getCurrentUser(){
-            return currentUser;
+            var deferred = $q.defer();
+            deferred.resolve(currentUser);
+            return deferred.promise;
+
         }
 
         function getUserById(id) {
-            return $http.get("/api/user/"+id);
+            var deferred = $q.defer();
+            $http.get("/api/user/"+id)
+                .success(function(r){
+                    deferred.resolve(r);
+                });
+            return deferred.promise;
         }
 
         function updateUser(user) {
-            return $http.put("/api/user/" + user._id, user);
+            $http.put("/api/user/" + user._id, user)
+                .success(function(r){
+                    deferred.resolve(r);
+                });
+            return deferred.promise;
         }
 
         function removeUser(id) {
-            return $http.delete("/api/user/" + id);
+            var deferred = $q.defer();
+            $http.delete("/api/user/" + id)
+                .success(function(r){
+                    deferred.resolve(r);
+                });
+            return deferred.promise;
         }
 
         function getAllUsers() {
-           return $http.get("/api/user");
+            var deferred = $q.defer();
+            $http.get("/api/user")
+                .success(function(r){
+                    deferred.resolve(r);
+                });
+            return deferred.promise;
         }
 
         function registerUser(user) {
-            return $http.post("/api/user", user);
+            var deferred = $q.defer();
+            $http.post("/api/user", user)
+                .success(function(data, status, headers, config){
+                    deferred.resolve(data);
+                });
+            return deferred.promise;
         }
 
         function login(user) {
-            return $http.post("/api/login", user);
+            var deferred = $q.defer();
+            $http.post("/api/login", user)
+                .success(function(data, status, headers, config){
+                    console.log("data");
+                    console.log(data);
+                    console.log("status");
+                    console.log(status);
+                    console.log("headers");
+                    console.log(headers);
+                    console.log("config");
+                    console.log(config);
+                    deferred.resolve(data);
+                });
+            return deferred.promise;
         }
 
         function logout() {
-            return $http.post("/api/logout");
+            var deferred = $q.defer();
+            currentUser = null;
+            $http.post("/api/logout")
+                .success(function(r){
+                    deferred.resolve(r);
+                });
+            return deferred.promise;
         }
     }
     console.log("user service file loaded");
