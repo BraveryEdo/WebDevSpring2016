@@ -43,7 +43,8 @@ module.exports = function (db, mongoose) {
     function findAllFormsForUser(uid) {
         var deferred = q.defer();
         readFormsFile();
-        deferred.resolve(forms.filter(function (f) {return f['userId'] == uid;}));
+        var uForms = forms.filter(function (f) {return f['userId'] == uid;});
+        deferred.resolve(uForms);
         return deferred.promise;
     }
 

@@ -42,62 +42,43 @@
 
         function getUserById(id) {
             var deferred = $q.defer();
-            $http.get("/api/user/"+id)
-                .success(function(r){
-                    deferred.resolve(r);
-                });
+            $http.get("/api/user/"+id).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
         function updateUser(user) {
-            $http.put("/api/user/" + user._id, user)
-                .success(function(r){
-                    deferred.resolve(r);
-                });
+            $http.put("/api/user/" + user._id, user).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
         function removeUser(id) {
             var deferred = $q.defer();
-            $http.delete("/api/user/" + id)
-                .success(function(r){
-                    deferred.resolve(r);
-                });
+            $http.delete("/api/user/" + id).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
         function getAllUsers() {
             var deferred = $q.defer();
-            $http.get("/api/user")
-                .success(function(r){
-                    deferred.resolve(r);
-                });
+            $http.get("/api/user").then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
         function registerUser(user) {
             var deferred = $q.defer();
-            $http.post("/api/user", user)
-                .success(function(data, status, headers, config){
-                    deferred.resolve(data);
-                });
+            $http.post("/api/user", user).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
         function login(user) {
             var deferred = $q.defer();
-            var data = $http.post("/api/login", user);
-            deferred.resolve(data);
+            $http.post("/api/login", user).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
         function logout() {
             var deferred = $q.defer();
             currentUser = null;
-            $http.post("/api/logout")
-                .success(function(r){
-                    deferred.resolve(r);
-                });
+            $http.post("/api/logout").then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
     }

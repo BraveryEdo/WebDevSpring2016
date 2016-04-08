@@ -35,26 +35,22 @@ module.exports = function (app, formModel) {
 
     function findAllFormsForUser(req, res){
         var uid = req.params['id'];
-        var forms = formModel.findAllFormsForUser(uid);
-        res.json(forms);
+        formModel.findAllFormsForUser(uid).then(function(r){res.json(r);});
     }
 
     function createNewForm(req, res) {
         var newForm = req.body;
-        var created = formModel.createNewForm(newForm);
-        res.json(created);
+        formModel.createNewForm(newForm).then(function(r){res.json(r);});
     }
 
     function updateFormById(req, res) {
         var fid = req.params['id'];
         var newForm = req.body;
-        var updated = formModel.updateFormById(fid, newForm);
-        res.json(updated);
+        formModel.updateFormById(fid, newForm).then(function(r){res.json(r);});
     }
 
     function removeFormById(req, res) {
         var fid = req.params['id'];
-        var removed = formModel.removeFormById(fid);
-        res.json(removed);
+        formModel.removeFormById(fid).then(function(r){res.json(r);});
     }
 };

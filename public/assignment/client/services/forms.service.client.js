@@ -50,8 +50,7 @@
             var uForm = form;
             uForm['_id'] = (new Date).getTime();
             uForm['userId'] = userId;
-            $http.post("/api/form", uForm)
-                .success(function(r){deferred.resolve(r);});
+            $http.post("/api/form", uForm).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
@@ -63,17 +62,15 @@
 
         function deleteFormById(formId){
             var deferred = $q.defer();
-            $http.delete("/api/form/"+formId).success(function(r){deferred.resolve(r);});
+            $http.delete("/api/form/"+formId).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
         function updateFormById(formId, newForm){
             var deferred = $q.defer();
-            $http.put("/api/form/"+formId, newForm).success(function(r){deferred.resolve(r);});
+            $http.put("/api/form/"+formId, newForm).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
-
-        console.log("finished loading form service functions");
     }
     console.log("form service file loaded");
 })();

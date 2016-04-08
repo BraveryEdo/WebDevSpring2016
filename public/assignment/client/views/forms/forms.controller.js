@@ -11,20 +11,12 @@
         $scope.location = $location;
 
         //initialize
-        UserService.getCurrentUser()
-            .then(function(result){
+        UserService.getCurrentUser().then(function(result){
             $scope.user = result;
-
-            FormsService.findAllFormsForUser($scope.user["_id"], function($userForms){
+            FormsService.findAllFormsForUser($scope.user["_id"]).then(function($userForms){
                 $scope.forms = $userForms;
-                FormsService.form(function($f){
-                    selectForm($f);
-                });
             });
-        },  function(err){
-                $scope.user = null;
-                console.log("no current user found to show forms for" + err);
-            });
+        });
 
 
         //add a new form
@@ -85,13 +77,15 @@
         function selectForm($form) {
                 FormsService.setForm($form)
                     .then(function ($res) {
-                        $scope.newFormName = $res["title"];
-                        $scope.selectedForm = $res;
-                }, function(err){
-                        //form deselected
-                        $scope.newFormName = null;
-                        $scope.selectedForm = null;
-                    });
+                        if($res == null) {
+                            //form deselected
+                            $scope.newFormName = null;
+                            $scope.selectedForm = null;
+                        } else {
+                            $scope.newFormName = $res["title"];
+                            $scope.selectedForm = $res;
+                        }
+                });
         }
         console.log("forms controller finished loading");
     }
