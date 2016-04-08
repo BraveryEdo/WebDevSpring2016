@@ -14,7 +14,8 @@
         UserService.getCurrentUser().then(function(result){
             $scope.user = result;
             FormsService.findAllFormsForUser($scope.user["_id"]).then(function($userForms){
-                $scope.forms = $userForms;
+                $scope.forms = $userForms.data;
+                console.log($scope.forms);
             });
         });
 
@@ -40,7 +41,7 @@
                 };
                 FormsService.createFormForUser($scope.user["_id"], form)
                     .then(function ($res) {
-                        $scope.forms = $res;
+                        $scope.forms = $res.data;
                         selectForm(form);
                 },  function(err){
                         console.log("same form name found for this user, aborting creation to avoid duplicates " + err);
