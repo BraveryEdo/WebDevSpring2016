@@ -62,13 +62,7 @@ module.exports = function (db, mongoose){
 
     function updateUserById(uid, newUser) {
         var deferred = q.defer();
-
-        getAllUsers()
-            .then(function (usrs) {
-                users = usrs;
-            }, function (err) {
-                console.log("what happened here? " + err);
-            });
+        readUsersFile();
 
         var filt = users.filter(function (u) {
             return u['username'] == newUser['username'];
@@ -92,7 +86,6 @@ module.exports = function (db, mongoose){
                 break;
             }
         }
-
         return deferred.promise;
     }
 

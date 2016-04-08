@@ -22,15 +22,12 @@ module.exports = function (app, formModel) {
 
 
     function getAllForms(req, res) {
-        console.log("forms.service.server.js:getAllForms");
         var forms = formModel.getAllForms();
         res.json(forms);
     }
 
     function getFormById(req, res) {
         var fid = req.params['id'];
-        console.log("forms.service.server.js:getFormById");
-        console.log(fid);
         var form = formModel.getFormById(fid);
         res.json(form);
 
@@ -38,15 +35,12 @@ module.exports = function (app, formModel) {
 
     function findAllFormsForUser(req, res){
         var uid = req.params['id'];
-        console.log("forms.service.server.js:findAllFormsForUser");
-        console.log(uid);
         var forms = formModel.findAllFormsForUser(uid);
         res.json(forms);
     }
 
     function createNewForm(req, res) {
         var newForm = req.body;
-        console.log("forms.service.server.js:CreateNewForm");
         var created = formModel.createNewForm(newForm);
         res.json(created);
     }
@@ -54,16 +48,12 @@ module.exports = function (app, formModel) {
     function updateFormById(req, res) {
         var fid = req.params['id'];
         var newForm = req.body;
-        console.log("forms.service.server.js:UpdateFormById");
-        console.log(fid);
         var updated = formModel.updateFormById(fid, newForm);
         res.json(updated);
     }
 
     function removeFormById(req, res) {
         var fid = req.params['id'];
-        console.log("forms.service.server.js:removeFormById");
-        console.log(fid);
         var removed = formModel.removeFormById(fid);
         res.json(removed);
     }

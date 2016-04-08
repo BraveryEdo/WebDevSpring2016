@@ -22,43 +22,34 @@ module.exports = function (db, mongoose) {
     };
     return api;
 
+    function readFormsFile(){
+        forms = JSON.parse(fs.readFileSync("public/assignment/server/models/form.mock.json"));
+    }
+
     function getAllForms() {
         var deferred = q.defer();
-
-        var file = new XMLHttpRequest();
-        file.overrideMimeType("application/json");
-        file.open("GET", "form.mock.json", true);
-        file.onreadystatechange = function () {
-            if (file.readyState == 4 && file.status == "200") {
-                forms = JSON.parse(file.responseText);
-                deferred.resolve(forms);
-            } else {
-                deferred.resolve(null);
-            }
-        };
-
+        readFormsFile();
+        deferred.resolve(forms);
         return deferred.promise;
     }
 
     function getFormById(fid) {
         var deferred = q.defer();
-        deferred.resolve(forms.filter(function (f) {
-            return f['_id'] == fid;
-        }));
-
+        readFormsFile();
+        deferred.resolve(forms.filter(function (f) {return f['_id'] == fid;}));
         return deferred.promise;
     }
 
     function findAllFormsForUser(uid) {
         var deferred = q.defer();
-        deferred.resolve(forms.filter(function (f) {
-            return f['userId'] == uid;
-        }));
+        readFormsFile();
+        deferred.resolve(forms.filter(function (f) {return f['userId'] == uid;}));
         return deferred.promise;
     }
 
     function createNewForm(newForm) {
         var deferred = q.defer();
+        readFormsFile();
         forms.push(newForm);
         deferred.resolve(forms);
         return deferred.promise;
@@ -66,22 +57,22 @@ module.exports = function (db, mongoose) {
 
     function updateFormById(fid, newForm) {
         var deferred = q.defer();
-        var result = null;
+        readFormsFile();
         for (var i = 0; i < forms.length; i++){
             if (fid == forms[i]['_id']) {
                 forms[i]['userId'] = newForm['userId'];
                 forms[i]['title'] = newForm['title'];
                 forms[i]['fields'] = newForm['fields'];
-                result = forms[i];
+                deferred.resolve(forms[i]);
                 break;
             }
         }
-        deferred.resolve(result);
         return deferred.promise;
     }
 
     function removeFormById(fid) {
         var deferred = q.defer();
+        readFormsFile();
         var index;
         for (index = 0; index < forms.length; index++) {
             if (fid == forms[index]['_id']) {

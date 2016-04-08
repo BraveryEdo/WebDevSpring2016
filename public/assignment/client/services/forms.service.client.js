@@ -7,7 +7,7 @@
         .module("FormMakerApp")
         .factory("FormsService", FormsService);
 
-    function FormsService($http) {
+    function FormsService($http, $q) {
         var selectedForm = null;
 
         var service = {
@@ -22,40 +22,55 @@
         return service;
 
         function logout(){
+            var deferred = $q.defer();
             selectedForm = null;
-            return "200";
+            deferred.resolve("200");
+            return deferred.promise;
         }
 
         function form(){
-            return selectedForm;
+            var deferred = $q.defer();
+            deferred.resolve(selectedForm);
+            return deferred.promise;
         }
 
         function setForm(form){
+            var deferred = $q.defer();
             if(selectedForm == form){
                 selectedForm = null;
             } else {
                 selectedForm = form;
             }
-            return selectedForm;
+            deferred.resolve(selectedForm);
+            return deferred.promise;
         }
 
         function createFormForUser(userId, form){
+            var deferred = $q.defer();
             var uForm = form;
             uForm['_id'] = (new Date).getTime();
             uForm['userId'] = userId;
-            return $http.post("/api/form", uForm);
+            $http.post("/api/form", uForm)
+                .success(function(r){deferred.resolve(r);});
+            return deferred.promise;
         }
 
         function findAllFormsForUser(userId){
-            return $http.get("/api/uform/" + userId);
+            var deferred = $q.defer();
+            $http.get("/api/uform/" + userId).then(function(r){deferred.resolve(r);});
+            return deferred.promise;
         }
 
         function deleteFormById(formId){
-            return $http.delete("/api/form/"+formId);
+            var deferred = $q.defer();
+            $http.delete("/api/form/"+formId).success(function(r){deferred.resolve(r);});
+            return deferred.promise;
         }
 
         function updateFormById(formId, newForm){
-            return $http.put("/api/form/"+formId, newForm);
+            var deferred = $q.defer();
+            $http.put("/api/form/"+formId, newForm).success(function(r){deferred.resolve(r);});
+            return deferred.promise;
         }
 
         console.log("finished loading form service functions");
