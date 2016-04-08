@@ -7,7 +7,7 @@
         .module("FormMakerApp")
         .controller("LoginController", ['$scope', '$location', 'UserService', LoginController]);
 
-    function LoginController($scope, $location, UserService, $q) {
+    function LoginController($scope, $location, UserService) {
         $scope.location = $location;
 
         $scope.login = function (username, password){
@@ -19,31 +19,12 @@
 
                 UserService.login(info)
                     .then(function(response){
-                        if(response == null || response == undefined){
+                        if(response == null || response == undefined || response.data == null || response.data == undefined){
                             window.alert("login failed");
                         } else {
-                            console.log(response);
-                            UserService.setUser(response.data);
-                            $scope.user = response.data;
-                            $scope.Username = response.data['username'];
-                            $scope.showUsername = true;
-                            $scope.showRegister = false;
-                            $scope.showLogin = false;
-                            console.log(response.data);
-                            var roles = response.data['roles'];
-                            var res = false;
-                            if (roles !== null) {
-                                for (var i = 0; i < roles.length; i++) {
-                                    if (roles[i] == "admin" || roles[i] == "Admin" || roles[i] == "ADMIN") {
-                                        res = true;
-                                        break;
-                                    }
-                                }
-                            } else {
-                                console.log("roles null: " + roles);
-                            }
-                            $scope.showAdmin = res;
-                            $location.url("/profile");
+                            UserService.setUser(response.data).then(function(u) {
+                                $location.url("/profile");
+                            });
                         }
                     });
             }

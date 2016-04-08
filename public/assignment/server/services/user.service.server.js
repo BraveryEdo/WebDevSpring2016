@@ -22,8 +22,7 @@ module.exports = function (app, userModel) {
 
     function login(req, res) {
         var u = req.body;
-        var r = userModel.login(u);
-        res.json(r);
+        userModel.login(u).then(function(r){ res.json(r) });
     }
 
     function logout(req, res) {

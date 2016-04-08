@@ -26,8 +26,11 @@
 
 
         function setUser(user){
+            var deferred = $q.defer();
             currentUser = user;
-            getCurrentUser();
+            deferred.resolve(currentUser);
+            return deferred.promise;
+
         }
 
         function getCurrentUser(){
@@ -83,18 +86,8 @@
 
         function login(user) {
             var deferred = $q.defer();
-            $http.post("/api/login", user)
-                .success(function(data, status, headers, config){
-                    console.log("data");
-                    console.log(data);
-                    console.log("status");
-                    console.log(status);
-                    console.log("headers");
-                    console.log(headers);
-                    console.log("config");
-                    console.log(config);
-                    deferred.resolve(data);
-                });
+            var data = $http.post("/api/login", user);
+            deferred.resolve(data);
             return deferred.promise;
         }
 

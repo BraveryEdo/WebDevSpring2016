@@ -75,6 +75,7 @@ module.exports = function (db, mongoose){
         });
 
         if (filt.length > 0 && filt[0]['_id'] !== uid) {
+            console.log("uid fail");
             deferred.resolve(null);
             return deferred.promise;
         }
