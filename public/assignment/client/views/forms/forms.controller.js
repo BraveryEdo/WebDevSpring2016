@@ -24,7 +24,7 @@
         $scope.addForm = addForm;
         function addForm($name){
             var fields;
-            if($scope.selectedForm == null){
+            if($scope.selectedForm == null || $scope.selectedForm == undefined){
                 fields = [];
             } else {
                 fields = $scope.selctedForm['fields'];
@@ -52,13 +52,14 @@
 
         //update an existing form
         $scope.updateForm = function($form){
-            if($scope.selectedForm !== null && $scope.selectedForm['_id'] == $form['_id']){
-                $form['title'] = $scope.newFormName;}
+            if($scope.selectedForm !== null && $scope.selectedForm !== undefined && $scope.selectedForm['_id'] == $form['_id']){
+                $form['title'] = $scope.newFormName;
+            }
 
             FormsService.updateFormById($form['_id'], $form)
                 .then(function(res){
                         console.log("updating " + $scope.Username + "'s form, id#" + $form["_id"]);
-                        selectForm(res);
+                        selectForm(res.data);
                         $location.url('/form-fields');
             },      function(err){
                         console.log("form update failed " + err);
@@ -68,7 +69,7 @@
         $scope.deleteForm  = function($form){
             FormsService.deleteFormById($form["_id"])
             .then(function(res){
-                $scope.forms = res;
+                $scope.forms = res.data;
             }, function(err){
                 console.log("unable to delete form " + err);
             });

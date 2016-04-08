@@ -52,7 +52,7 @@ module.exports = function (db, mongoose) {
         var deferred = q.defer();
         readFormsFile();
         forms.push(newForm);
-        deferred.resolve(forms);
+        deferred.resolve(forms.filter(function(f){return f['userId'] == newForm['userId'];}));
         return deferred.promise;
     }
 

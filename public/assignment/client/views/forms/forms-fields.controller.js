@@ -17,14 +17,14 @@
             var newForm = null;
             FormsService.form().then(function(f){
                 newForm = f;
+                console.log(newForm);
                 for(var i = 0; i < newForm['fields'].length; i++){
                     if(newForm['fields'][i]['_id'] == $field['_id']){
                         newForm['fields'][i] = $field;
                     }
                 }
-                FormsService.updateFormById($scope.form['_id'], newForm)
-                    .then(function($updatedForm){
-                        $scope.form = $updatedForm;
+                FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){
+                        $scope.form = $updatedForm.data;
                         window.alert("change saved!");
                     });
 
@@ -37,7 +37,7 @@
             var newForm = $scope.form;
             var newFormFields = $scope.form['fields'].filter(function (u) {return u['_id'] !== $field['_id'];});
             newForm['fields'] = newFormFields;
-            FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){$scope.form = $updatedForm;});
+            FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){$scope.form = $updatedForm.data;});
         };
 
         $scope.addField = function($newType){
@@ -45,7 +45,6 @@
             var newForm = null;
             FormsService.form().then(function(f){
                 newForm = f;
-
                 var empty = [];
                 switch($newType){
                     case "Text":
@@ -73,8 +72,8 @@
                         break;
                 }
                 if(newField != null) {
-                    newForm["fields"].push(newField);
-                    FormsService.updateFormById(newForm['_id'], newForm).then(function($updatedForm){$scope.form = $updatedForm;});
+                    newForm['fields'].push(newField);
+                    FormsService.updateFormById(newForm['_id'], newForm).then(function($updatedForm){$scope.form = $updatedForm.data;});
                 }
             });
         };
@@ -87,6 +86,8 @@
             for(var i = 0; i < fields.length; i++){
                 if(fields[i]['_id'] == $field['_id']){
                     var options = fields[i]['options'];
+                    console.log(fields[i]);
+                    console.log(options);
                     console.log("adding option: " + $scope.newOptionText);
                     options.push({'_id': (new Date).getTime(),'text': $scope.newOptionText});
                     fields[i]['options'] = options;
@@ -97,14 +98,14 @@
             }
 
             FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){
-                $scope.form = $updatedForm;
+                $scope.form = $updatedForm.data;
                 $scope.newOptionText = "";
                 console.log("addOption toggled");
             });
         };
 
         $scope.showOption = function($field){
-            return $field['addOption'];
+            return $field['addOption'] == true;
         };
 
         $scope.toggleOption = function($field){
@@ -118,7 +119,7 @@
             }
 
             FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){
-                $scope.form = $updatedForm;
+                $scope.form = $updatedForm.data;
                 console.log("addOption toggled");
             });
 
