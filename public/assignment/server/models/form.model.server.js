@@ -2,11 +2,11 @@
  * Created by EDO on 3/23/2016.
  */
 "use strict";
-
 module.exports = function (db, mongoose) {
     var q = require('q');
     var fs = require('fs');
     var forms = [];
+    var formPath = "public/assignment/server/models/form.mock.json";
 
     //var formSchema = mongoose.schema({
     //
@@ -23,15 +23,37 @@ module.exports = function (db, mongoose) {
     };
     return api;
 
+    //reads form file info into the forms array
     function readFormsFile(){
-        forms = JSON.parse(fs.readFileSync("public/assignment/server/models/form.mock.json"));
+        forms = JSON.parse(fs.readFileSync(formPath));
+    }
+
+    //replaces the file contents with the local forms array
+    function writeFormsFile(){
+        fs.writeFileSync(formPath, JSON.stringify(forms, null, 4), 'utf-8');
     }
 
     function sort(uid){
         var deferred = q.defer();
         readFormsFile();
-        var uForms = forms.filter(function (f) {return f['userId'] == uid;}).reverse();
+        var uForms = [];
+
+        for(var i = 0; i < forms.length; i++){
+            if(forms[i]['userId'] == uid){
+                uForms.push(forms[i]);}}
+
+        uForms.reverse();
+
+        //remove old forms with matching id and re add to the end in reverse order
+        for(var j = 0; j < uForms.length; j++){
+            for (var index = 0; index < forms.length; index++){
+                if (uForms[j]['_id'] == forms[index]['_id']){
+                    forms.splice(index, 1);
+                    forms.push(uForms[j]);
+                    break;}}}
+
         deferred.resolve(uForms);
+        writeFormsFile();
         return deferred.promise;
     }
 
@@ -62,6 +84,7 @@ module.exports = function (db, mongoose) {
         readFormsFile();
         forms.push(newForm);
         deferred.resolve(forms.filter(function(f){return f['userId'] == newForm['userId'];}));
+        writeFormsFile();
         return deferred.promise;
     }
 
@@ -77,6 +100,7 @@ module.exports = function (db, mongoose) {
                 break;
             }
         }
+        writeFormsFile();
         return deferred.promise;
     }
 
@@ -91,6 +115,7 @@ module.exports = function (db, mongoose) {
             }
         }
         deferred.resolve(forms);
+        writeFormsFile();
         return deferred.promise;
     }
 };
