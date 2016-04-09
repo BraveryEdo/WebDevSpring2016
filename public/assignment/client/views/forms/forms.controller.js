@@ -19,6 +19,15 @@
             });
         });
 
+        //change sorting order of forms
+        $scope.sort = function(){
+            FormsService.sort($scope.user['_id'])
+                .then(function(res){
+                    $scope.forms = res.data;
+                    console.log($scope.forms);
+                });
+        };
+
 
         //add a new form
         $scope.addForm = addForm;

@@ -18,12 +18,21 @@ module.exports = function (db, mongoose) {
         createNewForm: createNewForm,
         updateFormById: updateFormById,
         removeFormById: removeFormById,
-        findAllFormsForUser: findAllFormsForUser
+        findAllFormsForUser: findAllFormsForUser,
+        sort: sort
     };
     return api;
 
     function readFormsFile(){
         forms = JSON.parse(fs.readFileSync("public/assignment/server/models/form.mock.json"));
+    }
+
+    function sort(uid){
+        var deferred = q.defer();
+        readFormsFile();
+        var uForms = forms.filter(function (f) {return f['userId'] == uid;}).reverse();
+        deferred.resolve(uForms);
+        return deferred.promise;
     }
 
     function getAllForms() {

@@ -17,9 +17,16 @@
             createFormForUser: createFormForUser,
             findAllFormsForUser: findAllFormsForUser,
             deleteFormById: deleteFormById,
-            updateFormById: updateFormById
+            updateFormById: updateFormById,
+            sort: sort
         };
         return service;
+
+        function sort(userId){
+            var deferred = $q.defer();
+            $http.get("/api/form/sort/" + userId).then(function(r){deferred.resolve(r);});
+            return deferred.promise;
+        }
 
         function logout(){
             var deferred = $q.defer();

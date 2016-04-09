@@ -6,9 +6,11 @@ module.exports = function (app, formModel) {
     app.get("/api/form", getAllForms);
     app.get("/api/form/:id", getFormById);
     app.get("/api/uform/:id", findAllFormsForUser);
+    app.get("/api/form/sort/:id", sort);
     app.post("/api/form", createNewForm);
     app.put("/api/form/:id", updateFormById);
     app.delete("/api/form/:id", removeFormById);
+
 
     var service = {
         getAllForms: getAllForms,
@@ -16,10 +18,14 @@ module.exports = function (app, formModel) {
         findAllFormsForUser: findAllFormsForUser,
         createNewForm: createNewForm,
         updateFormById: updateFormById,
-        removeFormById: removeFormById
+        removeFormById: removeFormById,
+        sort: sort
     };
     return service;
 
+    function sort(req, res){
+        formModel.sort(req.params['id']).then(function(r){res.json(r);});
+    }
 
     function getAllForms(req, res) {
         var forms = formModel.getAllForms();
@@ -28,8 +34,7 @@ module.exports = function (app, formModel) {
 
     function getFormById(req, res) {
         var fid = req.params['id'];
-        var form = formModel.getFormById(fid);
-        res.json(form);
+         formModel.getFormById(fid).then(function(r){res.json(r);});
 
     }
 
