@@ -19,7 +19,7 @@
 
                 UserService.login(info)
                     .then(function(response){
-                        if(response == null || response == undefined || response.data == null || response.data == undefined){
+                         if(response == null || response == undefined || response.data == null || response.data == undefined){
                             window.alert("login failed");
                         } else {
                             UserService.setUser(response.data).then(function(u) {

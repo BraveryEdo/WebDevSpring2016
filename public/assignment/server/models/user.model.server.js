@@ -14,7 +14,8 @@ module.exports = function (db, mongoose){
         getUserById: getUserById,
         createNewUser: createNewUser,
         updateUserById: updateUserById,
-        removeUserById: removeUserById
+        removeUserById: removeUserById,
+        getUserByName: getUserByName
     };
     return api;
 
@@ -44,6 +45,16 @@ module.exports = function (db, mongoose){
         var deferred = q.defer();
         readUsersFile();
         deferred.resolve(users);
+        return deferred.promise;
+    }
+
+    function getUserByName(username){
+        var deferred = q.defer();
+        readUsersFile();
+        deferred.resolve(users.filter(function (u) {
+            return u['username'] == username;
+        }));
+
         return deferred.promise;
     }
 

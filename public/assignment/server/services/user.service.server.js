@@ -4,6 +4,7 @@ module.exports = function (app, userModel) {
     app.get("/api/user/:id", getUserById);
     app.post("/api/user", createNewUser);
     app.put("/api/user/:id", updateUserById);
+    app.get("/api/user/name/"+username, findUserByUsername);
     app.delete("/api/user/:id", removeUserById);
     app.post("/api/login", login);
     app.post("/api/logout", logout);
@@ -15,7 +16,8 @@ module.exports = function (app, userModel) {
         getUserById: getUserById,
         createNewUser: createNewUser,
         removeUserById: removeUserById,
-        updateUserById: updateUserById
+        updateUserById: updateUserById,
+        findUserByUsername: findUserByUsername
     };
     return service;
 
@@ -31,6 +33,13 @@ module.exports = function (app, userModel) {
     function getAllUsers(req, res) {
         var users = userModel.getAllUsers();
         res.json(users);
+    }
+
+    function findUserByUsername(req, res){
+        var un = req.params['id'];
+        console.log(uid);
+        var user = userModel.getUserByName(un);
+        res.json(user);
     }
 
     function getUserById(req, res) {

@@ -20,10 +20,16 @@
             getUserById: getUserById,
             removeUser: removeUser,
             setUser: setUser,
-            getCurrentUser: getCurrentUser
+            getCurrentUser: getCurrentUser,
+            findUserByUsername: findUserByUsername
         };
         return service;
 
+        function findUserByUsername(username){
+            var deferred = $q.defer();
+            $http.get("/api/user/name/"+username).then(function(r){deferred.resolve(r);});
+            return deferred.promise;
+        }
 
         function setUser(user){
             var deferred = $q.defer();
