@@ -6,84 +6,71 @@
 (function(){
     angular
         .module('FormMakerApp')
-        .controller("FormsFieldsController", ['$scope', '$location', 'FormsService', FormsFieldsController]);
+        .controller("FormsFieldsController", ['$scope', '$location', 'FieldService', 'FormsService', FormsFieldsController]);
 
-    function FormsFieldsController($scope, $location, FormsService){
+    function FormsFieldsController($scope, $location, FieldService,FormsService){
         $scope.location = $location;
         $scope.newOptionText = "";
         FormsService.form().then(function($f){$scope.form = $f;});
 
         $scope.editField = function($field){
-            var newForm = null;
-            FormsService.form().then(function(f){
-                newForm = f;
-                console.log(newForm);
-                for(var i = 0; i < newForm['fields'].length; i++){
-                    if(newForm['fields'][i]['_id'] == $field['_id']){
-                        newForm['fields'][i] = $field;
-                    }
-                }
-                FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){
-                        $scope.form = $updatedForm.data;
-                        window.alert("change saved!");
-                    });
-
-            });
+            FieldService.updateField($scope.form['_id'], $field['_id'] ,$field).then(function($updatedForm){
+                    $scope.form = $updatedForm.data;
+                    window.alert("change saved!");
+                });
         };
 
 
         $scope.deleteField = function($field){
-            console.log("trying to delete");
-            var newForm = $scope.form;
-            var newFormFields = $scope.form['fields'].filter(function (u) {return u['_id'] !== $field['_id'];});
-            newForm['fields'] = newFormFields;
-            FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){$scope.form = $updatedForm.data;});
+            FieldService.deleteFieldFromForm($scope.form['_id'], $field['_id']).then(function(f){
+                $scope.form = f.data;
+            });
         };
 
         $scope.addField = function($newType){
             var newField = null;
-            var newForm = null;
-            FormsService.form().then(function(f){
-                newForm = f;
-                var empty = [];
-                switch($newType){
-                    case "Text":
-                        newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "text": "", "addOption": false};                    break;
-                    case "Date":
-                        newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "date": null, "addOption": false};
-                        break;
-                    case "Dropdown":
-                        newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": empty, "addOption": false};
-                        break;
-                    case "Checkbox":
-                        newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": empty, "addOption": false};
-                        break;
-                    case "Radio Button":
-                        newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": empty, "addOption": false};
-                        break;
-                    case "Paragraph":
-                        newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "text": "", "addOption": false};
-                        break;
-                    case null:
-                        console.log("no field type chosen");
-                        break;
-                    default:
-                        console.log("unknown field type, update form-fields controller");
-                        break;
-                }
-                if(newField != null) {
-                    newForm['fields'].push(newField);
-                    FormsService.updateFormById(newForm['_id'], newForm).then(function($updatedForm){$scope.form = $updatedForm.data;});
-                }
-            });
+
+            var empty = [];
+
+            //perhaps extract this to the form model so i send it a type string then receive a template of that type
+            switch($newType){
+                case "Text":
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "text": "", "addOption": false};                    break;
+                case "Date":
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "date": null, "addOption": false};
+                    break;
+                case "Dropdown":
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": empty, "addOption": false};
+                    break;
+                case "Checkbox":
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": empty, "addOption": false};
+                    break;
+                case "Radio Button":
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "options": empty, "addOption": false};
+                    break;
+                case "Paragraph":
+                    newField = {"_id": (new Date).getTime(), "type": $newType, "title": $scope.newFieldTitle, "text": "", "addOption": false};
+                    break;
+                case null:
+                    console.log("no field type chosen");
+                    break;
+                default:
+                    console.log("unknown field type, update form-fields controller");
+                    break;
+            }
+            if(newField !== null) {
+                FieldService.createFieldForForm($scope.form['_id'], newField).then(function($updatedForm){$scope.form = $updatedForm.data;});
+            } else {
+                window.alert("please choose an option from the dropdown menu");
+            }
+
         };
 
         $scope.addOption = function($field, $newOptionText){
             $scope.newOptionText = $newOptionText;
-            var newForm = $scope.form;
             var fields = $scope.form['fields'];
-
-            for(var i = 0; i < fields.length; i++){
+            var i;
+            for(i = 0; i < fields.length; i++){
                 if(fields[i]['_id'] == $field['_id']){
                     var options = fields[i]['options'];
                     console.log(fields[i]);
@@ -92,16 +79,12 @@
                     options.push({'_id': (new Date).getTime(),'text': $scope.newOptionText});
                     fields[i]['options'] = options;
                     fields[i]['addOption'] = false;
-                    newForm['fields'] = fields;
-                    break;
-                }
-            }
+                    break;}}
 
-            FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){
+            FieldService.updateField($scope.form['_id'], $field['_id'], fields[i]).then(function($updatedForm){
                 $scope.form = $updatedForm.data;
                 $scope.newOptionText = "";
-                console.log("addOption toggled");
-            });
+                console.log("addOption toggled");});
         };
 
         $scope.showOption = function($field){
@@ -109,19 +92,16 @@
         };
 
         $scope.toggleOption = function($field){
-            var newForm = $scope.form;
             var fields = $scope.form['fields'];
-            for(var i = 0; i < fields.length; i++){
+            var i;
+            for(i = 0; i < fields.length; i++){
                 if(fields[i]['_id'] == $field['_id']){
-                    newForm['fields'][i]['addOption'] = !newForm['fields'][i]['addOption'];
-                    break;
-                }
-            }
+                    fields[i]['addOption'] = !fields[i]['addOption'];
+                    break;}}
 
-            FormsService.updateFormById($scope.form['_id'], newForm).then(function($updatedForm){
+            FieldService.updateField($scope.form['_id'], $field['_id'], fields[i]).then(function($updatedForm){
                 $scope.form = $updatedForm.data;
-                console.log("addOption toggled");
-            });
+                console.log("addOption toggled");});
 
         };
 

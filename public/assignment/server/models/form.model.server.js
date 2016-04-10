@@ -19,7 +19,14 @@ module.exports = function (db, mongoose) {
         updateFormById: updateFormById,
         removeFormById: removeFormById,
         findAllFormsForUser: findAllFormsForUser,
-        sort: sort
+        sort: sort,
+        createFieldForForm: createFieldForForm,
+        getFieldsForForm: getFieldsForForm,
+        getFieldForForm: getFieldForForm,
+        deleteFieldFromForm: deleteFieldFromForm,
+        updateField: updateField
+
+
     };
     return api;
 
@@ -118,4 +125,73 @@ module.exports = function (db, mongoose) {
         writeFormsFile();
         return deferred.promise;
     }
+
+    //field functions
+    function createFieldForForm(fid, newField){
+        var deferred = q.defer();
+        readFormsFile();
+        for (var i = 0; i < forms.length; i++){
+            if (fid == forms[i]['_id']) {
+                forms[i]['fields'].push(newField);
+                deferred.resolve(forms[i]);
+                break;
+            }
+        }
+        writeFormsFile();
+        return deferred.promise;
+    }
+
+
+    function getFieldsForForm(fid){
+        var deferred = q.defer();
+        readFormsFile();
+        deferred.resolve(forms.filter(function(f){return f['_id'] == fid;})[0]['fields']);
+        return deferred.promise;
+    }
+
+    function getFieldForForm(fid, f2id){
+        var deferred = q.defer();
+        readFormsFile();
+        var form = forms.filter(function(f){return f['_id'] == fid;});
+        var field = form['fields'].filter(function(f2){return f2['_id'] == f2id;});
+        deferred.resolve(field);
+        return deferred.promise;
+    }
+
+    function deleteFieldFromForm(fid, f2id){
+        var deferred = q.defer();
+        readFormsFile();
+        for (var index = 0; index < forms.length; index++) {
+            if (fid == forms[index]['_id']) {
+                for(var j = 0; j < forms[index]['fields'].length; j++){
+                    if(f2id == forms[index]['fields'][j]['_id']){
+                        forms[index]['fields'].splice(j, 1);
+                        deferred.resolve(forms[index]);
+                        break;
+                    }
+                }
+            }
+        }
+        writeFormsFile();
+        return deferred.promise;
+    }
+
+    function updateField(fid, f2id, fieldUpdate){
+        var deferred = q.defer();
+        readFormsFile();
+        for (var index = 0; index < forms.length; index++) {
+            if (fid == forms[index]['_id']) {
+                for(var j = 0; j < forms[index]['fields'].length; j++){
+                    if(f2id == forms[index]['fields'][j]['_id']){
+                        forms[index]['fields'][j] = fieldUpdate;
+                        deferred.resolve(forms[index]);
+                        break;
+                    }
+                }
+            }
+        }
+        writeFormsFile();
+        return deferred.promise;
+    }
+
 };

@@ -42,7 +42,51 @@
                 "_id": 1460241369789,
                 "type": "Text",
                 "title": "new field2019",
-                "text": "the new text",
+                "text": "the new text2",
+                "addOption": false
+            },
+            {
+                "_id": 1460310046804,
+                "type": "Checkbox",
+                "title": "sadasdasd",
+                "options": [
+                    {
+                        "_id": 1460310161272,
+                        "text": "a"
+                    }
+                ],
+                "addOption": false
+            },
+            {
+                "_id": 1460310148820,
+                "type": "Checkbox",
+                "title": "asdasd",
+                "options": [
+                    {
+                        "_id": 1460310152759,
+                        "text": "sss"
+                    },
+                    {
+                        "_id": 1460310156097,
+                        "text": "ddd"
+                    }
+                ],
+                "addOption": false
+            },
+            {
+                "_id": 1460310165002,
+                "type": "Dropdown",
+                "title": "asdasd",
+                "options": [
+                    {
+                        "_id": 1460310168553,
+                        "text": "1"
+                    },
+                    {
+                        "_id": 1460310171007,
+                        "text": "2"
+                    }
+                ],
                 "addOption": false
             }
         ]

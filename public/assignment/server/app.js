@@ -9,6 +9,7 @@ module.exports = function (app, db, mongoose) {
     //console.log(userModel, formModel);
     var uss = require("./services/user.service.server.js")(app, userModel);
     var fss = require("./services/forms.service.server.js")(app, formModel);
+    var fiss = require("./services/field.service.server.js")(app, formModel);
     //console.log(uss, fss);
 
 };
