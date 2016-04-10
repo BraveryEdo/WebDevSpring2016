@@ -6,6 +6,7 @@ module.exports = function (db, mongoose){
     var q = require('q');
     var fs = require('fs');
     var users = [];
+    var userPath = "public/assignment/server/models/user.mock.json";
 
     var api = {
         login: login,
@@ -18,7 +19,11 @@ module.exports = function (db, mongoose){
     return api;
 
     function readUsersFile(){
-        users = JSON.parse(fs.readFileSync("public/assignment/server/models/user.mock.json"));
+        users = JSON.parse(fs.readFileSync(userPath));
+    }
+
+    function writeUsersFile(){
+        fs.writeFileSync(userPath, JSON.stringify(users, null, 4), 'utf-8');
     }
 
     function login(user) {
@@ -56,6 +61,7 @@ module.exports = function (db, mongoose){
         var deferred = q.defer();
         readUsersFile();
         users.push(newUser);
+        writeUsersFile();
         deferred.resolve(newUser);
         return deferred.promise;
     }
@@ -86,6 +92,8 @@ module.exports = function (db, mongoose){
                 break;
             }
         }
+
+        writeUsersFile();
         return deferred.promise;
     }
 
@@ -101,6 +109,7 @@ module.exports = function (db, mongoose){
             }
         }
 
+        writeUsersFile();
         return deferred.promise;
     }
 
