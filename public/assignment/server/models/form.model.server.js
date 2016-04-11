@@ -24,9 +24,8 @@ module.exports = function (db, mongoose) {
         getFieldsForForm: getFieldsForForm,
         getFieldForForm: getFieldForForm,
         deleteFieldFromForm: deleteFieldFromForm,
-        updateField: updateField
-
-
+        updateField: updateField,
+        shift: shift
     };
     return api;
 
@@ -38,6 +37,43 @@ module.exports = function (db, mongoose) {
     //replaces the file contents with the local forms array
     function writeFormsFile(){
         fs.writeFileSync(formPath, JSON.stringify(forms, null, 4), 'utf-8');
+    }
+
+    function shift(fid, f2id, dir){
+        var deferred = q.defer();
+        readFormsFile();
+        for (var i = 0; i < forms.length; i++){
+            if (fid == forms[i]['_id']) {
+                var fields = forms[i]['fields'];
+                for(var j = 0; j < fields.length; j++){
+                    if(f2id == fields[j]['_id']){
+                        if((j == 0 && dir =="up") //out of range options
+                            || (j == (fields.length - 1) && dir == "down")){
+                            //do nothing
+                            deferred.resolve(forms[i]);
+                            break;
+                        } else {
+                            if (dir == "up") {
+                                var swap = fields[j - 1];
+                                fields[j - 1] = fields[j];
+                                fields[j] = swap;
+                            } else {
+
+                                var swap = fields[j + 1];
+                                fields[j + 1] = fields[j];
+                                fields[j] = swap;
+                            }
+                            forms[i]['fields'] = fields;
+                            writeFormsFile();
+                            deferred.resolve(forms[i]);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return deferred.promise;
     }
 
     function sort(uid){

@@ -41,6 +41,8 @@
                                 <span data-ng-click="toggleOption(field)" class="glyphicon glyphicon-plus" data-ng-if="!showOption(field) && (field['type'] == 'Radio Button' || field['type'] == 'Dropdown' || field['type'] == 'Checkbox')"></span>
                                 <span data-ng-click="toggleOption(field)" class="glyphicon glyphicon-minus" data-ng-if="showOption(field) &&(field['type'] == 'Radio Button' || field['type'] == 'Dropdown' || field['type'] == 'Checkbox')"></span>
                                 <span data-ng-click="deleteField(field)" class="glyphicon glyphicon-remove"></span>
+                                <span data-ng-click="shift(field['_id'], 'up')" class="glyphicon glyphicon-chevron-up"></span>
+                                <span data-ng-click="shift(field['_id'], 'down')" class="glyphicon glyphicon-chevron-down"></span>
                             </td>
                         </tr>
                         <tr>

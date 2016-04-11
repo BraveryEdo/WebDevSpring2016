@@ -27,6 +27,12 @@
             });
         };
 
+        $scope.shift = function($fid, dir){
+          FieldService.shift($scope.form['_id'], $fid, dir).then(function(f){
+                  $scope.form = f.data;
+              });
+        };
+
         $scope.addField = function($newType){
             var newField = null;
 
@@ -73,18 +79,17 @@
             for(i = 0; i < fields.length; i++){
                 if(fields[i]['_id'] == $field['_id']){
                     var options = fields[i]['options'];
-                    console.log(fields[i]);
-                    console.log(options);
-                    console.log("adding option: " + $scope.newOptionText);
                     options.push({'_id': (new Date).getTime(),'text': $scope.newOptionText});
                     fields[i]['options'] = options;
                     fields[i]['addOption'] = false;
-                    break;}}
+                    break;
+                }
+            }
 
             FieldService.updateField($scope.form['_id'], $field['_id'], fields[i]).then(function($updatedForm){
                 $scope.form = $updatedForm.data;
                 $scope.newOptionText = "";
-                console.log("addOption toggled");});
+            });
         };
 
         $scope.showOption = function($field){
@@ -97,11 +102,14 @@
             for(i = 0; i < fields.length; i++){
                 if(fields[i]['_id'] == $field['_id']){
                     fields[i]['addOption'] = !fields[i]['addOption'];
-                    break;}}
+                    break;
+                }
+            }
 
             FieldService.updateField($scope.form['_id'], $field['_id'], fields[i]).then(function($updatedForm){
                 $scope.form = $updatedForm.data;
-                console.log("addOption toggled");});
+                console.log("addOption toggled");
+            });
 
         };
 
