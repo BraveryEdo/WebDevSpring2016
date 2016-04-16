@@ -15,7 +15,7 @@
             $scope.user = result;
             FormsService.findAllFormsForUser($scope.user["_id"]).then(function($userForms){
                 $scope.forms = $userForms.data;
-                console.log($scope.forms);
+                //console.log($scope.forms);
             });
         });
 

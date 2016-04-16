@@ -7,10 +7,12 @@ module.exports = function (db, mongoose) {
     var fs = require('fs');
     var forms = [];
     var formPath = "public/assignment/server/models/form.mock.json";
+    var Schema = mongoose.Schema;
+    console.log(Schema);
+    var FieldSchema = require('./field.schema.server.js')(Schema);
+    var FormSchema = require('./form.schema.server.js')(Schema, FieldSchema);
+    var FormModel = mongoose.model('Form', FormSchema);
 
-    //var formSchema = mongoose.schema({
-    //
-    //});
 
     var api = {
         getAllForms: getAllForms,
@@ -59,9 +61,9 @@ module.exports = function (db, mongoose) {
                                 fields[j] = swap;
                             } else {
 
-                                var swap = fields[j + 1];
+                                var swap2 = fields[j + 1];
                                 fields[j + 1] = fields[j];
-                                fields[j] = swap;
+                                fields[j] = swap2;
                             }
                             forms[i]['fields'] = fields;
                             writeFormsFile();
