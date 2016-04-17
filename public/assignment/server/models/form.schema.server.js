@@ -3,14 +3,16 @@
  */
 "use strict";
 
-(function(Schema, FieldSchema) {
-    var FormSchema = new Schema({
+module.exports = function(mongoose) {
+
+    var FieldSchema = require('./field.schema.server.js')(mongoose);
+    var FormSchema = new mongoose.Schema({
         "_id": Number,
         "title": String,
         "userId": String,
         "fields": [FieldSchema],
         "created": Date,
-        "updated": Date
-    });
+        "updated": {type: Date, default: Date.now}
+    }, {collection: "form"});
     return FormSchema;
-})();
+};

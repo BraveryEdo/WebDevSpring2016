@@ -7,11 +7,9 @@ module.exports = function (db, mongoose) {
     var fs = require('fs');
     var forms = [];
     var formPath = "public/assignment/server/models/form.mock.json";
-    var Schema = mongoose.Schema;
-    console.log(Schema);
-    var FieldSchema = require('./field.schema.server.js')(Schema);
-    var FormSchema = require('./form.schema.server.js')(Schema, FieldSchema);
-    var FormModel = mongoose.model('Form', FormSchema);
+    var FormSchema = require('./form.schema.server.js')(mongoose);
+    var FormModel = mongoose.model("Form", FormSchema);
+
 
 
     var api = {
@@ -33,6 +31,9 @@ module.exports = function (db, mongoose) {
 
     //reads form file info into the forms array
     function readFormsFile(){
+        FormModel.find(function(err, data){
+            forms = data;
+        });
         forms = JSON.parse(fs.readFileSync(formPath));
     }
 
