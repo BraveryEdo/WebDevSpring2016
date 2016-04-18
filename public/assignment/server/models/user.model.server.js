@@ -39,7 +39,7 @@ module.exports = function (db, mongoose){
     function login(user) {
         var deferred = q.defer();
 
-        var un = user['username'];
+        var un = user['username'].toLowerCase();
         var pw = user['password'];
         UserModel.findOne({'username': un, 'password': pw}, function(err, data){
             if(err){
@@ -65,7 +65,7 @@ module.exports = function (db, mongoose){
 
     function getUserByName(username){
         var deferred = q.defer();
-        UserModel.findOne({'username': username}, function(err, data){
+        UserModel.findOne({'username': username.toLowerCase()}, function(err, data){
             if(err){
                 deferred.resolve(err);
             } else {
@@ -89,6 +89,7 @@ module.exports = function (db, mongoose){
 
     function createNewUser(newUser) {
         var deferred = q.defer();
+        newUser['username'] = newUser['username'].toLowerCase();
         UserModel.create(newUser, function(err, data){
             if(err){
                 deferred.reject(err);
@@ -101,8 +102,7 @@ module.exports = function (db, mongoose){
 
     function updateUserById(uid, newUser) {
         var deferred = q.defer();
-        readUsersFile();
-
+        newUser['username'] = newUser['username'].toLowerCase();
         UserModel.findOne({'_id': uid}, function(err, data){
            data.update(newUser, function(err, res){
                if(err){

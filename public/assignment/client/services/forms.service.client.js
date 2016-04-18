@@ -31,7 +31,7 @@
         function logout(){
             var deferred = $q.defer();
             selectedForm = null;
-            deferred.resolve("200");
+            deferred.resolve(selectedForm);
             return deferred.promise;
         }
 

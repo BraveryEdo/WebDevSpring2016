@@ -7,7 +7,7 @@ module.exports = function(mongoose) {
         "_id": {type: Number, unique: true},
         "firstName": String,
         "lastName": String,
-        "username": {type: String, unique: true},
+        "username": {type: String, unique: true, lowercase: true},
         "password": String,
         "roles": [String]
     },{collection: "User"});

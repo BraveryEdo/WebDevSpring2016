@@ -6,7 +6,9 @@ module.exports = function (db, mongoose) {
     var q = require('q');
     var fs = require('fs');
     var formPath = "public/assignment/server/models/form.mock.json";
-    var FormSchema = require('./form.schema.server.js')(mongoose);
+    var FieldSchema = require('./field.schema.server.js')(mongoose);
+    var FieldModel = mongoose.model("Field", FieldSchema);
+    var FormSchema = require('./form.schema.server.js')(mongoose, FieldSchema);
     var FormModel = mongoose.model("Form", FormSchema);
 
 
@@ -211,7 +213,9 @@ module.exports = function (db, mongoose) {
                 deferred.reject(err);
             } else {
                 form['updated'] = (new Date).getTime();
-                form['fields'].push(newField);
+                var fields = form['fields'];
+                fields.push(newField);
+                form['fields'] = fields;
                 form.save(function (err) {
                     if (err) {
                         deferred.reject(err);
@@ -276,7 +280,27 @@ module.exports = function (db, mongoose) {
 
     function updateField(fid, f2id, fieldUpdate){
         var deferred = q.defer();
-        deferred.resolve(FormModel.methods.updateField(fid, f2id, fieldUpdate));
+        FormModel.findOne({'_id': fid}, function(err, form){
+            if(err) {
+                deferred.reject(err);
+            } else {
+                var fields = form['fields'];
+                for(var i = 0; i < fields.length; i++){
+                    if(fields[i]['_id'] == f2id){
+                        fields[i] = fieldUpdate;
+                    }
+                }
+                form['fields'] = fields;
+                form.save(function(err){
+                    if(err){
+                        deferred.reject(err);
+                    } else {
+                        deferred.resolve(getFormById(fid));
+                    }
+                });
+
+            }
+        });
         return deferred.promise;
     }
 
