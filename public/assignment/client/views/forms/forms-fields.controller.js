@@ -11,7 +11,9 @@
     function FormsFieldsController($scope, $location, FieldService,FormsService){
         $scope.location = $location;
         $scope.newOptionText = "";
-        FormsService.form().then(function($f){$scope.form = $f;});
+        FormsService.form().then(function($f){
+            $scope.form = $f;
+        });
 
         $scope.editField = function($field){
             FieldService.updateField($scope.form['_id'], $field['_id'] ,$field).then(function($updatedForm){
@@ -27,9 +29,9 @@
             });
         };
 
-        $scope.shift = function($fid, dir){
-          FieldService.shift($scope.form['_id'], $fid, dir).then(function(f){
-                  $scope.form = f.data;
+        $scope.shift = function($f2id, dir){
+          FieldService.shift($scope.form['_id'], $f2id, dir).then(function(f){
+                $scope.form = f.data;
               });
         };
 

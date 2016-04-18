@@ -8,7 +8,7 @@ module.exports = function (app, formModel) {
     app.get("/api/field/:formId/:fieldId", getFieldForForm);
     app.delete("/api/field/:formId/:fieldId", deleteFieldFromForm);
     app.put("/api/field/:formId/:fieldId", updateField);
-    app.post("/api/field/shift/:formId/:fieldId/:dir", shift);
+    app.put("/api/field/shift/:formId/:fieldId/:dir", shift);
 
     var service = {
         createFieldForForm: createFieldForForm,

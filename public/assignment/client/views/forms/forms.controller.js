@@ -15,9 +15,19 @@
             $scope.user = result;
             FormsService.findAllFormsForUser($scope.user["_id"]).then(function($userForms){
                 $scope.forms = $userForms.data;
+
+                FormsService.form().then(function($f){
+                    $scope.selectedForm = $f;
+                });
                 //console.log($scope.forms);
             });
         });
+
+        $scope.fieldsButton = function(){
+            if($scope.selectedForm !== null){
+                $scope.location.path('/form-fields');
+            }
+        };
 
         //change sorting order of forms
         $scope.sort = function(){

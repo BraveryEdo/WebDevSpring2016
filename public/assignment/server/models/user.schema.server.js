@@ -1,16 +1,15 @@
 /**
  * Created by EDO on 4/12/2016.
  */
-"use strict";
 module.exports = function(mongoose) {
-
+    var q = require('q');
     var UserSchema = new mongoose.Schema({
-        "_id": Number,
+        "_id": {type: Number, unique: true},
         "firstName": String,
         "lastName": String,
-        "username": String,
+        "username": {type: String, unique: true},
         "password": String,
         "roles": [String]
-    },{collection: "user"});
+    },{collection: "User"});
     return UserSchema;
 };

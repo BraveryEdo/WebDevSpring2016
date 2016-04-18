@@ -21,7 +21,7 @@
 
         function shift(formId, fieldId, dir){
             var deferred = $q.defer();
-            $http.post("/api/field/shift/" + formId +"/" + fieldId + "/" + dir).then(function(r){deferred.resolve(r);});
+            $http.put("/api/field/shift/" + formId +"/" + fieldId + "/" + dir).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
 
