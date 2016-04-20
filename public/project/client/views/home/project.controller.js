@@ -12,12 +12,15 @@
                 var width, height;
                 var t = 0;
                 var Hover = false;
+                var lastHover = 999999;
                 var n_rings = 6;
                 var ring_radius = [];
                 var showSun = false;
 
                 //setting up to stream from soundcloud
                 var clientID = '3ec04edf098e7efab4adfa28ea79ba39';
+                //my personal userID, please don't reuse
+                var userID = '8379765';
                 var clientSecret = 'eaaa1cef71e0d6dab383127009b1bed7';
                 var streamSource;
                 var analyser, context;
@@ -25,6 +28,16 @@
                 var trackIDs = [];
                 var trackNames = [];
                 var trackNr;
+                var time = 0;
+                var trackLength = 0;
+                var playing = false;
+
+                var showDisplay = false;
+                var searchActive = false;
+
+
+                var myFaves = 'http://api.soundcloud.com/users/' + userID + '/favorites/?client_id=' + clientID;
+
                 var SCResolveBase = "http://api.soundcloud.com/resolve?url=";
                 var genreBase = 'http://soundcloud.com/charts/';
                 var type = ["top", "trending"];
@@ -37,38 +50,38 @@
                     "science", "sports", "storytelling","technology"];
                 var genreEnd = '&client_id=' + clientID;
 
-                var SCLogo;
+                var SCLogo, playButton, pauseButton, searchButton;
 
 
- //reserved p5 method
                 p.preload = function(){
                     SC.initialize({
                         client_id: clientID
                     });
-                    setSource(type[0],genres[0]);
+                    setTrackListFaves();
+                    //setTrackList(type[0], genres[0]);
                     SCLogo = p.loadImage("/icons/SCLogo.png");
+                    playButton = p.loadImage("/icons/playButton.png");
+                    pauseButton = p.loadImage("/icons/pauseButton.png");
+                    searchButton = p.loadImage("/icons/searchImg.png");
                 };
 
 
-                //reserved p5 method
                 p.setup = function(){
+                    console.log("project setup started");
                     setRes();
                     p.createCanvas(width, height, 'p3d');
                     p.noStroke();
-                    setRingData();
-
-                    resize();
-
+                    console.log("marker 1");
                     context = new(window.AudioContext || window.webkitAudioContext);
 
                     //Create a Stream-Instance audio via audiostreamsource.js by Gregg Tavares
                     streamSource = audioStreamSource.create({
                         context: context, // a WebAudio context
-                        loop: true, // true or false if you want it to loop
+                        loop: false, // true or false if you want it to loop
                         autoPlay: false, // true to autoplay (you don't want this. See below)
-                        crossOrigin: false // true to try to get crossOrigin permission
+                        crossOrigin: true // true to try to get crossOrigin permission
                     });
-
+                    console.log("marker 2");
                     analyser = context.createAnalyser();
 
                     streamSource.on('newSource', function(source) {
@@ -76,33 +89,33 @@
                         source.connect(context.destination);
                         source.connect(analyser);
                     });
-
+                    console.log("marker 3");
                     streamSource.on('error', function(err) {
                         alert("Trouble connecting to soundcloud, please try again");
                     });
 
-
+                    trackNr = Math.floor(Math.random() * trackIDs.length); // create a random start number
+                    playTrack(trackNr);
+                    console.log("marker 4");
                     //20 miliseconds = 50 updates everysecond
-                    setInterval(analyser.getByteFrequencyData(streamData), 16);   //analyse stream every 16 milliseconds
+                    setInterval(sampleAudioStream, 16);   //analyse stream every 16 milliseconds
+                    console.log("project setup ended");
                 };
 
-                //reserved p5 method
-                p.mousePressed = function(){pressed(p.mouseX, p.mouseY);};
-
-                //reserved p5 method
-                p.touchStarted = function(){pressed(p.touchX, p.touchY);};
-
-                p.mouseMoved = function(){Hover = inRange(p.mouseX, p.mouseY);};
-
-                p.mouseMoved = function(){Hover = inRange(p.touchX, p.touchY);};
+                p.sampleAudioStream = sampleAudioStream;
+                function sampleAudioStream(){
+                    analyser.getByteFrequencyData(streamData)
+                }
 
                 p.windowResized = resize;
 
-                function setSource(typ, genre){
-                    var source = genreBase+typ+genreMid+genre+genreEnd+'&limit='+50+'&offset=0';
-                    $.get(SCResolveBase+source, function(data){
-                        getTrackList(data);
-                    })
+                function setTrackListFaves(){
+                    p.loadJSON(myFaves, getTrackList);
+                }
+
+                function setTrackList(typ, genre){
+                    var source = genreBase+typ+genreMid+genre+genreEnd+'&limit='+50+'&linked_partitioning=1';
+                    p.loadJSON(source, getTrackList);
                 }
 
                 function getTrackList (data) {
@@ -115,24 +128,18 @@
                     }
                 }
 
-                function inRange(x, y){
-                    return(x> 0 && x < width && y > 0 && y < height);
+                function playTrack(trackNr){
+                    var src = 'http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID;
+                    streamSource.setSource(src); // init src to play
                 }
 
-                function pressed(x, y){
-                    if(inRange(x, y)){
-                        trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
-                        //set source
-                    } else {
-                        p.stop();
-                    }
+                function inRange(x, y){
+                    return(x> 0 && x < width && y > 0 && y < height);
                 }
 
                 function resize(){
                     setRes();
                     p.resizeCanvas(width, height);
-                    p.noStroke();
-                    p.background(255);
                 }
 
                 function setRes(){
@@ -309,9 +316,13 @@
                     ring_radius[5] = 46 + r/2;
                 }
 
-                function dataUpdate(){
-                    if(showSun){setRingData();}
-                }
+                p.mousePressed = function(){pressed(p.mouseX, p.mouseY);};
+
+                p.touchStarted = function(){pressed(p.touchX, p.touchY);};
+
+                p.mouseMoved = function(){Hover = inRange(p.mouseX, p.mouseY);};
+
+                p.touchMoved = function(){Hover = inRange(p.touchX, p.touchY);};
 
                 p.keyPressed = function(){
                     if(p.keyCode == 83){//keycode for s
@@ -321,11 +332,45 @@
                     }
                 };
 
+                function pressed(x, y){
+                    if(inRange(x, y)){
+                        trackNr = Math.floor(Math.random() * trackIDs.length);
+                        playTrack(trackNr);
+                    } else {
+                        p.stop();
+                    }
+                }
+
 
                 function displayInterface(){
-                    var w = SCLogo.width;
-                    var h = SCLogo.height;
-                    p.image(SCLogo, width-w, height-h)
+                    if(searchActive || showDisplay){
+                        //track title
+                        p.textSize(32);
+                        p.text(trackNames[trackNr], 10, 30);
+                        //search bar
+                        var searchw = searchButton.width;
+                        var searchh = searchButton.height;
+
+                        //time seeker
+
+
+                        //play/pause button
+                        if(playing){
+                            var pausew = pauseButton.width;
+                            var pauseh = pauseButton.height;
+                            p.image(pauseButton, width/2.0 - pausew/2.0, height-pauseh);
+                        } else {
+                            var playw = playButton.width;
+                            var playh = playButton.height;
+                            p.image(playButton, width/2.0 - playw/2.0, height-playh);
+                        }
+
+
+                    }
+                    //logo
+                    var logow = SCLogo.width;
+                    var logoh = SCLogo.height;
+                    p.image(SCLogo, width-logow, height-logoh)
                 }
 
                 //reserved p5 method
@@ -337,11 +382,23 @@
                     if(showSun) triSunPattern();
                     aurora();
                     displayInterface();
-                    t++;
                 };
 
                 p.stop = function(){
                     streamSource.stop();
+                };
+
+                function dataUpdate(){
+                    if(showSun){setRingData();}
+                    time = streamSource.getCurrentTime();
+                    trackLength = streamSource.getDuration();
+                    playing = streamSource.isPlaying();
+                    if(Hover){
+                        lastHover = 0;
+                    }
+                    showDisplay = (lastHover++ < 100);
+
+                    t++;
                 }
 
             };
