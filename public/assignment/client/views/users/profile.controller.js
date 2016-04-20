@@ -12,13 +12,17 @@
         UserService.getCurrentUser()
             .then(function($res){
                 $scope.username = $res["username"];
-                $scope.password1 = $res["password"];
-                $scope.password2 = $res["password"];
+                $scope.password1 = "";
+                $scope.password2 = "";
                 $scope.fname = $res["firstName"];
                 $scope.lname = $res["lastName"];
 
                 $scope.update = function($username, $password1,$password2, $fname, $lname){
                     if($password1 == $password2){
+                        if($password1 == "" || $password1 == null){
+                            //password field is blank, use the old one
+                            $password1 = $res["password"];
+                        }
                         UserService.updateUser(
                             {
                                 "_id": $scope.user['_id'],

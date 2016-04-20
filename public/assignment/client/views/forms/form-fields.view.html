@@ -31,7 +31,9 @@
                                     <label data-ng-model="option" data-ng-repeat="option in field['options']"><input type="checkbox" name="optcheck">{{option['text']}}</label>
                                 </div>
 
-                                <p data-ng-model="field.text" data-ng-switch-when="Paragraph"></p>
+                                <div data-ng-switch-when="Paragraph">
+                                    <textarea class="form-control" data-ng-model="field.text"></textarea>
+                                </div>
 
                                 <p data-ng-switch-default>unknown field type: {{field['type']}}</p>
 

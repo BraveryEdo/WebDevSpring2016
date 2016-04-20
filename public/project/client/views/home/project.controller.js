@@ -8,47 +8,47 @@
         .module('FormMakerApp')
         .factory('viz', ['p5', function(p5) {
             return function(p){
-                //JSON
-                var clientID = '3ec04edf098e7efab4adfa28ea79ba39';
-
-                var userID = '8379765';
+                //visualizer vars
                 var width, height;
-                var trackIDs = [];
-                var trackNames = [];
-                var trackNr;
-
-                //Streaming
-                var streamSource;
-                var analyser, context;
-                var streamData = new Uint8Array(128);
                 var t = 0;
-
+                var Hover = false;
                 var n_rings = 6;
                 var ring_radius = [];
                 var showSun = false;
-                //reserved p5 method
+
+                //setting up to stream from soundcloud
+                var clientID = '3ec04edf098e7efab4adfa28ea79ba39';
+                var clientSecret = 'eaaa1cef71e0d6dab383127009b1bed7';
+                var streamSource;
+                var analyser, context;
+                var streamData = new Uint8Array(128);
+                var trackIDs = [];
+                var trackNames = [];
+                var trackNr;
+                var SCResolveBase = "http://api.soundcloud.com/resolve?url=";
+                var genreBase = 'http://soundcloud.com/charts/';
+                var type = ["top", "trending"];
+                var genreMid = '?genre=';
+                var genres = ["all-music", "all-audio", "alternativerock", "classical", "country",
+                    "danceedm", "dancehall", "disco", "drumbass", "folksingersongwriter", "hiphoprap",
+                    "house", "indie", "jazzblues", "latin", "metal", "piano", "pop", "rbsoul", "reggae",
+                    "reggaeton", "rock", "soundtrack", "trance", "trap", "triphop", "world", "audiobooks",
+                    "business", "comedy", "entertainment", "learning", "newspolitics", "religionspirituality",
+                    "science", "sports", "storytelling","technology"];
+                var genreEnd = '&client_id=' + clientID;
+
+                var SCLogo;
+
+
+ //reserved p5 method
                 p.preload = function(){
                     SC.initialize({
                         client_id: clientID
                     });
-                    //Analyze a JSON request into function listTracks()
-                    var loadTracks = 'http://api.soundcloud.com/users/' + userID + '/favorites/?client_id=' + clientID;
-                    p.loadJSON(loadTracks, listTracks);
+                    setSource(type[0],genres[0]);
+                    SCLogo = p.loadImage("/icons/SCLogo.png");
                 };
 
-                // Formatting JSON DATA from Soundcloud (called via preload())
-                p.listTracks = listTracks;
-
-                function listTracks (data) {
-                    var i;
-                    for (i = 0; i < data.length; i++) {
-                        trackIDs[i] = data[i].id;
-                    }
-                    for (i = 0; i < data.length; i++) {
-                        trackNames[i] = data[i].title;
-                        //console.log('Name: ' + trackNames[i] + ', ID: ' + trackIDs[i]);
-                    }
-                }
 
                 //reserved p5 method
                 p.setup = function(){
@@ -81,41 +81,53 @@
                         alert("Trouble connecting to soundcloud, please try again");
                     });
 
-                    trackNr = Math.floor(Math.random() * trackIDs.length); // create a random start number
-                    var src = 'http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID;
-                    streamSource.setSource(src); // init src to play
 
                     //20 miliseconds = 50 updates everysecond
-                    setInterval(sampleAudioStream, 16);   //analyse stream every 16 milliseconds
+                    setInterval(analyser.getByteFrequencyData(streamData), 16);   //analyse stream every 16 milliseconds
                 };
 
-                p.sampleAudioStream = sampleAudioStream;
-                function sampleAudioStream(){
-                    analyser.getByteFrequencyData(streamData);
-                }
-
+                //reserved p5 method
+                p.mousePressed = function(){pressed(p.mouseX, p.mouseY);};
 
                 //reserved p5 method
-                p.mousePressed = function() {
-                    if(p.mouseX > 0 && p.mouseX < width &&
-                        p.mouseY > 0 && p.mouseY < height){
+                p.touchStarted = function(){pressed(p.touchX, p.touchY);};
+
+                p.mouseMoved = function(){Hover = inRange(p.mouseX, p.mouseY);};
+
+                p.mouseMoved = function(){Hover = inRange(p.touchX, p.touchY);};
+
+                p.windowResized = resize;
+
+                function setSource(typ, genre){
+                    var source = genreBase+typ+genreMid+genre+genreEnd+'&limit='+50+'&offset=0';
+                    $.get(SCResolveBase+source, function(data){
+                        getTrackList(data);
+                    })
+                }
+
+                function getTrackList (data) {
+                    var i;
+                    for (i = 0; i < data.length; i++) {
+                        trackIDs[i] = data[i].id;
+                    }
+                    for (i = 0; i < data.length; i++) {
+                        trackNames[i] = data[i].title;
+                    }
+                }
+
+                function inRange(x, y){
+                    return(x> 0 && x < width && y > 0 && y < height);
+                }
+
+                function pressed(x, y){
+                    if(inRange(x, y)){
                         trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
-                        streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID);
+                        //set source
                     } else {
                         p.stop();
                     }
+                }
 
-                };
-
-                //reserved p5 method
-                p.touchStarted = function() {
-                    if(p.touchX > 0){
-                        trackNr = Math.floor(Math.random() * trackIDs.length); // create random TrackNr
-                        streamSource.setSource('http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID);
-                    }
-                };
-
-                p.windowResized = resize;
                 function resize(){
                     setRes();
                     p.resizeCanvas(width, height);
@@ -297,6 +309,10 @@
                     ring_radius[5] = 46 + r/2;
                 }
 
+                function dataUpdate(){
+                    if(showSun){setRingData();}
+                }
+
                 p.keyPressed = function(){
                     if(p.keyCode == 83){//keycode for s
                         showSun = !showSun;
@@ -307,17 +323,20 @@
 
 
                 function displayInterface(){
-                    //console.log('Name: ' + trackNames[trackNr] + ', ID: ' + trackIDs[trackNr]);
+                    var w = SCLogo.width;
+                    var h = SCLogo.height;
+                    p.image(SCLogo, width-w, height-h)
                 }
 
                 //reserved p5 method
                 p.draw = function() {
-                    setRingData();
+                    dataUpdate();
                     p.clear();
                     p.background(255);
                     spectro();
-                    aurora();
                     if(showSun) triSunPattern();
+                    aurora();
+                    displayInterface();
                     t++;
                 };
 

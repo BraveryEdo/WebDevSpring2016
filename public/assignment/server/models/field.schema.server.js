@@ -2,7 +2,6 @@
  * Created by EDO on 4/12/2016.
  */
 module.exports = function(mongoose) {
-    var q = require('q');
     var FieldSchema = new mongoose.Schema({
         "_id": {type: Number, unique: true},
         "type": String,

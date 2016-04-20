@@ -31,7 +31,7 @@
                     var roles = u['roles'];
                     var res = false;
                     for (var i = 0; i < roles.length; i++) {
-                        if (roles[i] == "admin" || roles[i] == "Admin" || roles[i] == "ADMIN") {
+                        if (roles[i].toLowerCase() == "admin") {
                             res = true;
                             console.log("an admin has logged in!");
                             break;

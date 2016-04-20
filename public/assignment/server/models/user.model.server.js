@@ -18,7 +18,9 @@ module.exports = function (db, mongoose){
         createNewUser: createNewUser,
         updateUserById: updateUserById,
         removeUserById: removeUserById,
-        getUserByName: getUserByName
+        getUserByName: getUserByName,
+        findUserByGoogleId: findUserByGoogleId,
+        findUserByFacebookId: findUserByFacebookId
     };
     return api;
 
@@ -34,6 +36,14 @@ module.exports = function (db, mongoose){
                 });
             }
         })
+    }
+
+    function findUserByGoogleId(id){
+
+    }
+
+    function findUserByFacebookId(id){
+
     }
 
     function login(user) {

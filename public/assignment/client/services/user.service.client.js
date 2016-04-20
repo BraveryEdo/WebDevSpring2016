@@ -14,6 +14,7 @@
         var service = {
             register: registerUser,
             login: login,
+            loggedin: loggedin,
             logout: logout,
             updateUser: updateUser,
             getAllUsers: getAllUsers,
@@ -24,6 +25,12 @@
             findUserByUsername: findUserByUsername
         };
         return service;
+
+        function loggedin(){
+            var deferred = $q.defer();
+            $http.get("/api/loggedin").then(function(r){deferred.resolve(r);});
+            return deferred.promise;
+        }
 
         function findUserByUsername(username){
             var deferred = $q.defer();
@@ -53,6 +60,7 @@
         }
 
         function updateUser(user) {
+            var deferred = $q.defer();
             $http.put("/api/user/" + user._id, user).then(function(r){deferred.resolve(r);});
             return deferred.promise;
         }
