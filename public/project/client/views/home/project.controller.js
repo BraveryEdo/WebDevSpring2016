@@ -34,23 +34,11 @@
 
                 var showDisplay = false;
                 var searchActive = false;
-
+                var searchText = "";
 
                 var myFaves = 'http://api.soundcloud.com/users/' + userID + '/favorites/?client_id=' + clientID;
 
-                var SCResolveBase = "http://api.soundcloud.com/resolve?url=";
-                var genreBase = 'http://soundcloud.com/charts/';
-                var type = ["top", "trending"];
-                var genreMid = '?genre=';
-                var genres = ["all-music", "all-audio", "alternativerock", "classical", "country",
-                    "danceedm", "dancehall", "disco", "drumbass", "folksingersongwriter", "hiphoprap",
-                    "house", "indie", "jazzblues", "latin", "metal", "piano", "pop", "rbsoul", "reggae",
-                    "reggaeton", "rock", "soundtrack", "trance", "trap", "triphop", "world", "audiobooks",
-                    "business", "comedy", "entertainment", "learning", "newspolitics", "religionspirituality",
-                    "science", "sports", "storytelling","technology"];
-                var genreEnd = '&client_id=' + clientID;
-
-                var SCLogo, playButton, pauseButton, searchButton;
+                var SCLogo, playButton, pauseButton, searchButton, nextButton, prevButton;
 
 
                 p.preload = function(){
@@ -58,20 +46,23 @@
                         client_id: clientID
                     });
                     setTrackListFaves();
-                    //setTrackList(type[0], genres[0]);
+                    searchText = "https://soundcloud.com/simma-black/simblk066-01-86deep-something-original-mix-simma-black";
+                    search();
                     SCLogo = p.loadImage("/icons/SCLogo.png");
                     playButton = p.loadImage("/icons/playButton.png");
                     pauseButton = p.loadImage("/icons/pauseButton.png");
                     searchButton = p.loadImage("/icons/searchImg.png");
+                    nextButton = p.loadImage("/icons/nextButton.png");
+                    prevButton = p.loadImage("/icons/prevButton.png");
                 };
 
 
                 p.setup = function(){
-                    console.log("project setup started");
+
                     setRes();
                     p.createCanvas(width, height, 'p3d');
                     p.noStroke();
-                    console.log("marker 1");
+
                     context = new(window.AudioContext || window.webkitAudioContext);
 
                     //Create a Stream-Instance audio via audiostreamsource.js by Gregg Tavares
@@ -81,7 +72,7 @@
                         autoPlay: false, // true to autoplay (you don't want this. See below)
                         crossOrigin: true // true to try to get crossOrigin permission
                     });
-                    console.log("marker 2");
+
                     analyser = context.createAnalyser();
 
                     streamSource.on('newSource', function(source) {
@@ -89,17 +80,16 @@
                         source.connect(context.destination);
                         source.connect(analyser);
                     });
-                    console.log("marker 3");
+
                     streamSource.on('error', function(err) {
                         alert("Trouble connecting to soundcloud, please try again");
                     });
 
                     trackNr = Math.floor(Math.random() * trackIDs.length); // create a random start number
-                    playTrack(trackNr);
-                    console.log("marker 4");
+                    playTrack(trackIDs[trackNr]);
+
                     //20 miliseconds = 50 updates everysecond
                     setInterval(sampleAudioStream, 16);   //analyse stream every 16 milliseconds
-                    console.log("project setup ended");
                 };
 
                 p.sampleAudioStream = sampleAudioStream;
@@ -110,15 +100,17 @@
                 p.windowResized = resize;
 
                 function setTrackListFaves(){
-                    p.loadJSON(myFaves, getTrackList);
+                    p.loadJSON(myFaves, buildTrackList);
                 }
 
-                function setTrackList(typ, genre){
-                    var source = genreBase+typ+genreMid+genre+genreEnd+'&limit='+50+'&linked_partitioning=1';
-                    p.loadJSON(source, getTrackList);
+                function search() {
+                    SC.get('/resolve', {url: searchText}, function (sound) {
+                        //showSound(sound);
+                        console.log(sound);
+                    });
                 }
 
-                function getTrackList (data) {
+                function buildTrackList (data) {
                     var i;
                     for (i = 0; i < data.length; i++) {
                         trackIDs[i] = data[i].id;
@@ -128,8 +120,8 @@
                     }
                 }
 
-                function playTrack(trackNr){
-                    var src = 'http://api.soundcloud.com/tracks/' + trackIDs[trackNr] + '/stream?client_id=' + clientID;
+                function playTrack(id){
+                    var src = 'http://api.soundcloud.com/tracks/' + id + '/stream?client_id=' + clientID;
                     streamSource.setSource(src); // init src to play
                 }
 
@@ -179,7 +171,6 @@
                     var c = {'r': 255, 'g': 128, 'b': 128, 'a': 60};
                     for(var i  = 0; i < streamData.length-1; i+=5){
 
-                        var base = height;
                         var y1 = streamData[i];
                         var y2 = streamData[i+1];
 
@@ -335,7 +326,7 @@
                 function pressed(x, y){
                     if(inRange(x, y)){
                         trackNr = Math.floor(Math.random() * trackIDs.length);
-                        playTrack(trackNr);
+                        playTrack(trackIDs[trackNr]);
                     } else {
                         p.stop();
                     }
@@ -350,10 +341,13 @@
                         //search bar
                         var searchw = searchButton.width;
                         var searchh = searchButton.height;
+                        if(searchActive){
+                            //show the search bar with whats been typed
+                        }
 
                         //time seeker
 
-
+                        var buttonSize = 32;
                         //play/pause button
                         if(playing){
                             var pausew = pauseButton.width;

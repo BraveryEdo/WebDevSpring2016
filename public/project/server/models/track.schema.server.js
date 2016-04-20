@@ -5,8 +5,8 @@ module.exports = function(mongoose, CueSchema, SC) {
     var TrackSchema = new mongoose.Schema({
         "_id": {type: Number, unique: true},
         "title": String,
-        "creator": String,
         "length": Number,
+        "cover": String,
         "cues" :[CueSchema]
     },{collection: "Track"});
     return TrackSchema;
