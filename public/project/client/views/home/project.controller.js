@@ -31,6 +31,7 @@
                 var time = 0;
                 var trackLength = 0;
                 var playing = false;
+                var pausedTime = 0;
 
                 var showDisplay = false;
                 var searchActive = false;
@@ -38,7 +39,7 @@
 
                 var myFaves = 'http://api.soundcloud.com/users/' + userID + '/favorites/?client_id=' + clientID;
 
-                var SCLogo, playButton, pauseButton, searchButton, nextButton, prevButton;
+                var SCLogo, playButton, pauseButton, searchButton, nextButton, prevButton, optsButton;
 
 
                 p.preload = function(){
@@ -46,14 +47,14 @@
                         client_id: clientID
                     });
                     setTrackListFaves();
-                    searchText = "https://soundcloud.com/simma-black/simblk066-01-86deep-something-original-mix-simma-black";
-                    search();
+                    searchText = "Copy and paste a SoundCloud track URL here";
                     SCLogo = p.loadImage("/icons/SCLogo.png");
                     playButton = p.loadImage("/icons/playButton.png");
                     pauseButton = p.loadImage("/icons/pauseButton.png");
                     searchButton = p.loadImage("/icons/searchImg.png");
                     nextButton = p.loadImage("/icons/nextButton.png");
                     prevButton = p.loadImage("/icons/prevButton.png");
+                    optsButton = p.loadImage("/icons/optionsButton.png");
                 };
 
 
@@ -68,7 +69,7 @@
                     //Create a Stream-Instance audio via audiostreamsource.js by Gregg Tavares
                     streamSource = audioStreamSource.create({
                         context: context, // a WebAudio context
-                        loop: false, // true or false if you want it to loop
+                        loop: true, // true or false if you want it to loop
                         autoPlay: false, // true to autoplay (you don't want this. See below)
                         crossOrigin: true // true to try to get crossOrigin permission
                     });
@@ -114,8 +115,6 @@
                     var i;
                     for (i = 0; i < data.length; i++) {
                         trackIDs[i] = data[i].id;
-                    }
-                    for (i = 0; i < data.length; i++) {
                         trackNames[i] = data[i].title;
                     }
                 }
@@ -324,40 +323,103 @@
                 };
 
                 function pressed(x, y){
-                    if(inRange(x, y)){
-                        trackNr = Math.floor(Math.random() * trackIDs.length);
-                        playTrack(trackIDs[trackNr]);
+                    if(inRange(x, y)) {
+                        interactDisplay(x, y);
                     } else {
-                        p.stop();
+                        if(playing){
+                            pause();
+                        } else {
+                            play();
+                        }
+                        playing = !playing;
                     }
+                }
+
+                function pause(){
+                    streamSource.stop();
+                    pausedTime = streamSource.getCurrentTime();
+                }
+
+                function play(){
+                    streamSource.play();
+                }
+
+                function interactDisplay(x, y) {
+                    //logo
+                    var logow = SCLogo.width;
+                    var logoh = SCLogo.height;
+                    if (showDisplay) {
+                        var buttonSize = 32;
+                        //options button
+                        if (x >= 0 && x <= buttonSize && y >= 0 && y <= buttonSize) {
+                            console.log("options button pressed");
+                        }
+                        //search button
+                        if (x >= width-buttonSize && x <= width && y >= 0 && y <= buttonSize) {
+                            console.log("search button pressed");
+                            searchActive = !searchActive;
+                        }
+                        if (y>=height-buttonSize&&y<=height) {
+                            if (x >= width / 2.0 - buttonSize / 2 && x <= width / 2.0 + buttonSize / 2) {
+                                if (playing) {
+                                    console.log("Pause the track");
+                                    pause();
+                                } else {
+                                    console.log("Play the track");
+                                    play();
+                                }
+                            } else if (x >= width / 2.0 - 3 * buttonSize / 2.0 && x <= width / 2.0 - buttonSize / 2) {
+                                console.log("previous track");
+                                trackNr = (trackNr-1)%trackIDs.length;
+                                playTrack(trackIDs[trackNr]);
+                            } else if(x>=width / 2.0 + buttonSize / 2.0&&x<=width / 2.0 + 3*buttonSize / 2){
+                                console.log("next track");
+                                trackNr = (trackNr+1)%trackIDs.length;
+                                playTrack(trackIDs[trackNr]);
+                            }
+                        }
+
+                }
+                    p.image(SCLogo, width-logow, height-logoh);
+
+                    //trackNr = Math.floor(Math.random() * trackIDs.length);
+
                 }
 
 
                 function displayInterface(){
-                    if(searchActive || showDisplay){
+                    if(showDisplay){
                         //track title
-                        p.textSize(32);
-                        p.text(trackNames[trackNr], 10, 30);
-                        //search bar
-                        var searchw = searchButton.width;
-                        var searchh = searchButton.height;
+                        p.noFill();
+                        p.stroke(0);
+                        p.textSize(20);
+                        var buttonSize = 32;
+                        p.image(optsButton, 0, 0, buttonSize, buttonSize);
+                        p.image(searchButton, width-buttonSize, 0, buttonSize, buttonSize);
                         if(searchActive){
                             //show the search bar with whats been typed
+                            var cursor;
+                            if(t%10 < t%5){
+                                cursor = "|";
+                            } else {
+                                cursor = "";
+                            }
+                            p.text(searchText + cursor, 40, 20);
+
+                        } else {
+                            p.text(trackNames[trackNr], 40, 20);
                         }
 
-                        //time seeker
-
-                        var buttonSize = 32;
                         //play/pause button
                         if(playing){
-                            var pausew = pauseButton.width;
-                            var pauseh = pauseButton.height;
-                            p.image(pauseButton, width/2.0 - pausew/2.0, height-pauseh);
+                            p.image(pauseButton, width/2.0-buttonSize/2, height-buttonSize, buttonSize, buttonSize);
                         } else {
-                            var playw = playButton.width;
-                            var playh = playButton.height;
-                            p.image(playButton, width/2.0 - playw/2.0, height-playh);
+                            p.image(playButton, width/2.0-buttonSize/2, height-buttonSize, buttonSize, buttonSize);
                         }
+                        //next/prev
+
+                        p.image(prevButton, width/2.0-3*buttonSize/2.0, height-buttonSize, buttonSize, buttonSize);
+                        p.image(nextButton, width/2.0+buttonSize/2.0, height-buttonSize, buttonSize, buttonSize);
 
 
                     }
@@ -387,10 +449,10 @@
                     time = streamSource.getCurrentTime();
                     trackLength = streamSource.getDuration();
                     playing = streamSource.isPlaying();
-                    if(Hover){
+                    if(Hover||!playing){
                         lastHover = 0;
                     }
-                    showDisplay = (lastHover++ < 100);
+                    showDisplay = (lastHover++ < 100)||searchActive||!playing;
 
                     t++;
                 }
