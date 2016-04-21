@@ -35,6 +35,7 @@
 
                 var showDisplay = false;
                 var searchActive = false;
+                var optionsActive = false;
                 var searchText = "";
 
                 var myFaves = 'http://api.soundcloud.com/users/' + userID + '/favorites/?client_id=' + clientID;
@@ -112,10 +113,13 @@
                 }
 
                 function buildTrackList (data) {
-                    var i;
-                    for (i = 0; i < data.length; i++) {
-                        trackIDs[i] = data[i].id;
-                        trackNames[i] = data[i].title;
+                    var streamCount = 0;
+                    for (var i = 0; i < data.length; i++) {
+                        if(data[i].streamable){
+                            trackIDs[streamCount] = data[i].id;
+                            trackNames[streamCount] = data[i].title;
+                            streamCount++;
+                        }
                     }
                 }
 
@@ -328,10 +332,8 @@
                     } else {
                         if(playing){
                             pause();
-                        } else {
-                            play();
+                            playing = !playing;
                         }
-                        playing = !playing;
                     }
                 }
 
@@ -352,38 +354,58 @@
                         var buttonSize = 32;
                         //options button
                         if (x >= 0 && x <= buttonSize && y >= 0 && y <= buttonSize) {
-                            console.log("options button pressed");
+                            //console.log("options button pressed");
+                            optionsActive = !optionsActive;
                         }
+
+                        if(optionsActive){
+                            var textSize = 20;
+                            var maxLen = 16;
+
+                            var maxLen = 16;
+                            var maxEntries = Math.floor((height-textSize*3/4)/(textSize))-2;
+                            for(var i = 0; i < maxEntries; i++) {
+                                if(x >= 8
+                                && x <= 8 + textSize * maxLen * 2 / 3
+                                && y >= 15 - textSize + textSize * (i + 2)
+                                && y <= 15 + textSize * (i + 2)){
+                                        trackNr = (trackNr + 1 + i) % trackIDs.length;
+                                        playTrack(trackIDs[trackNr]);
+
+                                }
+                            }
+                        }
+
                         //search button
                         if (x >= width-buttonSize && x <= width && y >= 0 && y <= buttonSize) {
-                            console.log("search button pressed");
+                            //console.log("search button pressed");
                             searchActive = !searchActive;
                         }
                         if (y>=height-buttonSize&&y<=height) {
                             if (x >= width / 2.0 - buttonSize / 2 && x <= width / 2.0 + buttonSize / 2) {
                                 if (playing) {
-                                    console.log("Pause the track");
+                                    //console.log("Pause the track");
                                     pause();
                                 } else {
-                                    console.log("Play the track");
+                                   // console.log("Play the track");
                                     play();
                                 }
                             } else if (x >= width / 2.0 - 3 * buttonSize / 2.0 && x <= width / 2.0 - buttonSize / 2) {
-                                console.log("previous track");
+                               //console.log("previous track");
                                 trackNr = (trackNr-1)%trackIDs.length;
                                 playTrack(trackIDs[trackNr]);
                             } else if(x>=width / 2.0 + buttonSize / 2.0&&x<=width / 2.0 + 3*buttonSize / 2){
-                                console.log("next track");
+                                //console.log("next track");
                                 trackNr = (trackNr+1)%trackIDs.length;
                                 playTrack(trackIDs[trackNr]);
                             }
                         }
 
                 }
-                    p.image(SCLogo, width-logow, height-logoh);
 
-                    //trackNr = Math.floor(Math.random() * trackIDs.length);
-
+                    if(x>=width-logow && x<= width && y >= height-logoh && y < height){
+                        console.log("link to sound cloud");
+                    }
                 }
 
 
@@ -392,7 +414,8 @@
                         //track title
                         p.noFill();
                         p.stroke(0);
-                        p.textSize(20);
+                        var textSize = 20;
+                        p.textSize(textSize);
                         var buttonSize = 32;
                         p.image(optsButton, 0, 0, buttonSize, buttonSize);
                         p.image(searchButton, width-buttonSize, 0, buttonSize, buttonSize);
@@ -410,6 +433,24 @@
                             p.text(trackNames[trackNr], 40, 20);
                         }
 
+                        if(optionsActive){
+                            var maxLen = 16;
+                            var maxEntries = Math.floor((height-textSize*3/4)/(textSize))-2;
+                            for(var i = 0; i < maxEntries; i++){
+                                var shortTitle = trackNames[(trackNr+1+i)%trackIDs.length];
+                                if(shortTitle.length > maxLen){
+                                    shortTitle = shortTitle.substring(0,maxLen) + "...";
+                                }
+                                p.fill(255);
+                                p.quad(8,15-textSize+textSize*(i+2),
+                                       8,15+textSize*(i+2),
+                                       8+textSize*maxLen*2/3,15+textSize*(i+2),
+                                       8+textSize*maxLen*2/3,15-textSize+textSize*(i+2));
+                                p.fill(0);
+                                p.text(shortTitle, 10, 15+textSize*(i+2));
+                            }
+                        }
+                        p.noFill();
                         //play/pause button
                         if(playing){
                             p.image(pauseButton, width/2.0-buttonSize/2, height-buttonSize, buttonSize, buttonSize);
@@ -438,6 +479,10 @@
                     if(showSun) triSunPattern();
                     aurora();
                     displayInterface();
+                    //outline
+                    p.stroke(5);
+                    p.noFill();
+                    p.quad(1,0,1,height,width-1,height,width-1,0);
                 };
 
                 p.stop = function(){
@@ -448,13 +493,18 @@
                     if(showSun){setRingData();}
                     time = streamSource.getCurrentTime();
                     trackLength = streamSource.getDuration();
+
                     playing = streamSource.isPlaying();
-                    if(Hover||!playing){
+                    if(Hover||optionsActive||searchActive||!playing){
                         lastHover = 0;
                     }
-                    showDisplay = (lastHover++ < 100)||searchActive||!playing;
+                    showDisplay = (lastHover++ < 100)||optionsActive||searchActive||!playing;
 
                     t++;
+                }
+
+                function paste(event){
+                    console.log(event);
                 }
 
             };
