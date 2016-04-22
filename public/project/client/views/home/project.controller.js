@@ -4,8 +4,11 @@
 
 "use strict";
 (function(){
+    //rem has this scope so that the controller cna access the closing call for the p5 sketch
+    var rem;
     angular
         .module('FormMakerApp')
+        .controller('ProjectController',['$scope', '$location', ProjectController])
         .factory('viz', ['p5', function(p5) {
             return function(p){
                 //visualizer vars
@@ -27,6 +30,7 @@
                 var streamData = new Uint8Array(128);
                 var trackIDs = [];
                 var trackNames = [];
+                var extLink = [];
                 var trackNr;
                 var time = 0;
                 var trackLength = 0;
@@ -36,7 +40,11 @@
                 var showDisplay = false;
                 var searchActive = false;
                 var optionsActive = false;
+                var showRecord = true;
+                var showSocial = false;
+                var recording = false;
                 var searchText = "";
+                var searchInput;
 
                 var myFaves = 'http://api.soundcloud.com/users/' + userID + '/favorites/?client_id=' + clientID;
 
@@ -44,6 +52,9 @@
 
 
                 p.preload = function(){
+                    rem = function(){
+                        p.remove();
+                    };
                     SC.initialize({
                         client_id: clientID
                     });
@@ -92,6 +103,9 @@
 
                     //20 miliseconds = 50 updates everysecond
                     setInterval(sampleAudioStream, 16);   //analyse stream every 16 milliseconds
+                    searchInput = p.createInput();
+                    searchInput.position(40,20);
+                    searchInput.addClass("hidden");
                 };
 
                 p.sampleAudioStream = sampleAudioStream;
@@ -100,6 +114,15 @@
                 }
 
                 p.windowResized = resize;
+                function resize(){
+                    setRes();
+                    p.resizeCanvas(width, height);
+                }
+
+                function setRes(){
+                    height = window.innerHeight*0.8;
+                    width = document.body.clientWidth*0.8;
+                }
 
                 function setTrackListFaves(){
                     p.loadJSON(myFaves, buildTrackList);
@@ -107,7 +130,6 @@
 
                 function search() {
                     SC.get('/resolve', {url: searchText}, function (sound) {
-                        //showSound(sound);
                         console.log(sound);
                     });
                 }
@@ -118,6 +140,8 @@
                         if(data[i].streamable){
                             trackIDs[streamCount] = data[i].id;
                             trackNames[streamCount] = data[i].title;
+                            extLink[streamCount] = data[i].permalink_url;
+                            //console.log(data[i]);
                             streamCount++;
                         }
                     }
@@ -132,15 +156,6 @@
                     return(x> 0 && x < width && y > 0 && y < height);
                 }
 
-                function resize(){
-                    setRes();
-                    p.resizeCanvas(width, height);
-                }
-
-                function setRes(){
-                    height = Math.min(window.innerHeight*0.8, 700);
-                    width = document.body.clientWidth*0.8;
-                }
 
                 function reflectBot(x1, y1, x2, y2, color){
                     p.fill(color['r'], color['g'], color['b'], color['a']);
@@ -322,7 +337,7 @@
                     if(p.keyCode == 83){//keycode for s
                         showSun = !showSun;
                     } else {
-                        console.log(p.keyCode);
+                        //console.log(p.keyCode);
                     }
                 };
 
@@ -361,8 +376,6 @@
                         if(optionsActive){
                             var textSize = 20;
                             var maxLen = 16;
-
-                            var maxLen = 16;
                             var maxEntries = Math.floor((height-textSize*3/4)/(textSize))-2;
                             for(var i = 0; i < maxEntries; i++) {
                                 if(x >= 8
@@ -381,6 +394,7 @@
                             //console.log("search button pressed");
                             searchActive = !searchActive;
                         }
+                        //clicked on the bottom row
                         if (y>=height-buttonSize&&y<=height) {
                             if (x >= width / 2.0 - buttonSize / 2 && x <= width / 2.0 + buttonSize / 2) {
                                 if (playing) {
@@ -398,13 +412,18 @@
                                 //console.log("next track");
                                 trackNr = (trackNr+1)%trackIDs.length;
                                 playTrack(trackIDs[trackNr]);
+                            } else if(x >= width/2.0+5*buttonSize/2&& x<= width/2.0+7*buttonSize/2){
+                                recording = !recording;
+                            } if(x >= width/2.0-7*buttonSize/2 && x <= width/2.0-5*buttonSize/2){
+                                showSocial = !showSocial;
                             }
                         }
 
-                }
+                    }
 
                     if(x>=width-logow && x<= width && y >= height-logoh && y < height){
-                        console.log("link to sound cloud");
+                        window.open(extLink[trackNr]);
+
                     }
                 }
 
@@ -420,19 +439,28 @@
                         p.image(optsButton, 0, 0, buttonSize, buttonSize);
                         p.image(searchButton, width-buttonSize, 0, buttonSize, buttonSize);
                         if(searchActive){
-                            //show the search bar with whats been typed
-                            var cursor;
-                            if(t%10 < t%5){
-                                cursor = "|";
-                            } else {
-                                cursor = "";
-                            }
-                            p.text(searchText + cursor, 40, 20);
+                            searchInput.removeClass("hidden");
 
                         } else {
+                            searchInput.addClass("hidden");
+
                             p.text(trackNames[trackNr], 40, 20);
                         }
 
+                        //next/prev
+
+                        p.image(prevButton, width/2.0-3*buttonSize/2.0, height-buttonSize, buttonSize, buttonSize);
+                        p.image(nextButton, width/2.0+buttonSize/2.0, height-buttonSize, buttonSize, buttonSize);
+                        //time seek bar
+                        var start = buttonSize/2;
+                        var end = width-buttonSize/2;
+                        var d = end-start;
+                        p.stroke(0);
+                        p.line(start, height-3*buttonSize/2, end, height-3*buttonSize/2);
+                        p.ellipse((time/trackLength)*d+start, height-3*buttonSize/2, 10, 10);
+                        p.text(""+parseNumToTime(time)+"/"+parseNumToTime(trackLength), start,height-buttonSize);
+
+                        //button for the dropdown track list
                         if(optionsActive){
                             var maxLen = 16;
                             var maxEntries = Math.floor((height-textSize*3/4)/(textSize))-2;
@@ -457,13 +485,35 @@
                         } else {
                             p.image(playButton, width/2.0-buttonSize/2, height-buttonSize, buttonSize, buttonSize);
                         }
-                        //next/prev
 
-                        p.image(prevButton, width/2.0-3*buttonSize/2.0, height-buttonSize, buttonSize, buttonSize);
-                        p.image(nextButton, width/2.0+buttonSize/2.0, height-buttonSize, buttonSize, buttonSize);
+                        //recording button
+                        if(showRecord){
+                            p.noFill();
+                            p.ellipse(width/2.0+3*buttonSize, height-buttonSize/2,buttonSize, buttonSize);
+                            if(recording){
+                                p.fill(255,0,0);
+                            } else {
+                                p.fill(0,0,0);
+                            }
+                            p.ellipse(width/2.0+3*buttonSize, height-buttonSize/2,buttonSize/4, buttonSize/4);
+                        }
 
+                        //social button
+                        p.noFill();
+                        p.ellipse(width/2.0-3*buttonSize, height-buttonSize/2,buttonSize, buttonSize);
+                        if(showSocial){
+                            p.fill(0,0,255);
+                        } else {
+                            p.fill(0,0,0);
+                        }
+                        tri(width/2.0-3*buttonSize, height-buttonSize/2, 0, 0, buttonSize/2, 0);
+
+                        if(showSocial){
+                            console.log("display options for other recorded cues");
+                        }
 
                     }
+
                     //logo
                     var logow = SCLogo.width;
                     var logoh = SCLogo.height;
@@ -479,7 +529,8 @@
                     if(showSun) triSunPattern();
                     aurora();
                     displayInterface();
-                    //outline
+
+                    //player border
                     p.stroke(5);
                     p.noFill();
                     p.quad(1,0,1,height,width-1,height,width-1,0);
@@ -493,13 +544,12 @@
                     if(showSun){setRingData();}
                     time = streamSource.getCurrentTime();
                     trackLength = streamSource.getDuration();
-
                     playing = streamSource.isPlaying();
-                    if(Hover||optionsActive||searchActive||!playing){
+
+                    if(Hover||optionsActive||searchActive||showSocial||!playing){
                         lastHover = 0;
                     }
-                    showDisplay = (lastHover++ < 100)||optionsActive||searchActive||!playing;
-
+                    showDisplay = (lastHover++ < 100);
                     t++;
                 }
 
@@ -507,11 +557,31 @@
                     console.log(event);
                 }
 
+                function parseNumToTime(num){
+                    var hours   = Math.floor(num / 3600);
+                    var minutes = Math.floor((num - (hours * 3600)) / 60);
+                    var seconds = num - (hours * 3600) - (minutes * 60);
+
+                    if (minutes < 10) {minutes = "0"+minutes;}
+                    if (seconds < 10) {seconds = "0"+seconds;}
+                    var time;
+                    if(hours > 0) {
+                        time = hours + ':' + minutes + ':' + Math.floor(seconds);
+                    } else {
+                        time = minutes + ':' + Math.floor(seconds);
+                    }
+                    return time;
+                }
+
             };
         }])
         .controller("ProjectController", ['$scope', '$location', ProjectController]);
 
     function ProjectController($scope, $location){
+        $scope.$on('$routeChangeStart', function() {
+            rem();
+            console.log("navigated away from project page, ending the p5sketch");
+        });
         console.log("project controller finished loading");
     }
 })();
