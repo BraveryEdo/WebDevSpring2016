@@ -1,13 +1,12 @@
 "use strict";
 module.exports = function (app, userModel, LocalStrategy, bcrypt, passport) {
-    var auth = authorized;
 
-    app.get("/api/user", auth, getAllUsers);
+    app.post("/api/user", getAllUsers);
     app.get("/api/user/:id", getUserById);
     app.post("/api/user", createNewUser);
-    app.put("/api/user/:id", auth, updateUserById);
+    app.put("/api/user/:id", updateUserById);
     app.get("/api/user/name/:username", findUserByUsername);
-    app.delete("/api/user/:id", auth, removeUserById);
+    app.delete("/api/user/:id", removeUserById);
     app.post("/api/login", passport.authenticate('local'), login);
     app.get("/api/loggedin", loggedin);
     app.post("/api/logout", logout);
@@ -60,13 +59,7 @@ module.exports = function (app, userModel, LocalStrategy, bcrypt, passport) {
 
     return service;
 
-    function authorized (req, res, next) {
-        if (!req.isAuthenticated()) {
-            res.send(401);
-        } else {
-            next();
-        }
-    }
+
 
     //function facebookStrategy(token, refreshToken, profile, done) {
     //    userModel
@@ -182,41 +175,35 @@ module.exports = function (app, userModel, LocalStrategy, bcrypt, passport) {
     }
 
     function getAllUsers(req, res) {
-        var users = userModel.getAllUsers();
-        res.json(users);
+        var roles = req.body;
+        userModel.getAllUsers(roles).then(function(r){res.json(r);});
+
     }
 
     function findUserByUsername(req, res){
         var un = req.params['username'];
-        console.log(uid);
-        var user = userModel.getUserByName(un);
-        res.json(user);
+       userModel.getUserByName(un).then(function(r){res.json(r);});
     }
 
     function getUserById(req, res) {
         var uid = req.params['id'];
-        console.log(uid);
-        var user = userModel.getUserById(uid);
-        res.json(user);
+        userModel.getUserById(uid).then(function(r){res.json(r);});
 
     }
 
     function createNewUser(req, res) {
         var newUser = req.body;
-        var created = userModel.createNewUser(newUser);
-        res.json(created);
+        userModel.createNewUser(newUser).then(function(r){res.json(r);});
     }
 
     function updateUserById(req, res) {
         var uid = req.params['id'];
         var newUser = req.body;
-        var updated = userModel.updateUserById(uid, newUser);
-        res.json(updated);
+        userModel.updateUserById(uid, newUser).then(function(r){res.json(r);});
     }
 
     function removeUserById(req, res) {
         var uid = req.params['id'];
-        var removed = userModel.removeUserById(uid);
-        res.json(removed);
+       userModel.removeUserById(uid).then(function(r){res.json(r);});
     }
 };

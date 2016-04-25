@@ -1,43 +1,30 @@
-
-
-            <h1 class="page-header">Admin</h1>
-            <h3>Users</h3>
-            <div class="table table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Username</div></th>
-                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Password</div></th>
-                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Role</div></th>
-                            <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Action</div></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="text" class="form-control" id="newUsername" placeholder="New Username"></td>
-                            <td><input type="text" class="form-control" id="newPassword" placeholder="New Password"></td>
-                            <td><input type="text" class="form-control" id="newRole" placeholder="New Role"></td>
-                            <td><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-ok" ></span></td>
-                        </tr>
-                        <tr>
-                            <td>Alice</td>
-                            <td>*******</td>
-                            <td>Student</td>
-                            <td><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-pencil"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Bob</td>
-                            <td>*******</td>
-                            <td>Faculty | Admin</td>
-                            <td><span class="glyphicon glyphicon-remove"></span><span class="glyphicon glyphicon-pencil"></span></td>
-                        </tr>
-                        <tr>
-                            <td>Charlie</td>
-                            <td>*******</td>
-                            <td></td>
-                            <td><span class="glyphicon glyphicon-remove"><span class="glyphicon glyphicon-pencil"></span></span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+<h1 class="page-header">Admin</h1>
+<h3>Users</h3>
+<div class="table table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Username</div></th>
+                <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Password</div></th>
+                <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Role</div></th>
+                <th><div class="th-inner sortable both"><span class="glyphicon glyphicon-sort" aria-hidden="true"></span> Action</div></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input type="text" class="form-control" data-ng-model="selectedUser['username']" id="newUsername" placeholder="New Username"></td>
+                <td><input type="text" class="form-control" data-ng-model="newPassword" id="newPassword" placeholder="New Password"></td>
+                <td><input type="text" class="form-control" id="newRole" data-ng-model="selectedUser['roles']" placeholder="New Role"></td>
+                <td><span class="glyphicon glyphicon-plus"></span><span class="glyphicon glyphicon-ok" ></span></td>
+            </tr>
+            <tr data-ng-repeat="user in Users">
+                <td>{{user['username']}}</td>
+                <td>*******</td>
+                <td>{{user['roles']}}</td>
+                <td><span data-ng-click="remove(user)" class="glyphicon glyphicon-remove"></span>
+                    <span data-ng-click="edit(user)" class="glyphicon glyphicon-pencil"></span></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 

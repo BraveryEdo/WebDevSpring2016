@@ -71,10 +71,9 @@
             return deferred.promise;
         }
 
-        function getAllUsers() {
+        function getAllUsers(roles) {
             var deferred = $q.defer();
-            $http.get("/api/user").then(function(r){deferred.resolve(r);});
-            return deferred.promise;
+            $http.post("/api/user",roles).then(function(r){deferred.resolve(r);});            return deferred.promise;
         }
 
         function registerUser(user) {

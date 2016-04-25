@@ -5,6 +5,7 @@
 module.exports = function (db, mongoose){
     var q = require('q');
     var fs = require('fs');
+    var bcrypt = require('bcrypt-nodejs');
     var userPath = "public/assignment/server/models/user.mock.json";
     var UserSchema = require('./user.schema.server.js')(mongoose);
     var UserModel = mongoose.model("User", UserSchema);
@@ -39,7 +40,11 @@ module.exports = function (db, mongoose){
     }
 
     function findUserByGoogleId(id){
+        var deferred = q.defer();
+        UserModel.findOne({'username': un, 'password': pw}, function(err, data) {
+        });
 
+        return deferred.promise;
     }
 
     function findUserByFacebookId(id){
@@ -61,15 +66,27 @@ module.exports = function (db, mongoose){
         return deferred.promise;
     }
 
-    function getAllUsers() {
+    function getAllUsers(roles) {
         var deferred = q.defer();
-        UserModel.find({}, function(err, data){
-            if(err){
-                deferred.resolve(err);
-            } else {
-                deferred.resolve(data);
+        var aTest = false;
+        for(var i =0; i< roles.length; i++){
+            if(roles[i].toLowerCase() == "admin"){
+                aTest = true;
+                break;
             }
-        });
+        }
+        if(aTest){
+            UserModel.find({},function(err, data){
+                if(err){
+                    deferred.reject(err);
+                } else {
+                    deferred.resolve(data);
+                }
+            });
+        } else {
+            deferred.reject("not an admin");
+        }
+
         return deferred.promise;
     }
 

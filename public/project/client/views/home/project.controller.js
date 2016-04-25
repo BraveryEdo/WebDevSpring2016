@@ -13,7 +13,6 @@
             return function(p){
                 //visualizer vars
                 var width, height;
-                var t = 0;
                 var Hover = false;
                 var lastHover = 999999;
                 var n_rings = 6;
@@ -45,10 +44,11 @@
                 var recording = false;
                 var searchText = "";
                 var searchInput;
+                var fs = false;
 
                 var myFaves = 'http://api.soundcloud.com/users/' + userID + '/favorites/?client_id=' + clientID;
 
-                var SCLogo, playButton, pauseButton, searchButton, nextButton, prevButton, optsButton;
+                var SCLogo, playButton, pauseButton, searchButton, nextButton, prevButton, optsButton, expandButton, shrinkButton;
 
 
                 p.preload = function(){
@@ -67,6 +67,8 @@
                     nextButton = p.loadImage("/icons/nextButton.png");
                     prevButton = p.loadImage("/icons/prevButton.png");
                     optsButton = p.loadImage("/icons/optionsButton.png");
+                    expandButton = p.loadImage("/icons/expand.png");
+                    shrinkButton = p.loadImage("/icons/shrink.png");
                 };
 
 
@@ -120,8 +122,10 @@
                 }
 
                 function setRes(){
-                    height = window.innerHeight*0.8;
-                    width = document.body.clientWidth*0.8;
+                    fs = p.fullscreen();
+                    height = window.innerHeight * 0.8;
+                    width = document.body.clientWidth * 0.8;
+
                 }
 
                 function setTrackListFaves(){
@@ -202,15 +206,15 @@
                     var s  = (width/2)/(streamData.length + 50);
                     var y_scale = 1/3;
 
-                    var gmax = 100*Math.cos(t)
+                    var gmax = 100*Math.cos(time)
 
                     var y_pos = height/2.5;
                     //aurora(i, 255.0*sin(i*.05), 100.0, 0.0, floor(200*sin(10*PI*t/gmax)));
                     for(var i = 0; i < streamData.length; i++) {
 
-                        var r = 255.0*Math.sin(t *.5+i*.05);
-                        var g = 100*Math.cos(t+i*0.05);
-                        var b = 100*Math.tan(t-i*0.5);
+                        var r = 255.0*Math.sin(time *.5+i*.05);
+                        var g = 100*Math.cos(time+i*0.05);
+                        var b = 100*Math.tan(time-i*0.5);
                         var a = 128;
 
                         var x1 = i*s;
@@ -228,30 +232,30 @@
                 }
 
                 function triSunPattern(){
-                    var s = Math.sin(t*0.5);
+                    var s = Math.sin(time*0.5);
 
                     p.stroke(0);
                     p.fill(Math.random()*255, 222, Math.random()*255, 100);
-                    ring(width/2.0, height/2.0, 3, ring_radius[0], 2*t, false);
+                    ring(width/2.0, height/2.0, 3, ring_radius[0], 2*time, false);
                     p.fill(31, 182, 222, 100);
-                    ring(width/2.0, height/2.0, 3, ring_radius[1], 2*t, true);
+                    ring(width/2.0, height/2.0, 3, ring_radius[1], 2*time, true);
                     p.fill(200, 180, 0, 100);
-                    ring(width/2.0, height/2.0, 3, ring_radius[2], Math.PI+2*t, true);
+                    ring(width/2.0, height/2.0, 3, ring_radius[2], Math.PI+2*time, true);
                     p.fill(222, 31, 31, 100);
-                    ring(width/2.0, height/2.0, 3, ring_radius[3], 2*t, true);
+                    ring(width/2.0, height/2.0, 3, ring_radius[3], 2*time, true);
                     p.fill(218, 222, 31, 150);
-                    ring(width/2.0, height/2.0, 6, ring_radius[4], t, true);
+                    ring(width/2.0, height/2.0, 6, ring_radius[4], time, true);
                     p.fill(229, 35, 35, 100);
-                    ring(width/2.0, height/2.0, 11, 125, t, true);
+                    ring(width/2.0, height/2.0, 11, 125, time, true);
                     p.fill(229, 136, 35, 100);
-                    ring(width/2.0, height/2.0, 10, 125, -t, true);
+                    ring(width/2.0, height/2.0, 10, 125, -time, true);
                     p.fill(239, 255, 67, 100);
-                    ring(width/2.0, height/2.0, 12, 125, 1.5*t, true);
+                    ring(width/2.0, height/2.0, 12, 125, 1.5*time, true);
                     p.fill(255, 255, 255, 10);
-                    ring(width/2.0, height/2.0, 6, ring_radius[5], t, true);
-                    ring(width/2.0, height/2.0, 6, ring_radius[5] + 2, 1.1*t, true);
-                    ring(width/2.0, height/2.0, 6, ring_radius[5] + 4, 1.2*t, true);
-                    ring(width/2.0, height/2.0, 6, ring_radius[5] + 6, 1.3*t, true);
+                    ring(width/2.0, height/2.0, 6, ring_radius[5], time, true);
+                    ring(width/2.0, height/2.0, 6, ring_radius[5] + 2, 1.1*time, true);
+                    ring(width/2.0, height/2.0, 6, ring_radius[5] + 4, 1.2*time, true);
+                    ring(width/2.0, height/2.0, 6, ring_radius[5] + 6, 1.3*time, true);
                     p.fill(0, 0, 0, 0);
                     p.stroke(255);
                     //equalizerRing(width/2.0, height/2.0, num_bars, t);
@@ -315,8 +319,8 @@
                 }
 
                 function setRingData(){
-                    var r = 50*Math.sin(t*0.02);
-                    var r2 = 50*Math.cos(2*t*0.02);
+                    var r = 50*Math.sin(time*0.02);
+                    var r2 = 50*Math.cos(2*time*0.02);
                     ring_radius[0] = 75 + r2/2;
                     ring_radius[1] = 75 + r2/3;
                     ring_radius[2] = 30 + r2/3;
@@ -414,8 +418,11 @@
                                 playTrack(trackIDs[trackNr]);
                             } else if(x >= width/2.0+5*buttonSize/2&& x<= width/2.0+7*buttonSize/2){
                                 recording = !recording;
-                            } if(x >= width/2.0-7*buttonSize/2 && x <= width/2.0-5*buttonSize/2){
+                            }else if(x >= width/2.0-7*buttonSize/2 && x <= width/2.0-5*buttonSize/2){
                                 showSocial = !showSocial;
+                            } else if(x>=0 && x <= buttonSize){
+                                p.fullscreen(!fs);
+                                fs = !fs;
                             }
                         }
 
@@ -423,7 +430,6 @@
 
                     if(x>=width-logow && x<= width && y >= height-logoh && y < height){
                         window.open(extLink[trackNr]);
-
                     }
                 }
 
@@ -504,15 +510,23 @@
                         if(showSocial){
                             p.fill(0,0,255);
                         } else {
-                            p.fill(0,0,0);
+                            p.fill(0,255,0);
                         }
-                        tri(width/2.0-3*buttonSize, height-buttonSize/2, 0, 0, buttonSize/2, 0);
+                        p.ellipse(width/2.0-3*buttonSize, height-buttonSize/2, buttonSize/2, buttonSize/2);
 
                         if(showSocial){
                             console.log("display options for other recorded cues");
                         }
 
+                        //fullscreen toggle button
+                        if(fs){
+                            p.image(shrinkButton, 0, height-buttonSize, buttonSize, buttonSize);
+                        } else {
+                            p.image(expandButton, 0, height-buttonSize, buttonSize, buttonSize);
+                        }
+
                     }
+
 
                     //logo
                     var logow = SCLogo.width;
@@ -531,9 +545,6 @@
                     displayInterface();
 
                     //player border
-                    p.stroke(5);
-                    p.noFill();
-                    p.quad(1,0,1,height,width-1,height,width-1,0);
                 };
 
                 p.stop = function(){
@@ -549,8 +560,7 @@
                     if(Hover||optionsActive||searchActive||showSocial||!playing){
                         lastHover = 0;
                     }
-                    showDisplay = (lastHover++ < 100);
-                    t++;
+                    showDisplay = (lastHover++ < 20);
                 }
 
                 function paste(event){
