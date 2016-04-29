@@ -63,7 +63,7 @@
                     SCLogo = p.loadImage("/icons/SCLogo.png");
                     playButton = p.loadImage("/icons/playButton.png");
                     pauseButton = p.loadImage("/icons/pauseButton.png");
-                    searchButton = p.loadImage("/icons/searchImg.png");
+                    searchButton = p.loadImage("/icons/searchImg.PNG");
                     nextButton = p.loadImage("/icons/nextButton.png");
                     prevButton = p.loadImage("/icons/prevButton.png");
                     optsButton = p.loadImage("/icons/optionsButton.png");
