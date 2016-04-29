@@ -50,20 +50,19 @@
       <file leaf-file-name="project.controller.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/project/client/views/home/project.controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.49094203">
-              <caret line="64" column="72" selection-start-line="64" selection-start-column="72" selection-end-line="64" selection-end-column="72" />
+            <state vertical-scroll-proportion="0.26768643">
+              <caret line="35" column="35" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="35" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <element signature="e#4951#5032#0" expanded="false" />
-                <element signature="e#6584#6673#0" expanded="false" />
-                <element signature="e#6734#7753#0" expanded="false" />
-                <element signature="e#7789#8306#0" expanded="false" />
-                <element signature="e#8341#9435#0" expanded="false" />
-                <element signature="e#9477#11326#0" expanded="false" />
-                <element signature="e#11445#12239#0" expanded="false" />
-                <element signature="e#12373#12964#0" expanded="false" />
-                <element signature="e#13508#13923#0" expanded="false" />
-                <element signature="e#24611#25263#0" expanded="false" />
+                <element signature="e#4952#5033#0" expanded="false" />
+                <element signature="e#6585#6674#0" expanded="false" />
+                <element signature="e#6735#7754#0" expanded="false" />
+                <element signature="e#7790#8307#0" expanded="false" />
+                <element signature="e#8342#9436#0" expanded="false" />
+                <element signature="e#9478#11327#0" expanded="false" />
+                <element signature="e#12374#12965#0" expanded="false" />
+                <element signature="e#13509#13924#0" expanded="false" />
+                <element signature="e#24612#25264#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -736,12 +735,6 @@
       <option name="number" value="Default" />
       <updated>1453171976946</updated>
     </task>
-    <task id="LOCAL-00029" summary="form fields updates, still working on editing forms">
-      <created>1458429423402</created>
-      <option name="number" value="00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1458429423402</updated>
-    </task>
     <task id="LOCAL-00030" summary="form editing update">
       <created>1458439591868</created>
       <option name="number" value="00030" />
@@ -1030,7 +1023,13 @@
       <option name="project" value="LOCAL" />
       <updated>1461928115859</updated>
     </task>
-    <option name="localTasksCounter" value="78" />
+    <task id="LOCAL-00078" summary="search button load update">
+      <created>1461928259977</created>
+      <option name="number" value="00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1461928259977</updated>
+    </task>
+    <option name="localTasksCounter" value="79" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1471,20 +1470,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/project/client/views/home/project.controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49094203">
-          <caret line="64" column="72" selection-start-line="64" selection-start-column="72" selection-end-line="64" selection-end-column="72" />
+        <state vertical-scroll-proportion="0.26768643">
+          <caret line="35" column="35" selection-start-line="35" selection-start-column="35" selection-end-line="35" selection-end-column="35" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <element signature="e#4951#5032#0" expanded="false" />
-            <element signature="e#6584#6673#0" expanded="false" />
-            <element signature="e#6734#7753#0" expanded="false" />
-            <element signature="e#7789#8306#0" expanded="false" />
-            <element signature="e#8341#9435#0" expanded="false" />
-            <element signature="e#9477#11326#0" expanded="false" />
-            <element signature="e#11445#12239#0" expanded="false" />
-            <element signature="e#12373#12964#0" expanded="false" />
-            <element signature="e#13508#13923#0" expanded="false" />
-            <element signature="e#24611#25263#0" expanded="false" />
+            <element signature="e#4952#5033#0" expanded="false" />
+            <element signature="e#6585#6674#0" expanded="false" />
+            <element signature="e#6735#7754#0" expanded="false" />
+            <element signature="e#7790#8307#0" expanded="false" />
+            <element signature="e#8342#9436#0" expanded="false" />
+            <element signature="e#9478#11327#0" expanded="false" />
+            <element signature="e#12374#12965#0" expanded="false" />
+            <element signature="e#13509#13924#0" expanded="false" />
+            <element signature="e#24612#25264#0" expanded="false" />
           </folding>
         </state>
       </provider>

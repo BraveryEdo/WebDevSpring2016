@@ -17,7 +17,6 @@
                 var lastHover = 999999;
                 var n_rings = 6;
                 var ring_radius = [];
-                var showSun = false;
 
                 //setting up to stream from soundcloud
                 var clientID = '3ec04edf098e7efab4adfa28ea79ba39';
@@ -36,6 +35,9 @@
                 var playing = false;
                 var pausedTime = 0;
 
+
+
+                var showSun = true;
                 var showDisplay = false;
                 var searchActive = false;
                 var optionsActive = false;
